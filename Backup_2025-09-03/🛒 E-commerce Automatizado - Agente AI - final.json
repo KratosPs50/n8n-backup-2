@@ -1,0 +1,1086 @@
+{
+  "createdAt": "2025-08-02T02:12:38.679Z",
+  "updatedAt": "2025-08-02T17:04:25.719Z",
+  "id": "2KL4YkxmIqExsQQN",
+  "name": "🛒 E-commerce Automatizado - Agente AI - final",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8073e850-1451-40ae-802c-085254921c95",
+              "name": "base64",
+              "value": "={{ $node['whatsapp'].json[\"body\"][\"data\"][\"message\"][\"base64\"] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9332d488-1df7-4034-95af-ab7b1d5eb73a",
+      "name": "Base64 do Audio",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -1216,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "base64",
+        "options": {
+          "mimeType": "audio/mp3"
+        }
+      },
+      "id": "b3a8598d-fd3a-402d-a627-8811a919ddbc",
+      "name": "Converter audio",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        -1024,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6cf43a1c-dc76-49fb-9b5a-3d1e5a32d765",
+              "name": "mensagem",
+              "value": "={{ $node['variaveis'].json[\"whatsapp_mensagem\"] ? $node['variaveis'].json[\"whatsapp_mensagem\"] :\n\n$json[\"text\"] ? $json[\"text\"] : \n\n$json[\"content\"]\n\n}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "989c4059-84b5-4df9-9ca6-4f697373fc41",
+      "name": "Mensagem",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -624,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8073e850-1451-40ae-802c-085254921c95",
+              "name": "base64",
+              "value": "={{ $node['whatsapp'].json[\"body\"][\"data\"][\"message\"][\"base64\"] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7b6a6a36-b8af-4960-bb0c-1cb410a01d6c",
+      "name": "Base64 da imagem",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -1216,
+        608
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $node['variaveis'].json[\"evolution_url\"] }}/chat/getBase64FromMediaMessage/{{ $node['variaveis'].json[\"evolution_instancia\"] }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $node['variaveis'].json[\"evolution_api_key\"] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "message.key.id",
+              "value": "={{ $node['whatsapp'].json[\"body\"][\"data\"][\"key\"][\"id\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a0877aa8-2872-4269-9a2f-997de26eab65",
+      "name": "Pegar o base64 do PDF",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1216,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "base64",
+        "options": {}
+      },
+      "id": "96a2a926-db23-47a0-b934-21c7465d6166",
+      "name": "Converter imagem",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        -1024,
+        608
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "base64",
+        "options": {}
+      },
+      "id": "6e845d37-e513-4a99-aa91-91e31aa46dc5",
+      "name": "Converter PDF",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        -1024,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "id": "b34503bb-bf29-4b1c-9842-ce6681722319",
+      "name": "Extrair texto do PDF",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -816,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $node['variaveis'].json[\"whatsapp_tipo_mensagem\"] }}",
+                    "rightValue": "conversation",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Texto"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "dfecf09e-4d5a-4037-9473-58f3fbb022fc",
+                    "leftValue": "={{ $node['variaveis'].json[\"whatsapp_tipo_mensagem\"] }}",
+                    "rightValue": "audioMessage",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Audio"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "1cdd5e89-7c39-47fb-90f1-943938f17278",
+                    "leftValue": "={{ $node['variaveis'].json[\"whatsapp_tipo_mensagem\"] }}",
+                    "rightValue": "imageMessage",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Imagem"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "0629db8d-546d-4180-a4f2-81b806aab6c7",
+                    "leftValue": "={{ $node['whatsapp'].json[\"body\"][\"data\"][\"message\"][\"documentWithCaptionMessage\"][\"message\"][\"documentMessage\"][\"mimetype\"] }}",
+                    "rightValue": "application/pdf",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Arquivo PDF"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b3a63351-b3a2-4b87-837e-b6ef5ab050d1",
+      "name": "Qual o tipo de mensagem?",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        -1424,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ee14e195-ff9a-401c-b2e1-74aa6b777014",
+              "name": "ecommerce_url",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "59e498f3-7758-4931-89e4-5aa8fab75c14",
+              "name": "evolution_url",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "f0f4a0c0-d65a-4e00-a98f-d661e8d7723c",
+              "name": "evolution_instacia",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "f21da676-d72d-4201-8ced-54bbdaf4a617",
+              "name": "evolution_api_key",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "74d38f1b-4e13-4761-b9e4-9fa4713ca790",
+              "name": "whatsapp_numero",
+              "value": "={{ $node['whatsapp'].json[\"body\"][\"data\"][\"key\"][\"remoteJid\"].replace(/\\D/g, '') }}",
+              "type": "string"
+            },
+            {
+              "id": "7a74c5c6-8599-4ac2-97e8-d3afc14caadf",
+              "name": "whatsapp_tipo_mensagem",
+              "value": "={{ $node['whatsapp'].json[\"body\"][\"data\"][\"messageType\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "ab44567a-5acd-4215-af02-47f7f0e40e9c",
+              "name": "date_time",
+              "value": "={{ $node['whatsapp'].json[\"body\"][\"date_time\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "382d2532-d567-40ad-8820-5c319ba9b3e7",
+              "name": "whatsapp_mensagem",
+              "value": "={{ $node['whatsapp'].json[\"body\"][\"data\"][\"message\"][\"conversation\"] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "acbdc7b0-1793-463e-a120-891a8d4b5670",
+      "name": "variaveis",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1776,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "id": "f77ad1f6-e954-4c1d-b087-1d2d2a016264",
+      "name": "Transcrição do audio",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.3,
+      "position": [
+        -816,
+        400
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "fQUsqGYvG7BKn0Op",
+          "name": "OpenAi account FORTUNE POST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "text": "Descreva essa imagem?",
+        "inputType": "base64",
+        "options": {
+          "maxTokens": 300
+        }
+      },
+      "id": "9eac00f1-122d-4e54-bbb7-6e784c2c640d",
+      "name": "Analisar imagem",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.3,
+      "position": [
+        -816,
+        608
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "fQUsqGYvG7BKn0Op",
+          "name": "OpenAi account FORTUNE POST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "3dccde5a-70d4-43d3-8600-808c08a42874",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        192
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "fQUsqGYvG7BKn0Op",
+          "name": "OpenAi account FORTUNE POST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('variaveis').item.json.whatsapp_numero }}",
+        "contextWindowLength": 500
+      },
+      "id": "6b9f6abc-8e6b-41c0-84fa-3895979af22d",
+      "name": "Window Buffer Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        64,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 3,
+        "options": {
+          "search": "={{ $fromAI('product_search', 'O nome do produto desejado') }}",
+          "status": "publish",
+          "stockStatus": "instock"
+        }
+      },
+      "id": "123cd37d-84a9-406c-8dfa-b1c095b9f075",
+      "name": "woocommerce_search",
+      "type": "n8n-nodes-base.wooCommerceTool",
+      "typeVersion": 1,
+      "position": [
+        224,
+        192
+      ],
+      "credentials": {
+        "wooCommerceApi": {
+          "id": "Vligpm8xarkJpUbr",
+          "name": "WooCommerce account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Entrada do node code\nconst inputData = $node[\"AI Agent - Vendedor\"].json[\"output\"];\n\n// Função para converter Markdown em formatação WhatsApp\nfunction convertMarkdownToWhatsApp(markdown) {\n    let output = markdown;\n\n    // Converter **negrito** para *negrito*\n    output = output.replace(/\\*\\*(.*?)\\*\\*/g, '*$1*');\n\n    // Remover links, mantendo apenas o texto ou adaptando\n    output = output.replace(/\\[(.*?)\\]\\((.*?)\\)/g, '$1 ($2)');\n\n    // Remover imagens no formato ![alt](URL)\n    output = output.replace(/!\\[.*?\\]\\(.*?\\)/g, '');\n\n    return output;\n}\n\n// Verificar se inputData é um array ou string\nlet formattedOutput;\n\nif (Array.isArray(inputData)) {\n    // Se for um array, processar cada item\n    formattedOutput = inputData.map(item => ({\n        output: convertMarkdownToWhatsApp(item.output)\n    }));\n} else if (typeof inputData === 'string') {\n    // Se for uma string, processar diretamente\n    formattedOutput = {\n        output: convertMarkdownToWhatsApp(inputData)\n    };\n} else {\n    throw new Error('Formato inesperado de inputData. Deve ser uma string ou um array.');\n}\n\n// Retornar o resultado\nreturn formattedOutput;"
+      },
+      "id": "6b33857b-005c-4df6-9580-b97464c45c32",
+      "name": "Code1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -496,
+        880
+      ]
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.output }}",
+        "attributes": {
+          "attributes": [
+            {
+              "name": "messagem",
+              "description": "A mensagem formatada para Whatsapp",
+              "required": true
+            }
+          ]
+        },
+        "options": {
+          "systemPromptTemplate": "Você é um especialista em formatação de mensagem para Whatsapp.\n\nSegue as formatações:\n\n- Negrito: *asteriscos*\n- Listas: Use - antes do texto\n- Links e URLs: Inclua diretamente, sem formatação, sem []\n- Não envie link de imagem\n\nSempre que tiver formatação Markdown, transforme na formatação para Whatsapp.\n\nAdicione emoji para melhor formatação.\n\nDeixe o texto mais humanizado"
+        }
+      },
+      "id": "f3898f3c-54a5-46dc-a8e1-21f732cf8a0b",
+      "name": "Information Extractor1",
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1,
+      "position": [
+        368,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('variaveis').item.json.evolution_url }}/message/sendText/{{ $('variaveis').item.json.evolution_instacia }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('variaveis').item.json.whatsapp_numero }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.output.messagem }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "04e72959-1c37-4136-b1d7-8f0e258b7ed8",
+      "name": "Mensagem de texto2",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        704,
+        0
+      ],
+      "typeVersion": 4.1,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "KAl5lfwlzBD87Tgd",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "82ac24e7-eef5-4248-a51c-c23fec8c7052",
+      "name": "OpenAI Chat Model1",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        -96,
+        624
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "fQUsqGYvG7BKn0Op",
+          "name": "OpenAi account FORTUNE POST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('variaveis').item.json.whatsapp_numero }}",
+        "contextWindowLength": 500
+      },
+      "id": "1abbe466-bff5-4ae8-940f-5e3c09cc8b81",
+      "name": "Window Buffer Memory1",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        48,
+        624
+      ]
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.output }}",
+        "attributes": {
+          "attributes": [
+            {
+              "name": "messagem",
+              "description": "A mensagem formatada para Whatsapp",
+              "required": true
+            }
+          ]
+        },
+        "options": {
+          "systemPromptTemplate": "Você é um especialista em formatação de mensagem para Whatsapp.\n\nSegue as formatações:\n\n- Negrito: *asteriscos*\n- Listas: Use - antes do texto\n- Links e URLs: Inclua diretamente, sem formatação, sem []\n- Não envie link de imagem\n\nSempre que tiver formatação Markdown, transforme na formatação para Whatsapp.\n\nAdicione emoji para melhor formatação.\n\nDeixe o texto mais humanizado"
+        }
+      },
+      "id": "8c6f746e-6a04-4ca1-8a58-58f47445a70b",
+      "name": "Information Extractor",
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1,
+      "position": [
+        352,
+        448
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('variaveis').item.json.evolution_url }}/message/sendText/{{ $('variaveis').item.json.evolution_instacia }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('variaveis').item.json.whatsapp_numero }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.output.messagem }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a0b9b368-9630-425c-a23b-d591a293ca32",
+      "name": "Mensagem de texto",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        688,
+        448
+      ],
+      "typeVersion": 4.1,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "KAl5lfwlzBD87Tgd",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $node[\"Mensagem\"].json.mensagem }}",
+        "options": {
+          "systemMessage": "=<papel>\nVendedor de e-commerce\n</papel>\n\n<persona>\nAlice\n</persona>\n\n<publico_alvo>\nClientes interessados em comprar produtos online no site loja.automacacaosemlimites.com.br\n</publico_alvo>\n\n<instrucao_exata>\nAuxiliar os clientes em todas as etapas do processo de compra de forma clara, educada e eficiente.\n</instrucao_exata>\n\n<instrucao_variavel>\nSe solicitado, fornecer informações detalhadas sobre os produtos.\n</instrucao_variavel>\n\n<objetivo>\nGarantir uma experiência de compra tranquila, conquistando a confiança dos clientes e incentivando compras recorrentes.\n</objetivo>\n\n<funcoes>\n- Atender clientes via Whatsapp.\n- Informar sobre produtos e serviços disponíveis.\n- Solucionar dúvidas e problemas relacionados ao processo de compra.\n- Conduzir na escolha do produto desejado.\n- Encaminhar um link de checkout para finalizar a compra.\n</funcoes>\n\n<panorama_e_contexto>\nA loja oferece uma ampla gama de produtos nos segmentos de eletrônicos, com entrega em todo o Brasil e suporte ao cliente online.\n</panorama_e_contexto>\n\n<comunicacao_e_humanizacao>\n1. Tom: Amigável e profissional.\n2. Extra: Use emojis para criar uma comunicação leve e envolvente.\n3. Frases curtas e claras para facilitar a leitura rápida no WhatsApp.\n4. Objetivo: Mostrar empatia e resolver problemas de forma rápida e eficiente.\n5. Respeitar os limites de atendimento: Encaminhar para um atendente humano se o cliente pedir ajuda fora do escopo da IA.\n6. Formatação: As respostas devem ser formatadas conforme as regras de formatação do WhatsApp: \n1. Negrito: *asteriscos*\n2. Itálico: _sublinhados_\n3. Rasurado: ~tildes~\n4. Listas: Use - antes do texto\n5. Links e URLs: Inclua diretamente, sem formatação\n</comunicacao_e_humanizacao>\n\n<etapas_do_atendimento>\n1. Saudação inicial.\n2. Identificação da necessidade do cliente.\n3. Apresentação de soluções ou produtos, utilizando a tool \"woocommerce_search\".\n4. Finalize a compra do produto desejado enviando o link do checkout no formato: https://loja.automacaosemlimites.com.br/finalizar-compra/?add-to-cart=[ID_DO_PRODUTO], altere no link o ID_DO_PRODUTO pelo id do produto que foi retornado na busca do produto, da tool 'woocommerce_search' anteriormente.\n5. Conclusão com agradecimentos e incentivo para futuras compras.\n</etapas_do_atendimento>\n\n<roteiro_modelo>\n- **Boas-vindas e Introdução**  \n\"Olá! Sou a Alice, seu assistente virtual. Como posso te ajudar hoje? 😊 Está buscando algum produto específico?\"\n\n- **Identificação da Necessidade**  \nPergunte: \"Você está procurando um produto específico ou gostaria de sugestões?\"\n\n- **Sugestões de Produtos**  \nExemplo: \"Temos ótimos smartphones na promoção hoje! Que tal um iPhone 15 ou um Samsung Galaxy S23? 😊\"\n\n- **Detalhamento de Produtos**  \n\"O iPhone 15 tem 128GB, câmera de 48MP, e custa R$ 6.599,00. Quer saber mais sobre as formas de pagamento?\"\n\n- **Adição ao Carrinho e Geração de Checkout**  \nExemplo: \"Adicionei o iPhone 15 ao carrinho. Aqui está o link para finalizar a compra: [link do checkout].\"\n\n- **Promoções e Upsell**  \nExemplo: \"Que tal um carregador rápido com 50% de desconto para acompanhar o seu iPhone? 😊\"\n\n- **Encerramento**  \n\"Obrigado por comprar conosco! Se precisar de mais alguma coisa, é só chamar. Boa compra e até logo! 🛒✨\"\n</roteiro_modelo>\n\n<linguagem_precisa>\nUtilizar uma linguagem clara, objetiva e livre de termos técnicos complexos.\n</linguagem_precisa>\n\n<tom_e_estilo>\n- Tom: Profissional e acolhedor.\n- Ênfase: Soluções rápidas e atenção às necessidades do cliente.\n</tom_e_estilo>\n\n<modelo_e_organizacao>\n1. Apresentação do agente.\n2. Identificação de dúvidas ou problemas.\n3. Resolução de questões.\n4. Encerramento com incentivo à fidelização.\n</modelo_e_organizacao>\n\n<cumprimento>\nRespostas devem ter no máximo 100 palavras, priorizando agilidade e clareza.\n</cumprimento>\n\n<nivel_de_criatividade>\nMédio, adaptando-se ao perfil do cliente e suas necessidades específicas.\n</nivel_de_criatividade>\n\n<nivel_de_detalhes_nas_respostas>\nAlto, fornecendo informações completas sobre produtos, entregas e políticas.\n</nivel_de_detalhes_nas_respostas>\n\n<restricoes_e_limites_explicitos>\n- Não prometer prazos de entrega ou disponibilidade de produtos sem confirmação prévia no sistema.\n- Não oferecer informações confidenciais: Não fornecer dados que não estão públicos, como dados financeiros ou pessoais.\n- Não pressionar o cliente: Sugerir produtos, mas sempre respeitando o ritmo do cliente.\n- Nunca responda com marcações markdown.\n- Não ofereça produtos que não tem preço definido.\n</restricoes_e_limites_explicitos>\n\n<horario_de_funcionamento>\n- **Domingo**: 10:00 às 16:00h\n- **Segunda a Sexta-feira**: 08:00 às 20:00h\n- **Sábado**: 09:00 às 18:00h\n</horario_de_funcionamento>\n\n<produtos_e_servicos>\n- **Eletrônicos**: Smartphones, fones de ouvido, notebooks.\n</produtos_e_servicos>\n\n<informacoes_da_empresa>\n- **Site oficial**: https://loja.automacaosemlimites.com.br\n- **Contato**: suporte@automacaosemlimites.com.br\n- **Política de devolução**: Devoluções aceitas em até 7 dias após a compra, conforme os termos disponíveis no site.\n</informacoes_da_empresa>"
+        }
+      },
+      "id": "aeeb0bb4-9662-4dc7-a892-8857eeea7a8f",
+      "name": "AI Agent - Vendedor",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "order",
+        "operation": "getAll",
+        "limit": 3,
+        "options": {
+          "search": "={{ $fromAI('search', 'ID do produto ou email') }}"
+        }
+      },
+      "id": "53cb9329-2d4d-4568-82e3-728aa85143d2",
+      "name": "woocommerce_order_status",
+      "type": "n8n-nodes-base.wooCommerceTool",
+      "typeVersion": 1,
+      "position": [
+        208,
+        624
+      ],
+      "credentials": {
+        "wooCommerceApi": {
+          "id": "Vligpm8xarkJpUbr",
+          "name": "WooCommerce account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "8819a61c-b58c-447f-8f27-b30fc3da6499",
+      "name": "OpenAI Chat Model2",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        -448,
+        544
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "fQUsqGYvG7BKn0Op",
+          "name": "OpenAi account FORTUNE POST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $node[\"Mensagem\"].json.mensagem }}",
+        "options": {
+          "systemMessage": "=<papel>\nAtendente de e-commerce\n</papel>\n\n<persona>\nAlice\n</persona>\n\n<publico_alvo>\nClientes da loja online loja.automacacaosemlimites.com.br interessados em informações sobre produtos e status de pedidos.\n</publico_alvo>\n\n<instrucao_exata>\nAuxiliar os clientes em dúvidas sobre produtos e no acompanhamento do status de seus pedidos de forma clara, educada e eficiente.\n</instrucao_exata>\n\n<instrucao_variavel>\nSe solicitado, fornecer informações detalhadas sobre produtos ou o status do pedido com base no número informado pelo cliente.\n</instrucao_variavel>\n\n<objetivo>\nGarantir uma experiência positiva e eficiente para os clientes, resolvendo suas dúvidas e proporcionando confiança no serviço.\n</objetivo>\n\n<funcoes>\n- Atender clientes via WhatsApp e e-mail.\n- Informar sobre produtos disponíveis e seus detalhes.\n- Consultar e informar o status do pedido com base no número do pedido fornecido.\n- Auxiliar em casos de problemas com entregas ou dúvidas relacionadas a pedidos.\n- Encaminhar problemas não resolvidos para o suporte humano.\n</funcoes>\n\n<panorama_e_contexto>\nA loja oferece uma ampla variedade de produtos eletrônicos com entrega em todo o Brasil e suporte online eficiente.\n</panorama_e_contexto>\n\n<comunicacao_e_humanizacao>\n1. Tom: Amigável e profissional.\n2. Extra: Usar emojis para criar uma comunicação envolvente no WhatsApp.\n3. Foco em clareza: Respostas diretas e formatadas para facilitar a leitura.\n4. Empatia: Mostrar compreensão e compromisso com a solução do problema.\n5. Respeitar o escopo: Encaminhar para atendimento humano casos fora do alcance da IA.\n6. Formatação para WhatsApp: \n   - Negrito: *asteriscos*\n   - Itálico: _sublinhados_\n   - Links diretos para URLs sem formatação especial\n</comunicacao_e_humanizacao>\n\n<etapas_do_atendimento>\n1. Saudação inicial.\n2. Identificação da necessidade: Produto ou status de pedido.\n3. Caso seja status do pedido:\n   - Solicitar número do pedido.\n   - Consultar sistema com ferramenta \"order_status_lookup\".\n   - Informar o status e os próximos passos ao cliente.\n4. Caso seja produto:\n   - Utilizar a ferramenta \"woocommerce_search\" para localizar o item.\n   - Apresentar os resultados e encaminhar para compra.\n5. Encerramento com agradecimento e incentivo para futuras interações.\n</etapas_do_atendimento>\n\n<roteiro_modelo>\n- **Boas-vindas e Introdução**  \n\"Olá! Sou a Alice, seu assistente virtual da Loja Sem Limites. Como posso te ajudar hoje? 😊\"\n\n- **Consulta de Status de Pedido**  \n\"Claro, posso te ajudar com isso! Por favor, informe o número do seu pedido ou e-mail para que eu possa verificar o status. 📦\"\n\n- **Resposta sobre Status de Pedido**  \n\"Seu pedido #12345 está em transporte e tem previsão de entrega para o dia 30/11. Qualquer dúvida, é só me chamar! 🚚✨\"\n\n- **Resolução de Problemas**  \n\"Entendi, vou encaminhar sua solicitação ao suporte especializado para resolver isso. Eles entrarão em contato em breve. 👍\"\n\n- **Encerramento**  \n\"Obrigado por entrar em contato! Qualquer coisa, estarei por aqui para ajudar. Até logo! 😊\"\n</roteiro_modelo>\n\n<linguagem_precisa>\nManter clareza e objetividade, sem jargões complexos.\n</linguagem_precisa>\n\n<tom_e_estilo>\n- Tom: Profissional e acolhedor.\n- Ênfase: Solução rápida e empática.\n</tom_e_estilo>\n\n<modelo_e_organizacao>\n1. Apresentação inicial.\n2. Identificação da necessidade.\n3. Solução ou direcionamento para suporte humano.\n4. Encerramento.\n</modelo_e_organizacao>\n\n<cumprimento>\nRespostas devem ter no máximo 100 palavras, priorizando clareza e objetividade.\n</cumprimento>\n\n<nivel_de_criatividade>\nMédio, com flexibilidade para adaptar-se às necessidades dos clientes.\n</nivel_de_criatividade>\n\n<nivel_de_detalhes_nas_respostas>\nAlto, especialmente em questões relacionadas a produtos e status de pedidos.\n</nivel_de_detalhes_nas_respostas>\n\n<restricoes_e_limites_explicitos>\n- Não fornecer prazos ou informações de entrega sem consulta no sistema.\n- Não informar dados confidenciais ou indisponíveis publicamente.\n- Evitar pressionar o cliente.\n- Não responder em markdown ou exceder o escopo de automação.\n</restricoes_e_limites_explicitos>\n\n<horario_de_funcionamento>\n- **Domingo**: 10:00 às 16:00h\n- **Segunda a Sexta-feira**: 08:00 às 20:00h\n- **Sábado**: 09:00 às 18:00h\n</horario_de_funcionamento>\n\n<produtos_e_servicos>\n- **Eletrônicos**: Smartphones, notebooks, fones de ouvido.\n</produtos_e_servicos>\n\n<informacoes_da_empresa>\n- **Site oficial**: https://loja.automacaosemlimites.com.br\n- **Contato**: suporte@automacaosemlimites.com.br\n- **Política de devolução**: Devoluções aceitas em até 7 dias após a compra, conforme os termos disponíveis no site.\n</informacoes_da_empresa>"
+        }
+      },
+      "id": "5a4a054b-55e6-4d62-9c4f-d2a9f8d4f780",
+      "name": "AI Agent - Suporte",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -16,
+        448
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "api-evolution-webhook",
+        "options": {}
+      },
+      "id": "6a1268db-075f-40fa-8ef3-3c17d4296d95",
+      "name": "whatsapp",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -2048,
+        304
+      ],
+      "webhookId": "b84bd6c5-2751-439a-a509-b00a8e066b14"
+    },
+    {
+      "parameters": {
+        "inputText": "={{ $node[\"Mensagem\"].json.mensagem }}",
+        "options": {
+          "categories": "Vendas, Informação, Reclamação"
+        }
+      },
+      "id": "4efbbe68-82f1-4db0-bead-794ea3a0a2d3",
+      "name": "Sentiment Analysis",
+      "type": "@n8n/n8n-nodes-langchain.sentimentAnalysis",
+      "typeVersion": 1,
+      "position": [
+        -464,
+        304
+      ]
+    }
+  ],
+  "connections": {
+    "Base64 do Audio": {
+      "main": [
+        [
+          {
+            "node": "Converter audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Converter audio": {
+      "main": [
+        [
+          {
+            "node": "Transcrição do audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Base64 da imagem": {
+      "main": [
+        [
+          {
+            "node": "Converter imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pegar o base64 do PDF": {
+      "main": [
+        [
+          {
+            "node": "Converter PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Converter imagem": {
+      "main": [
+        [
+          {
+            "node": "Analisar imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Converter PDF": {
+      "main": [
+        [
+          {
+            "node": "Extrair texto do PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extrair texto do PDF": {
+      "main": [
+        [
+          {
+            "node": "Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qual o tipo de mensagem?": {
+      "main": [
+        [
+          {
+            "node": "Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Base64 do Audio",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Base64 da imagem",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pegar o base64 do PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "variaveis": {
+      "main": [
+        [
+          {
+            "node": "Qual o tipo de mensagem?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcrição do audio": {
+      "main": [
+        [
+          {
+            "node": "Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analisar imagem": {
+      "main": [
+        [
+          {
+            "node": "Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent - Vendedor",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Information Extractor1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Window Buffer Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent - Vendedor",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "woocommerce_search": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent - Vendedor",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor1": {
+      "main": [
+        [
+          {
+            "node": "Mensagem de texto2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent - Suporte",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Information Extractor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Window Buffer Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent - Suporte",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor": {
+      "main": [
+        [
+          {
+            "node": "Mensagem de texto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent - Vendedor": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "woocommerce_order_status": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent - Suporte",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensagem": {
+      "main": [
+        [
+          {
+            "node": "Sentiment Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Sentiment Analysis",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent - Suporte": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "whatsapp": {
+      "main": [
+        [
+          {
+            "node": "variaveis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sentiment Analysis": {
+      "main": [
+        [
+          {
+            "node": "AI Agent - Vendedor",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent - Suporte",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "AI Agent - Vendedor": [
+      {
+        "json": {
+          "output": "Aqui estão alguns modelos de iPhone disponíveis em nossa loja:\n\n1. **Apple iPhone 15 Pro Max 1TB Black Titanium**\n   - **Preço:** R$ 10.000,00\n   - **Descrição:** Design sofisticado em titânio, tela Super Retina XDR de 6,7\", câmera de 48MP e conectividade 5G.\n   - [Ver produto](https://loja.automacaosemlimites.com.br/produto/apple-iphone-15-pro-max-1tb-black-titanium-desempenho-e-estilo/)\n   - ![iPhone 15 Pro Max](https://loja.automacaosemlimites.com.br/wp-content/uploads/2024/10/810069763-1-4.jpg)\n\n2. **Apple iPhone 16 Pro Max 256GB Titânio Preto**\n   - **Preço:** Sob consulta\n   - **Descrição:** Novo design em titânio, chip A18 Pro, câmera de 48MP e tela de 6,9\".\n   - [Ver produto](https://loja.automacaosemlimites.com.br/produto/apple-iphone-16-pro-max-256gb-titanio-preto-69-48mp-ios-5g/)\n   - ![iPhone 16 Pro Max](https://loja.automacaosemlimites.com.br/wp-content/uploads/2024/10/apple-iphone-16-pro-max-256gb-titanio-preto-69-48mp-ios-5g.webp)\n\nSe precisar de mais informações ou ajuda para escolher, estou à disposição! 😊"
+        }
+      }
+    ]
+  },
+  "versionId": "0bc49e9f-cb1f-4436-af21-1fdd58c05e7d",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-08-02T02:12:38.679Z",
+      "updatedAt": "2025-08-02T02:12:38.679Z",
+      "role": "workflow:owner",
+      "workflowId": "2KL4YkxmIqExsQQN",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": [
+    {
+      "createdAt": "2025-08-02T02:12:20.121Z",
+      "updatedAt": "2025-08-02T02:12:20.121Z",
+      "id": "YsZeTP7NBB1Ir8g4",
+      "name": "E-commerce Automatizado"
+    }
+  ]
+}
