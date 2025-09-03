@@ -1,0 +1,1141 @@
+{
+  "createdAt": "2024-10-24T17:46:49.550Z",
+  "updatedAt": "2024-12-03T19:13:21.800Z",
+  "id": "cg8NPgF1xUd7oynr",
+  "name": "Manager_Evolution",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "ad8d40ac-4f78-45ef-a369-3a1b86e16281",
+      "name": "Wait",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1000,
+        680
+      ],
+      "webhookId": "c12fc51b-fcbc-41b7-a3d5-ff0187ec36db"
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "nomeCaixa",
+              "value": "={{ $('Webhook').item.json[\"body\"][\"messages\"][0][\"content\"].match(/Nome da caixa: ([^\\s]+)/)[1]; }}"
+            },
+            {
+              "name": "importarContatos",
+              "value": "={{ $('Webhook').item.json[\"body\"][\"messages\"][0][\"content\"].match(/Importar contatos: ([^\\s]+)/)[1]; }}"
+            },
+            {
+              "name": "importarMensagens",
+              "value": "={{ $('Webhook').item.json[\"body\"][\"messages\"][0][\"content\"].match(/Importar mensagens: ([^\\s]+)/)[1]; }}"
+            },
+            {
+              "name": "diasDeImportacao",
+              "value": "={{ $('Webhook').item.json[\"body\"][\"messages\"][0][\"content\"].match(/Dias de importação: ([^\\s]+)/)[1]; }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fb348fe7-e250-4f85-ae71-8fdf511568e7",
+      "name": "LimpaDados1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        1060,
+        880
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const length = 25;  // Você pode ajustar isso conforme necessário\nconst charset = \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\";\nlet result = \"\";\n\nfor (let i = 0; i < length; i++) {\n    result += charset.charAt(Math.floor(Math.random() * charset.length));\n}\n\nreturn [\n    {\n        json: {\n            idsessao: result\n        }\n    }\n];\n"
+      },
+      "id": "de93161f-a51e-4f61-852a-3f856c70413e",
+      "name": "Gerador de ID Sessão",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        1860,
+        860
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Info Base').item.json[\"UrlAPI\"] }}/instance/fetchInstances",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Info Base').item.json[\"ApiKey\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b65bb6b9-99c6-4ee9-84b8-00885e132c99",
+      "name": "Busca As Sessões1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        460,
+        460
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "b1126bd3-46c6-4348-b54d-369d4421c77f",
+              "leftValue": "={{ $('Extrai Nome Sessão').item.json[\"extractedInstance\"] }}",
+              "rightValue": "={{ $('Busca As Sessões1').item.json[\"name\"] }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "64f4a8b8-8409-45aa-82b1-3ba4f627ae3e",
+      "name": "Filtro Sessões1",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [
+        640,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Info Base').item.json[\"UrlAPI\"] }}/instance/fetchInstances",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Info Base').item.json[\"ApiKey\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "40feca1f-4f21-4135-9f85-473782cbd4ec",
+      "name": "Busca As Sessões2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        460,
+        680
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "b1126bd3-46c6-4348-b54d-369d4421c77f",
+              "leftValue": "={{ $('Extrai Nome Sessão').item.json[\"extractedInstance\"] }}",
+              "rightValue": "={{ $('Busca As Sessões2').item.json[\"name\"] }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "9f652edb-bb2c-4816-8563-82fb75c29ce8",
+      "name": "Filtro Sessões2",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [
+        640,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "inboxes",
+          "mode": "list",
+          "cachedResultName": "inboxes"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "id",
+              "value": "={{ $('Info Base').item.json[\"IdCaixa\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "35b185b6-24f4-4a6d-829b-0e481ac2aa8d",
+      "name": "Busca Nome da Caixa",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [
+        -400,
+        640
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "UG4CqzCe8yk5SvOn",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Info Base').item.json[\"UrlAPI\"] }}/instance/restart/{{ $('Filtro Sessões1').item.json[\"name\"] }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Info Base').item.json[\"ApiKey\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "cce1a9cd-a225-40f9-8f7c-807c9ae74e04",
+      "name": "Reiniciar",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        820,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Info Base').item.json[\"UrlAPI\"] }}/instance/connectionState/{{ $('Filtro Sessões1').item.json[\"name\"] }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Info Base').item.json[\"ApiKey\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5a029758-2510-446b-9ba3-5f2b9a7539c6",
+      "name": "Solicita novo QR  Apos reiniciar",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1000,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "method": "DELETE",
+        "url": "={{ $('Info Base').item.json[\"UrlAPI\"] }}/instance/logout/{{ $('Filtro Sessões2').item.json[\"name\"] }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Info Base').item.json[\"ApiKey\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fd2546ab-ec53-40d9-af5b-5ec6965ad34c",
+      "name": "Deslogar",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        820,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Info Base').item.json[\"UrlAPI\"] }}/instance/connect/{{ $('Filtro Sessões2').item.json[\"name\"] }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Info Base').item.json[\"ApiKey\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a61cce15-e3c7-4e42-ae94-d9363b1d638f",
+      "name": "Solicita novo QR",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1200,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ca1712e6-c561-4d92-b734-44772a852e94",
+              "name": "UrlAPI",
+              "value": "https://epiv2.integrasac.com.br",
+              "type": "string"
+            },
+            {
+              "id": "57de8b54-b1d2-42b3-aabd-53f223fce321",
+              "name": "ApiKey",
+              "value": "1bf45057c106a4b5388b46e09fbc0420",
+              "type": "string"
+            },
+            {
+              "id": "7375ebec-7830-4b70-baa8-9a541e5803b7",
+              "name": "UrlChatwoot",
+              "value": "https://atendi.onlinechat.com.br",
+              "type": "string"
+            },
+            {
+              "id": "b6845baa-0b87-4e8a-8774-646d1908922e",
+              "name": "ApiKeyUserSuper",
+              "value": "QcNUG39sCgepiwFJVm7JJiBp",
+              "type": "string"
+            },
+            {
+              "id": "d3f5480b-acb3-4e8e-9fb9-e1d3f51c9a7a",
+              "name": "IdCaixa",
+              "value": "={{ $('Webhook').item.json[\"body\"][\"messages\"][0][\"inbox_id\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "33a549e0-b15e-4f34-a5e3-dfc5d0e5850d",
+              "name": "IdEmpresa",
+              "value": "={{ $('Webhook').item.json[\"body\"][\"messages\"][0][\"account_id\"] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "420f2ced-459a-4ec9-8875-846f404c9540",
+      "name": "Info Base",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -600,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "access_tokens",
+          "mode": "list",
+          "cachedResultName": "access_tokens"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "owner_id",
+              "value": "={{ $('Webhook').item.json[\"body\"][\"messages\"][0][\"sender\"][\"id\"] }}"
+            },
+            {
+              "column": "owner_type",
+              "value": "User"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "38d32f31-8cf4-4dae-80fa-1afe05d14a5f",
+      "name": "Pega Token Usuario",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [
+        460,
+        900
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "UG4CqzCe8yk5SvOn",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "channel_api",
+          "mode": "list",
+          "cachedResultName": "channel_api"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "id",
+              "value": "={{ $('Busca Nome da Caixa').item.json[\"channel_id\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7812134f-9c77-49e5-968a-53b2238d0147",
+      "name": "Busca Channel API",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [
+        -200,
+        640
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "UG4CqzCe8yk5SvOn",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Webhook').item.json[\"body\"][\"messages\"][0][\"processed_message_content\"] }}",
+                    "rightValue": "#reiniciar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "b362e54a-7771-4e37-8fb4-bc2c808a1a5a",
+                    "leftValue": "={{ $('Webhook').item.json[\"body\"][\"messages\"][0][\"processed_message_content\"] }}",
+                    "rightValue": "#deslogar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "e757064d-d045-4b57-98db-2fce220aa50a",
+                    "leftValue": "={{ $('Webhook').item.json[\"body\"][\"messages\"][0][\"processed_message_content\"] }}",
+                    "rightValue": "#Criador de Caixa:",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ddee6598-701d-4319-b51c-9804024d3b4a",
+      "name": "Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        140,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "1d483aba-b2f5-4591-8f13-771c35b440da",
+              "leftValue": "={{ $json.role }}",
+              "rightValue": 1,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "3754d66f-379b-481f-a561-316cc8059c5a",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        820,
+        900
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "account_users",
+          "mode": "list",
+          "cachedResultName": "account_users"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "user_id",
+              "value": "={{ $('Webhook').item.json[\"body\"][\"messages\"][0][\"sender\"][\"id\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f1a0120d-e9ef-4193-9371-f08652cac7b4",
+      "name": "Permissão do Usuario",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [
+        640,
+        900
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "UG4CqzCe8yk5SvOn",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Info Base').item.json[\"UrlChatwoot\"] }}/api/v1/accounts/{{ $('Webhook').item.json[\"body\"][\"messages\"][0][\"account_id\"] }}/conversations/{{ $('Webhook').item.json[\"body\"][\"id\"] }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "={{ $('Pega Token Usuario').item.json[\"token\"] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\"content\": \"🚨ATENÇÃO🚨\\nSeu usuário não tem permissão para criar novas caixas, contate o administrador\",\n\"message_type\": \"outgoing\",\n\"private\": true\n}",
+        "options": {}
+      },
+      "id": "f019849f-f0a3-48d0-902f-24c9af49db13",
+      "name": "Avisa que não é adm",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        960,
+        1080
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "48d0d2d9-a3c5-4e0c-8f76-6ba3ed8dafcd",
+              "leftValue": "={{ $('Puxa todas as Estancias').item.json[\"Chatwoot\"][\"accountId\"] }}",
+              "rightValue": "={{ $('Info Base').item.json[\"IdEmpresa\"] }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "6c0146a2-b95a-4103-becc-61fd53b54101",
+              "leftValue": "={{ $('Puxa todas as Estancias').item.json[\"Chatwoot\"][\"nameInbox\"] }}",
+              "rightValue": "={{ $('LimpaDados1').item.json[\"nomeCaixa\"] }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "4181ad60-746a-41cc-9dd2-0fec3ff86636",
+      "name": "Filter",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [
+        1460,
+        880
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "b9a89fac-5e22-4201-abf3-0046e796ff07",
+              "leftValue": "={{ $('Filter').item.json[\"Chatwoot\"][\"accountId\"] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "48330165-6481-406c-9a2e-7bae170efb41",
+      "name": "If1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1660,
+        880
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Info Base').item.json[\"UrlChatwoot\"] }}/api/v1/accounts/{{ $('Webhook').item.json[\"body\"][\"messages\"][0][\"account_id\"] }}/conversations/{{ $('Webhook').item.json[\"body\"][\"id\"] }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "={{ $('Pega Token Usuario').item.json[\"token\"] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\"content\": \"🚨ATENÇÃO🚨\\nJá existe caixas criadas com o mesmo nome, coloque um nome diferente\\n\\nLembre-se não altere o nome de sua caixa depois de criada.\",\n\"message_type\": \"outgoing\",\n\"private\": true\n}",
+        "options": {}
+      },
+      "id": "989fa450-7760-4aed-bdf0-fb8d3351cab3",
+      "name": "Avisa que ja Existe",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        1820,
+        1060
+      ],
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Info Base').item.json[\"UrlChatwoot\"] }}/api/v1/accounts/{{ $('Webhook').item.json[\"body\"][\"messages\"][0][\"account_id\"] }}/conversations/{{ $('Webhook').item.json[\"body\"][\"id\"] }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "={{ $('Pega Token Usuario').item.json[\"token\"] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\"content\": \"✅Caixa Criada✅\\nSua caixa foi criada com sucesso, acesse e faça a leitura do QR\\n\\nLembre-se não altere o nome de sua caixa depois de criada.\",\n\"message_type\": \"outgoing\",\n\"private\": true\n}",
+        "options": {}
+      },
+      "id": "38632d35-27e2-41a5-a657-f0e0b782d876",
+      "name": "Avisa que foi Criada",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        2220,
+        860
+      ],
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Recebe a URL do campo webhook_url\nconst url = $input.first().json[\"webhook_url\"];\n\n// Extrai a parte após a última barra\nconst extractedInstance = url.split('/').pop();\n\n// Retorna o resultado\nreturn [{ extractedInstance }];\n"
+      },
+      "id": "ee39d362-0787-494b-95a0-2405035fdaef",
+      "name": "Extrai Nome Sessão",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -20,
+        640
+      ],
+      "alwaysOutputData": false,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Info Base').item.json[\"UrlAPI\"] }}/instance/fetchInstances",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Info Base').item.json[\"ApiKey\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "cbdee462-adf9-4180-a1e2-aa8bd0e7e240",
+      "name": "Puxa todas as Estancias",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1260,
+        880
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Info Base').item.json[\"UrlAPI\"] }}/instance/create",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Info Base').item.json[\"ApiKey\"] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"instanceName\": \"{{ $('Gerador de ID Sessão').item.json[\"idsessao\"] }}_Whatsapp_IdCW_{{ $('Info Base').item.json[\"IdEmpresa\"] }}\",\n    \"token\": \"\",\n    \"qrcode\": true,\n    \"integration\": \"WHATSAPP-BAILEYS\",\n    \"rejectCall\": true,\n    \"msgCall\": \"Infelizmente não aceitamos ligações\",\n    \"groupsIgnore\": false,\n    \"alwaysOnline\": false,\n    \"readMessages\": true,\n    \"readStatus\": true,\n    \"syncFullHistory\": false,\n    \"chatwootAccountId\": \"{{ $('Info Base').item.json[\"IdEmpresa\"] }}\",\n    \"chatwootToken\": \"{{ $('Pega Token Usuario').item.json[\"token\"] }}\",\n    \"chatwootUrl\": \"{{ $('Info Base').item.json[\"UrlChatwoot\"] }}\",\n    \"chatwootSignMsg\": true,\n    \"chatwootReopenConversation\": false,\n    \"chatwootConversationPending\": false,\n    \"chatwootImportContacts\": true,\n    \"chatwootNameInbox\": \"{{ $('LimpaDados1').item.json[\"nomeCaixa\"] }}\",\n    \"chatwootMergeBrazilContacts\": true,\n    \"chatwootImportMessages\": true,\n    \"chatwootDaysLimitImportMessages\": 30,\n    \"chatwootOrganization\": \"Gerador de QR\",\n    \"chatwootLogo\": \"https://astraonline.com.br/wp-content/uploads/2024/08/qr.png\"\n}",
+        "options": {}
+      },
+      "id": "74c71893-6e14-43a8-89e8-77302b5db7ab",
+      "name": "Cria API Whatsapp1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2040,
+        860
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "statusapi",
+        "options": {}
+      },
+      "id": "d6d28002-ca6c-437e-a99e-4d39b70e28cb",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -780,
+        640
+      ],
+      "webhookId": "91ebef9c-8324-46ac-b6b8-713049a2d561"
+    }
+  ],
+  "connections": {
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Solicita novo QR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LimpaDados1": {
+      "main": [
+        [
+          {
+            "node": "Puxa todas as Estancias",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerador de ID Sessão": {
+      "main": [
+        [
+          {
+            "node": "Cria API Whatsapp1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Busca As Sessões1": {
+      "main": [
+        [
+          {
+            "node": "Filtro Sessões1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtro Sessões1": {
+      "main": [
+        [
+          {
+            "node": "Reiniciar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Busca As Sessões2": {
+      "main": [
+        [
+          {
+            "node": "Filtro Sessões2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtro Sessões2": {
+      "main": [
+        [
+          {
+            "node": "Deslogar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Busca Nome da Caixa": {
+      "main": [
+        [
+          {
+            "node": "Busca Channel API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reiniciar": {
+      "main": [
+        [
+          {
+            "node": "Solicita novo QR  Apos reiniciar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deslogar": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Info Base": {
+      "main": [
+        [
+          {
+            "node": "Busca Nome da Caixa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Busca Channel API": {
+      "main": [
+        [
+          {
+            "node": "Extrai Nome Sessão",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Busca As Sessões1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Busca As Sessões2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pega Token Usuario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pega Token Usuario": {
+      "main": [
+        [
+          {
+            "node": "Permissão do Usuario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "LimpaDados1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Avisa que não é adm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Permissão do Usuario": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Gerador de ID Sessão",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Avisa que ja Existe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extrai Nome Sessão": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Puxa todas as Estancias": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cria API Whatsapp1": {
+      "main": [
+        [
+          {
+            "node": "Avisa que foi Criada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Info Base",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "9c2cdefb-0a1e-416a-93e3-ab6d3f8da05e",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2024-10-24T17:46:49.550Z",
+      "updatedAt": "2024-10-24T17:46:49.550Z",
+      "role": "workflow:owner",
+      "workflowId": "cg8NPgF1xUd7oynr",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
