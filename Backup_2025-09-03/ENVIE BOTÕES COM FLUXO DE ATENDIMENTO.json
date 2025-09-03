@@ -1,0 +1,137 @@
+{
+  "createdAt": "2024-10-26T22:26:56.182Z",
+  "updatedAt": "2024-10-26T22:27:56.735Z",
+  "id": "FM8lT0ZG5aKnl2w4",
+  "name": "ENVIE BOTÕES COM FLUXO DE ATENDIMENTO",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "82098d46-b128-410f-b816-7d4d56e97e88",
+      "name": "When clicking ‘Test workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        360,
+        820
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.url }}/message/sendButtons/{{ $json.instancia }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $json.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"number\": \"{{ $json.numero }}\",\n    \"title\": \"Se torne um Gestor de Automações\",\n    \"description\": \"Descubra o Poder do n8n com a Nexxus Academy e seja um Gestor Bem Pago!\",\n    \"thumbnailUrl\": \"https://i.ibb.co/ZzPgvKs/logo.jpg\",\n    \"footer\": \"Acesse:\\nnexxusacademy.com.br/\",\n    \"buttons\": [\n        {\n            \"type\": \"reply\",\n            \"displayText\": \"Quero Formamação Nexxus\",\n            \"id\": \"nexxus\"\n        },\n        {\n            \"type\": \"copy\",\n            \"displayText\": \"Copia Link\",\n            \"copyCode\": \"https://nexxusacademy.com.br/\"\n        },\n        {\n            \"type\": \"url\",\n            \"displayText\": \"Comprar Agora\",\n            \"url\": \"https://nexxusacademy.com.br/\"\n        },\n        {\n            \"type\": \"call\",\n            \"displayText\": \"Me ligue e tire suas dúvidas\",\n            \"phoneNumber\": \"5575981787697\"\n        }\n    ],\n    \"delay\": 1200\n}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "88fdf4b5-8bfb-48ee-9eaf-a58dc6f8ccff",
+      "name": "ENVIAR BOTOES",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        920,
+        820
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e91c8adc-07d5-47dd-90d4-2e6b9bc40480",
+              "name": "instancia",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "910acfca-c0b4-44f4-ad3c-2470594e754f",
+              "name": "apikey",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "62e2b3f0-389d-454a-92d7-4f4a54791a73",
+              "name": "url",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "534068ad-d3f7-46b6-baf3-e80240329745",
+              "name": "numero",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "79201534-5980-4520-aea2-4b59226384f7",
+      "name": "DADOS - EVO",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        640,
+        820
+      ]
+    }
+  ],
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "DADOS - EVO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DADOS - EVO": {
+      "main": [
+        [
+          {
+            "node": "ENVIAR BOTOES",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "405ee47b-b2e8-422c-a14f-fd90167c3074",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2024-10-26T22:26:56.182Z",
+      "updatedAt": "2024-10-26T22:26:56.182Z",
+      "role": "workflow:owner",
+      "workflowId": "FM8lT0ZG5aKnl2w4",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
