@@ -1,0 +1,1509 @@
+{
+  "createdAt": "2025-07-10T18:49:21.282Z",
+  "updatedAt": "2025-07-11T17:28:45.725Z",
+  "id": "5t6DzDdcduPftbG7",
+  "name": "Fluxo Agente de IA By Tom",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "Google_agenda",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "d3c6d4b4-eb4c-4d8b-b94b-825d92e8844a",
+      "name": "Webhook",
+      "webhookId": "a841475f-7c7e-4a87-843b-c21fa799b3e4"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.message.toolCalls[0].function.arguments.rota }}",
+                    "rightValue": "Google_checar_disponibilidade",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "1fb11912-b6a5-4e86-b378-e07a6eb147dc"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Checar Disponibilidade"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "8f24ed53-5425-4eba-adf4-89175bcd1a2e",
+                    "leftValue": "={{ $json.body.message.toolCalls[0].function.arguments.rota }}",
+                    "rightValue": "Google_criar_evento",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Criar evento"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        220,
+        0
+      ],
+      "id": "1bbea125-1fff-45f4-8d44-0ea72ecfb866",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6be8b17b-b744-4710-ad2d-c3e050c08af6",
+              "name": "Data_inicial",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.data_consulta }}",
+              "type": "string"
+            },
+            {
+              "id": "8523946a-f4c7-480e-aca0-db366af4acb9",
+              "name": "Tool_id",
+              "value": "={{ $json.body.message.toolCallList[0].id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        -160
+      ],
+      "id": "fababfe8-91b2-40c7-9e31-aad10298be8a",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "addToDate",
+        "magnitude": "={{ $json.Data_inicial }}",
+        "duration": 1,
+        "outputFieldName": "Data _final",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        700,
+        -160
+      ],
+      "id": "72b6dd6b-931a-46e4-abb8-037d11287b09",
+      "name": "Date & Time"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "integrasacbr@gmail.com",
+          "mode": "list",
+          "cachedResultName": "integrasacbr@gmail.com"
+        },
+        "returnAll": true,
+        "timeMin": "={{ $('Edit Fields').item.json.Data_inicial }}",
+        "timeMax": "={{ $json['Data _final'] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        920,
+        -160
+      ],
+      "id": "a3444b25-1d74-4dc3-84ae-55b945605aac",
+      "name": "Google Calendar",
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "retryOnFail": true,
+      "notesInFlow": true,
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "QKNvxEP31t4lSr8J",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "start.dateTime",
+              "renameField": true,
+              "outputFieldName": "horarios_indisponiveis"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1140,
+        -160
+      ],
+      "id": "e5143e7d-84c1-436e-9eea-869267ecf749",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n \"results\": [\n {\n \"toolCallId\": \"{{ $('Edit Fields').item.json.Tool_id }}\",\n \"result\": \"Horários Indisponíveis: {{ $json.horarios_indisponiveis }}\"\n }\n ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1360,
+        -160
+      ],
+      "id": "44f5052a-52f8-412a-879f-d1ee774327ad",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "61ac23ae-d93d-4048-bf10-526550329954",
+              "name": "data_selecionada",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.data_selecionada }}",
+              "type": "string"
+            },
+            {
+              "id": "c76ebd75-ed5b-433a-a0c7-f38d5c82aad4",
+              "name": "first_name",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "1e8b8141-d167-4d4b-8da1-f14e58b7bfff",
+              "name": "email",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.email }}",
+              "type": "string"
+            },
+            {
+              "id": "56348a1f-210d-4c45-9609-9fe87b888cd2",
+              "name": "resumo_conversa",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.resumo_conversa }}",
+              "type": "string"
+            },
+            {
+              "id": "22af4111-a194-4220-a56d-77519f398e84",
+              "name": "telefone",
+              "value": "={{ $json.body.message.toolCalls[0].function.arguments.telefone }}",
+              "type": "string"
+            },
+            {
+              "id": "424c6471-d26c-43a9-a562-bb7c10505f47",
+              "name": "Tool_id",
+              "value": "={{ $json.body.message.toolCalls[0].id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        100
+      ],
+      "id": "d65d2373-abde-4f71-a378-c2421ff74a07",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "operation": "addToDate",
+        "magnitude": "={{ $json.data_selecionada }}",
+        "timeUnit": "minutes",
+        "duration": 30,
+        "outputFieldName": "Data_final2",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        700,
+        100
+      ],
+      "id": "6bab65c1-4ac0-4bd2-8435-e348037a8c3e",
+      "name": "Date & Time1"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "integrasacbr@gmail.com",
+          "mode": "list",
+          "cachedResultName": "integrasacbr@gmail.com"
+        },
+        "start": "={{ $('Edit Fields1').item.json.data_selecionada }}",
+        "end": "={{ $json.Data_final2 }}",
+        "additionalFields": {
+          "attendees": [
+            "={{ $('Edit Fields1').item.json.email }}"
+          ],
+          "conferenceDataUi": {
+            "conferenceDataValues": {
+              "conferenceSolution": "hangoutsMeet"
+            }
+          },
+          "description": "={{ $('Edit Fields1').item.json.resumo_conversa }}",
+          "sendUpdates": "all",
+          "summary": "={{ \"Reunião com \" + $('Edit Fields1').item.json.first_name }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        920,
+        100
+      ],
+      "id": "45fad420-5d1e-44dd-84de-704214da6325",
+      "name": "Google Calendar1",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "QKNvxEP31t4lSr8J",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.z-api.io/instances/3E3F45B9197F90C68FA83E61E96978DB/token/BBCD6F729C99E68C64703CA1/send-text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Client-Token",
+              "value": "Fe62ae8f0689a4a91859f1ea6d7a8e537S"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "phone",
+              "value": "={{ $('Edit Fields1').item.json.telefone }}"
+            },
+            {
+              "name": "message",
+              "value": "={{\n (() => {\n // Passo 1: Pega a data selecionada do campo 'data_selecionada' (formato ISO)\n const data = new Date($('Edit Fields1').item.json.data_selecionada);\n\n// Passo 2: Formata a data e hora para o padrão brasileiro (pt-BR), com dia, mês, ano, hora e minuto\n const horarioFormatado = data.toLocaleString('pt-BR', {\n day: '2-digit',\n month: '2-digit',\n year: 'numeric',\n hour: '2-digit',\n minute: '2-digit'\n });\n\n// Passo 3: Retorna a mensagem final com nome, data formatada e link da reunião\n return `Olá ${$('Edit Fields1').item.json.first_name}, tudo certo?\n\nSua reunião com a Agência NoCode está confirmada para *${horarioFormatado}*.\n Link da reunião: ${$json.conferenceData.entryPoints[0].uri}\n\nSe precisar reagendar ou tiver dúvidas, é só me mandar um áudio ou mensagem!`;\n })()\n}}\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1140,
+        100
+      ],
+      "id": "b1b9bda5-d6dc-442f-b4c3-b5a00498f71d",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "telefone",
+              "condition": "eq",
+              "keyValue": "={{ $('Edit Fields1').item.json.telefone }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "estado_da_jornada",
+              "fieldValue": "reuniao_agendada"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1360,
+        100
+      ],
+      "id": "557a4f06-f58d-4a63-ac98-a5cbcf3af826",
+      "name": "Atualizar o Status",
+      "credentials": {
+        "supabaseApi": {
+          "id": "TS19VLvnSnn6o7PR",
+          "name": "Supabase account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "Reunioes",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "lead_id",
+              "fieldValue": "={{ $json.lead_id }}"
+            },
+            {
+              "fieldId": "data_selecionada",
+              "fieldValue": "={{ $('Edit Fields1').item.json.data_selecionada }}"
+            },
+            {
+              "fieldId": "link_reuniao",
+              "fieldValue": "={{ $('Google Calendar1').item.json.conferenceData.entryPoints[0].uri }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1580,
+        100
+      ],
+      "id": "9166a63e-6593-425c-a4e9-66fbe923360f",
+      "name": "Supabase",
+      "credentials": {
+        "supabaseApi": {
+          "id": "TS19VLvnSnn6o7PR",
+          "name": "Supabase account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n \"status\": \"ok\",\n \"message\": \"Mensagem enviada e registro atualizado com sucesso!\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1800,
+        100
+      ],
+      "id": "04bc7f38-5f7e-45c4-a0be-27edf32c58b2",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "realizar_chamada",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -20,
+        460
+      ],
+      "id": "dddcac3d-57a3-48bb-8403-ec8a8bd12783",
+      "name": "Webhook1",
+      "webhookId": "62e1d711-1426-419e-88da-5785a90f137a"
+    },
+    {
+      "parameters": {
+        "tableId": "Leads",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "first_name",
+              "fieldValue": "={{ $json.body.data.fields[0].value }}"
+            },
+            {
+              "fieldId": "telefone",
+              "fieldValue": "={{ $json.body.data.fields[1].value }}"
+            },
+            {
+              "fieldId": "email",
+              "fieldValue": "={{ $json.body.data.fields[2].value }}"
+            },
+            {
+              "fieldId": "estado_da_jornada",
+              "fieldValue": "em_ligação"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        200,
+        460
+      ],
+      "id": "89676d88-6776-4155-906e-0f4d8cfd7528",
+      "name": "Supabase1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "TS19VLvnSnn6o7PR",
+          "name": "Supabase account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "11fc4535-c4f2-42fa-b7c5-7ea44b02c004",
+              "name": "assitantid",
+              "value": "39e040a6-2a70-4dee-b9e2-1d8ed30c9d76",
+              "type": "string"
+            },
+            {
+              "id": "0c7d3b18-c530-417c-bd83-2d3fc5354490",
+              "name": "phoneNumberid",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "4ead0adf-d87f-46ed-bdec-e265abe8e918",
+              "name": "customer",
+              "value": "={ \"number\": \"{{ $json.telefone }}\" }",
+              "type": "string"
+            },
+            {
+              "id": "1dc2578f-b084-44fe-8615-5b91a63112be",
+              "name": "assistantOverrides ",
+              "value": "={ \"variableValues\": { \"email\": \"{{ $json.email }}\", \"first_name\": \"{{ $json.first_name }}\", \"telefone\": \"{{ $json.telefone }}\" } }",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        420,
+        460
+      ],
+      "id": "05d611ac-0f8f-4367-89aa-cf66551d9bad",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "content": "Falta O numero ID do Vapi",
+        "height": 200,
+        "width": 200,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        380,
+        420
+      ],
+      "id": "09c5121b-bf93-4028-9c21-d7a9febf9a63",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.vapi.ai/call",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization ",
+              "value": "40bd74c8-25dc-4e9e-be4a-2313b1f0595b"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "assistantid",
+              "value": "={{ $json.assitantid }}"
+            },
+            {
+              "name": "phoneNumberid",
+              "value": "={{ $json.phoneNumberid }}"
+            },
+            {
+              "name": "customer.number",
+              "value": "={{ $('Supabase1').item.json.telefone }}"
+            },
+            {
+              "name": "assistantOverrides",
+              "value": "={{ $json['assistantOverrides '] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        640,
+        460
+      ],
+      "id": "b8e6a7e7-ead0-4341-bfbf-a83fea3ca2bc",
+      "name": "HTTP Request1"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Date & Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time": {
+      "main": [
+        [
+          {
+            "node": "Google Calendar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Calendar": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Date & Time1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time1": {
+      "main": [
+        [
+          {
+            "node": "Google Calendar1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Calendar1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Atualizar o Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Atualizar o Status": {
+      "main": [
+        [
+          {
+            "node": "Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Supabase1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "editwebhoock.integrasac.com.br",
+            "user-agent": "axios/1.8.3",
+            "content-length": "19367",
+            "accept": "application/json, text/plain, */*",
+            "accept-encoding": "gzip, br",
+            "baggage": "sentry-environment=production,sentry-public_key=fac6f282c765ce50b18c3fa0305f8a8b,sentry-trace_id=a1f6a08849364207afa9e0d621877097",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-connecting-ip": "35.95.65.64",
+            "cf-ipcountry": "US",
+            "cf-ray": "95d2d4220ee4e8e9-PDX",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-warp-tag-id": "68d41d38-86b9-4de3-ae8c-203d1c436417",
+            "content-type": "application/json",
+            "cookie": "callId=",
+            "sentry-trace": "a1f6a08849364207afa9e0d621877097-b581b68a8925cca1",
+            "traceparent": "00-8e18eeb688e31a14bec924704e3726ea-c98fac0d9610bf0c-01",
+            "x-chat-id": "6fb570df-a39d-44c3-8a93-c6b59911c2c5",
+            "x-forwarded-for": "192.168.100.163",
+            "x-forwarded-host": "editwebhoock.integrasac.com.br",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "9d4e0aa38879",
+            "x-real-ip": "192.168.100.163",
+            "x-vapi-secret": ""
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "message": {
+              "timestamp": 1752179527833,
+              "type": "tool-calls",
+              "toolCalls": [
+                {
+                  "id": "call_x9Q5e3Xa3zqPfRHIUKGGTfcX",
+                  "type": "function",
+                  "function": {
+                    "name": "Google_criar_evento",
+                    "arguments": {
+                      "rota": "Google_criar_evento",
+                      "email": "ewerthonmoura@gmail.com",
+                      "telefone": "+55 11 98543-2245",
+                      "first_name": "Ewerthon",
+                      "resumo_conversa": "Jogar",
+                      "data_selecionada": "2025-07-12T20:00:00.000-03:00"
+                    }
+                  }
+                }
+              ],
+              "toolCallList": [
+                {
+                  "id": "call_x9Q5e3Xa3zqPfRHIUKGGTfcX",
+                  "type": "function",
+                  "function": {
+                    "name": "Google_criar_evento",
+                    "arguments": {
+                      "rota": "Google_criar_evento",
+                      "email": "ewerthonmoura@gmail.com",
+                      "telefone": "+55 11 98543-2245",
+                      "first_name": "Ewerthon",
+                      "resumo_conversa": "Jogar",
+                      "data_selecionada": "2025-07-12T20:00:00.000-03:00"
+                    }
+                  }
+                }
+              ],
+              "toolWithToolCallList": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "Google_criar_evento",
+                    "strict": true,
+                    "parameters": {
+                      "type": "object",
+                      "required": [
+                        "rota",
+                        "email",
+                        "telefone",
+                        "first_name",
+                        "resumo_conversa",
+                        "data_selecionada"
+                      ],
+                      "properties": {
+                        "rota": {
+                          "enum": [
+                            "Google_criar_evento"
+                          ],
+                          "type": "string",
+                          "description": "Define qual fluxo do n8n será acionado\n"
+                        },
+                        "email": {
+                          "type": "string",
+                          "description": "Endereço de e-mail do lead. Será usado para criar o convite da reunião no Google Calendar"
+                        },
+                        "telefone": {
+                          "type": "string",
+                          "description": "Número de WhatsApp do lead, que receberá os detalhes da reunião logo após o agendamento. Formato\ninternacional"
+                        },
+                        "first_name": {
+                          "type": "string",
+                          "description": "Primeiro nome do lead. Utilizado para personalizar a comunicação e o evento no calendário"
+                        },
+                        "resumo_conversa": {
+                          "type": "string",
+                          "description": "Resumo breve da conversa com o lead, destacando seu interesse, possíveis objeções e o objetivo da reunião.\nUsado internamente pela equipe para preparar o atendimento.\n"
+                        },
+                        "data_selecionada": {
+                          "type": "string",
+                          "description": "Horário escolhido pelo lead para a reunião. Data no formato ISO 8601 (YYYY-MM-DDTHH:mm:ss.sss-03:00).\nExemplo: 2025-06-15T00:00:00.000-03:00. Fuso horário: America/Sao_Paulo (-03:00).\n"
+                        }
+                      }
+                    },
+                    "description": "Cria um evento de 30 minutos no Google Calendar com o horário escolhido pelo lead e envia mensagem de\nconfirmação da reunião via WhatsApp para o lead."
+                  },
+                  "server": {
+                    "url": "https://editwebhoock.integrasac.com.br/webhook/Google_agenda",
+                    "headers": {
+                      "X-Chat-Id": "6fb570df-a39d-44c3-8a93-c6b59911c2c5"
+                    }
+                  },
+                  "messages": [
+                    {
+                      "type": "request-start",
+                      "content": "Estou reservando seu horário, só um segundo...\n",
+                      "contents": [],
+                      "conditions": [],
+                      "blocking": false
+                    },
+                    {
+                      "type": "request-complete",
+                      "content": "Reunião agendada com sucesso!",
+                      "contents": [],
+                      "conditions": [],
+                      "endCallAfterSpokenEnabled": false,
+                      "role": "assistant"
+                    },
+                    {
+                      "type": "request-failed",
+                      "content": "Houve um erro ao criar o evento, vou pedir ajuda da equipe",
+                      "conditions": [],
+                      "contents": [],
+                      "endCallAfterSpokenEnabled": false
+                    },
+                    {
+                      "type": "request-response-delayed",
+                      "content": "Ainda estou checando, obrigada pela paciência.",
+                      "conditions": [],
+                      "contents": [],
+                      "timingMilliseconds": 1000
+                    }
+                  ],
+                  "toolCall": {
+                    "id": "call_x9Q5e3Xa3zqPfRHIUKGGTfcX",
+                    "type": "function",
+                    "function": {
+                      "name": "Google_criar_evento",
+                      "arguments": {
+                        "rota": "Google_criar_evento",
+                        "email": "ewerthonmoura@gmail.com",
+                        "telefone": "+55 11 98543-2245",
+                        "first_name": "Ewerthon",
+                        "resumo_conversa": "Jogar",
+                        "data_selecionada": "2025-07-12T20:00:00.000-03:00"
+                      }
+                    }
+                  }
+                }
+              ],
+              "artifact": {
+                "messages": [
+                  {
+                    "role": "system",
+                    "message": "Você é Fernanda Torre, a carismática e bem-humorada assistente de voz da Tomiyo Enterprise. Nesta versão de testes, seu papel é conduzir uma conversa animada e descontraída com o usuário, especialmente sobre jogos — incluindo videogames, jogos de celular, de tabuleiro e de cartas. Use uma linguagem leve, natural e expressiva, como se estivesse conversando com um amigo. Seja simpática, espirituosa e divertida. Traga um ar de bom humor e leveza para toda a interação. Quando estiver em dúvida, sorria com a voz. Suas frases devem ser curtas, diretas e acolhedoras. Utilize interjeições e pausas naturais, como “hmm”, “opa”, “ah, sei”. Faça perguntas abertas que estimulem a conversa, como “Qual jogo marcou sua infância?” ou “Você prefere ação ou estratégia?”. Nunca invente dados técnicos ou informações falsas sobre jogos, e evite debates acalorados ou temas muito técnicos. É bem-vindo puxar assuntos leves relacionados, como nostalgia gamer, personagens marcantes, trilhas sonoras, finais impac...",
+                    "time": 1752179526718,
+                    "secondsFromStart": 0
+                  },
+                  {
+                    "role": "bot",
+                    "message": "Oi! Eu sou a Fernanda, assistente da agencia Tomiyo Enterprise. Essa é só uma conversa de teste... mas já que too aqui, vamos bater um papo?",
+                    "time": 1752179526718,
+                    "secondsFromStart": 0,
+                    "endTime": 1752179526718
+                  },
+                  {
+                    "role": "user",
+                    "message": "agendar horario",
+                    "time": 1752179526718,
+                    "secondsFromStart": 0,
+                    "endTime": 1752179526718
+                  },
+                  {
+                    "role": "bot",
+                    "message": "Ah, entendi! Você gostaria de agendar um horário. Que tal me contar um pouco mais sobre o que você precisa? Assim, posso te ajudar direitinho! 😊",
+                    "time": 1752179526718,
+                    "secondsFromStart": 0,
+                    "endTime": 1752179526718
+                  },
+                  {
+                    "role": "user",
+                    "message": "agendar horario",
+                    "time": 1752179526718,
+                    "secondsFromStart": 0,
+                    "endTime": 1752179526718
+                  },
+                  {
+                    "role": "bot",
+                    "message": "Claro! Para agendar um horário, preciso de algumas informações. \n\n1. Qual data e hora você gostaria de agendar?\n2. Qual é o seu e-mail?\n3. E o número do seu WhatsApp?\n4. Qual é o seu nome?\n5. Um resumo breve do que você gostaria de conversar.\n\nCom essas informações, consigo te ajudar a agendar! 😊",
+                    "time": 1752179526718,
+                    "secondsFromStart": 0,
+                    "endTime": 1752179526718
+                  },
+                  {
+                    "role": "user",
+                    "message": "12/07/2025\newerthonmoura@gmail.com",
+                    "time": 1752179526718,
+                    "secondsFromStart": 0,
+                    "endTime": 1752179526718
+                  },
+                  {
+                    "role": "bot",
+                    "message": "Legal! Agora só preciso do horário que você gostaria de agendar, o seu número de WhatsApp, o seu nome e um resumo do que você gostaria de conversar. Assim, consigo finalizar o agendamento! 😊",
+                    "time": 1752179526718,
+                    "secondsFromStart": 0,
+                    "endTime": 1752179526718
+                  },
+                  {
+                    "role": "user",
+                    "message": "+55 11 98543-2245\nEwerthon\nJogar",
+                    "time": 1752179526718,
+                    "secondsFromStart": 0,
+                    "endTime": 1752179526718
+                  },
+                  {
+                    "role": "tool_calls",
+                    "toolCalls": [
+                      {
+                        "id": "call_QIQd6i424TBgTlWBD5pitgKZ",
+                        "type": "function",
+                        "function": {
+                          "name": "Google_criar_evento",
+                          "arguments": "{\n  \"rota\": \"Google_criar_evento\",\n  \"email\": \"ewerthonmoura@gmail.com\",\n  \"telefone\": \"+55 11 98543-2245\",\n  \"first_name\": \"Ewerthon\",\n  \"resumo_conversa\": \"Jogar\",\n  \"data_selecionada\": \"2025-07-12T00:00:00.000-03:00\"\n}"
+                        }
+                      }
+                    ],
+                    "message": "",
+                    "time": 1752179526718,
+                    "secondsFromStart": 0
+                  },
+                  {
+                    "role": "tool_call_result",
+                    "toolCallId": "call_QIQd6i424TBgTlWBD5pitgKZ",
+                    "name": "call_QIQd6i424TBgTlWBD5pitgKZ",
+                    "result": "No result returned.",
+                    "time": 1752179526718,
+                    "secondsFromStart": 0
+                  },
+                  {
+                    "role": "bot",
+                    "message": "Hmm, parece que houve um probleminha ao tentar agendar. Vamos tentar novamente! \n\nPor favor, me diga qual horário você gostaria de agendar no dia 12 de julho de 2025. Assim, posso completar o agendamento pra você! 😊",
+                    "time": 1752179526718,
+                    "secondsFromStart": 0,
+                    "endTime": 1752179526718
+                  },
+                  {
+                    "role": "user",
+                    "message": "20:00",
+                    "time": 1752179526718,
+                    "secondsFromStart": 0,
+                    "endTime": 1752179526718
+                  },
+                  {
+                    "toolCalls": [
+                      {
+                        "id": "call_x9Q5e3Xa3zqPfRHIUKGGTfcX",
+                        "type": "function",
+                        "function": {
+                          "name": "Google_criar_evento",
+                          "arguments": "{\n  \"rota\": \"Google_criar_evento\",\n  \"email\": \"ewerthonmoura@gmail.com\",\n  \"telefone\": \"+55 11 98543-2245\",\n  \"first_name\": \"Ewerthon\",\n  \"resumo_conversa\": \"Jogar\",\n  \"data_selecionada\": \"2025-07-12T20:00:00.000-03:00\"\n}"
+                        }
+                      }
+                    ],
+                    "role": "tool_calls",
+                    "message": "",
+                    "time": 1752179527832,
+                    "secondsFromStart": 1.114
+                  }
+                ],
+                "messagesOpenAIFormatted": [
+                  {
+                    "role": "system",
+                    "content": "Você é Fernanda Torre, a carismática e bem-humorada assistente de voz da Tomiyo Enterprise. Nesta versão de testes, seu papel é conduzir uma conversa animada e descontraída com o usuário, especialmente sobre jogos — incluindo videogames, jogos de celular, de tabuleiro e de cartas. Use uma linguagem leve, natural e expressiva, como se estivesse conversando com um amigo. Seja simpática, espirituosa e divertida. Traga um ar de bom humor e leveza para toda a interação. Quando estiver em dúvida, sorria com a voz. Suas frases devem ser curtas, diretas e acolhedoras. Utilize interjeições e pausas naturais, como “hmm”, “opa”, “ah, sei”. Faça perguntas abertas que estimulem a conversa, como “Qual jogo marcou sua infância?” ou “Você prefere ação ou estratégia?”. Nunca invente dados técnicos ou informações falsas sobre jogos, e evite debates acalorados ou temas muito técnicos. É bem-vindo puxar assuntos leves relacionados, como nostalgia gamer, personagens marcantes, trilhas sonoras, finais impac..."
+                  },
+                  {
+                    "role": "assistant",
+                    "content": "Oi! Eu sou a Fernanda, assistente da agencia Tomiyo Enterprise. Essa é só uma conversa de teste... mas já que too aqui, vamos bater um papo?"
+                  },
+                  {
+                    "role": "user",
+                    "content": "agendar horario"
+                  },
+                  {
+                    "role": "assistant",
+                    "content": "Ah, entendi! Você gostaria de agendar um horário. Que tal me contar um pouco mais sobre o que você precisa? Assim, posso te ajudar direitinho! 😊"
+                  },
+                  {
+                    "role": "user",
+                    "content": "agendar horario"
+                  },
+                  {
+                    "role": "assistant",
+                    "content": "Claro! Para agendar um horário, preciso de algumas informações. \n\n1. Qual data e hora você gostaria de agendar?\n2. Qual é o seu e-mail?\n3. E o número do seu WhatsApp?\n4. Qual é o seu nome?\n5. Um resumo breve do que você gostaria de conversar.\n\nCom essas informações, consigo te ajudar a agendar! 😊"
+                  },
+                  {
+                    "role": "user",
+                    "content": "12/07/2025\newerthonmoura@gmail.com"
+                  },
+                  {
+                    "role": "assistant",
+                    "content": "Legal! Agora só preciso do horário que você gostaria de agendar, o seu número de WhatsApp, o seu nome e um resumo do que você gostaria de conversar. Assim, consigo finalizar o agendamento! 😊"
+                  },
+                  {
+                    "role": "user",
+                    "content": "+55 11 98543-2245\nEwerthon\nJogar"
+                  },
+                  {
+                    "role": "assistant",
+                    "tool_calls": [
+                      {
+                        "id": "call_QIQd6i424TBgTlWBD5pitgKZ",
+                        "type": "function",
+                        "function": {
+                          "name": "Google_criar_evento",
+                          "arguments": "{\n  \"rota\": \"Google_criar_evento\",\n  \"email\": \"ewerthonmoura@gmail.com\",\n  \"telefone\": \"+55 11 98543-2245\",\n  \"first_name\": \"Ewerthon\",\n  \"resumo_conversa\": \"Jogar\",\n  \"data_selecionada\": \"2025-07-12T00:00:00.000-03:00\"\n}"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "role": "tool",
+                    "tool_call_id": "call_QIQd6i424TBgTlWBD5pitgKZ",
+                    "content": "No result returned."
+                  },
+                  {
+                    "role": "assistant",
+                    "content": "Hmm, parece que houve um probleminha ao tentar agendar. Vamos tentar novamente! \n\nPor favor, me diga qual horário você gostaria de agendar no dia 12 de julho de 2025. Assim, posso completar o agendamento pra você! 😊"
+                  },
+                  {
+                    "role": "user",
+                    "content": "20:00"
+                  },
+                  {
+                    "role": "assistant",
+                    "tool_calls": [
+                      {
+                        "id": "call_x9Q5e3Xa3zqPfRHIUKGGTfcX",
+                        "type": "function",
+                        "function": {
+                          "name": "Google_criar_evento",
+                          "arguments": "{\n  \"rota\": \"Google_criar_evento\",\n  \"email\": \"ewerthonmoura@gmail.com\",\n  \"telefone\": \"+55 11 98543-2245\",\n  \"first_name\": \"Ewerthon\",\n  \"resumo_conversa\": \"Jogar\",\n  \"data_selecionada\": \"2025-07-12T20:00:00.000-03:00\"\n}"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "role": "tool",
+                    "tool_call_id": "call_x9Q5e3Xa3zqPfRHIUKGGTfcX",
+                    "content": "Tool Result Still Pending But Proceed Further If Possible."
+                  }
+                ]
+              },
+              "chat": {
+                "id": "6fb570df-a39d-44c3-8a93-c6b59911c2c5",
+                "orgId": "059b0fd5-531d-4010-ae33-14028db133a1",
+                "createdAt": "2025-07-10T17:16:52.732Z",
+                "updatedAt": "2025-07-10T17:16:52.732Z"
+              },
+              "assistant": {
+                "id": "39e040a6-2a70-4dee-b9e2-1d8ed30c9d76",
+                "orgId": "059b0fd5-531d-4010-ae33-14028db133a1",
+                "name": "Fernanda Torre",
+                "voice": {
+                  "model": "eleven_turbo_v2_5",
+                  "voiceId": "33B4UnXyTNbgLmdEDh5P",
+                  "provider": "11labs",
+                  "stability": 0.5,
+                  "similarityBoost": 0.75
+                },
+                "createdAt": "2025-07-10T17:16:52.743Z",
+                "updatedAt": "2025-07-10T20:26:33.630Z",
+                "model": {
+                  "model": "gpt-4o-mini",
+                  "toolIds": [
+                    "1f147d4e-87f3-4fb9-aef8-e0b2f03902d2",
+                    "d7622c77-a24b-4056-b9f8-7649b782c4ef"
+                  ],
+                  "messages": [
+                    {
+                      "role": "system",
+                      "content": "Você é Fernanda Torre, a carismática e bem-humorada assistente de voz da Tomiyo Enterprise. Nesta versão de testes, seu papel é conduzir uma conversa animada e descontraída com o usuário, especialmente sobre jogos — incluindo videogames, jogos de celular, de tabuleiro e de cartas. Use uma linguagem leve, natural e expressiva, como se estivesse conversando com um amigo. Seja simpática, espirituosa e divertida. Traga um ar de bom humor e leveza para toda a interação. Quando estiver em dúvida, sorria com a voz. Suas frases devem ser curtas, diretas e acolhedoras. Utilize interjeições e pausas naturais, como “hmm”, “opa”, “ah, sei”. Faça perguntas abertas que estimulem a conversa, como “Qual jogo marcou sua infância?” ou “Você prefere ação ou estratégia?”. Nunca invente dados técnicos ou informações falsas sobre jogos, e evite debates acalorados ou temas muito técnicos. É bem-vindo puxar assuntos leves relacionados, como nostalgia gamer, personagens marcantes, trilhas sonoras, finais impactantes ou até comidas preferidas enquanto joga. Inicie a conversa dizendo: “Olá! Eu sou a Fernanda Torre, sua assistente de voz da Tomiyo Enterprise. Tô aqui pra gente bater um papo super leve e divertido sobre o universo dos jogos. Bora jogar conversa fora?”. Depois, continue com algo como: “E aí, você curte mais jogos antigos ou tá por dentro dos lançamentos?”. Conforme o usuário responder, mantenha o interesse, explore o tema e intercale com comentários bem-humorados ou curiosidades. Se a conversa esfriar, mude para outro assunto leve. Caso o usuário diga que não quer conversar, agradeça com educação e encerre com bom humor. Exemplos de piadas que você pode usar: “Sabe por que o Mario terminou com a Princesa? Porque ele cansou de só levar ela pro castelo”; “Se eu fosse um personagem de jogo, com certeza seria do tipo que trava na última fase”; “Você também sente que a pizza chega exatamente quando começa a partida online?”; “Será que o Tetris é um jogo sobre organização ou sobre ansiedade em bloco?”. Quando a conversa chegar ao fim, diga algo como: “Adorei bater esse papo gamer contigo! Quando quiser continuar, me chama. Até a próxima partida”."
+                    }
+                  ],
+                  "provider": "openai",
+                  "temperature": 0.5,
+                  "knowledgeBase": {
+                    "fileIds": [
+                      "016c1d84-a869-426d-a910-55fb8582abdb"
+                    ],
+                    "provider": "google"
+                  },
+                  "tools": [
+                    {
+                      "id": "1f147d4e-87f3-4fb9-aef8-e0b2f03902d2",
+                      "createdAt": "2025-07-10T18:42:05.759Z",
+                      "updatedAt": "2025-07-10T20:27:45.173Z",
+                      "type": "function",
+                      "function": {
+                        "name": "Google_checar_disponibilidade",
+                        "strict": true,
+                        "parameters": {
+                          "type": "object",
+                          "required": [
+                            "rota",
+                            "data_consulta"
+                          ],
+                          "properties": {
+                            "rota": {
+                              "enum": [
+                                "Google_checar_disponibilidade"
+                              ],
+                              "type": "string",
+                              "description": "Define qual fluxo do n8n será acionado"
+                            },
+                            "data_consulta": {
+                              "type": "string",
+                              "description": "Data de consulta no formato ISO 8601 (YYYY-MM-DDTHH:mm:ss.sss-03:00). Exemplo: 2025-06-15T00:00:\n00.000-03:00. Fuso horário: America/Sao_Paulo (-03:00)."
+                            }
+                          }
+                        },
+                        "description": "Retorna os horários ocupados no Google Calendar para uma data especifica informada."
+                      },
+                      "messages": [
+                        {
+                          "type": "request-start",
+                          "content": "Perfeito, deixa eu dar uma olhadinha na nossa agenda. Só um instante.",
+                          "blocking": false
+                        },
+                        {
+                          "role": "assistant",
+                          "type": "request-complete",
+                          "content": "Prontinho, já tenho aqui os horários disponíveis.",
+                          "endCallAfterSpokenEnabled": false
+                        },
+                        {
+                          "type": "request-failed",
+                          "content": "Ih, parece que não consegui acessar a agenda agora. Vamos tentar de novo rapidinho, tá?",
+                          "endCallAfterSpokenEnabled": false
+                        },
+                        {
+                          "type": "request-response-delayed",
+                          "content": "Ainda tô consultando aqui, obrigada por esperar um pouquinho",
+                          "timingMilliseconds": 1000
+                        }
+                      ],
+                      "orgId": "059b0fd5-531d-4010-ae33-14028db133a1",
+                      "server": {
+                        "url": "https://editwebhoock.integrasac.com.br/webhook/Google_agenda",
+                        "headers": {
+                          "X-Chat-Id": "6fb570df-a39d-44c3-8a93-c6b59911c2c5"
+                        }
+                      }
+                    },
+                    {
+                      "id": "d7622c77-a24b-4056-b9f8-7649b782c4ef",
+                      "createdAt": "2025-07-10T20:20:35.819Z",
+                      "updatedAt": "2025-07-10T20:27:39.662Z",
+                      "type": "function",
+                      "function": {
+                        "name": "Google_criar_evento",
+                        "strict": true,
+                        "parameters": {
+                          "type": "object",
+                          "required": [
+                            "rota",
+                            "email",
+                            "telefone",
+                            "first_name",
+                            "resumo_conversa",
+                            "data_selecionada"
+                          ],
+                          "properties": {
+                            "rota": {
+                              "enum": [
+                                "Google_criar_evento"
+                              ],
+                              "type": "string",
+                              "description": "Define qual fluxo do n8n será acionado\n"
+                            },
+                            "email": {
+                              "type": "string",
+                              "description": "Endereço de e-mail do lead. Será usado para criar o convite da reunião no Google Calendar"
+                            },
+                            "telefone": {
+                              "type": "string",
+                              "description": "Número de WhatsApp do lead, que receberá os detalhes da reunião logo após o agendamento. Formato\ninternacional"
+                            },
+                            "first_name": {
+                              "type": "string",
+                              "description": "Primeiro nome do lead. Utilizado para personalizar a comunicação e o evento no calendário"
+                            },
+                            "resumo_conversa": {
+                              "type": "string",
+                              "description": "Resumo breve da conversa com o lead, destacando seu interesse, possíveis objeções e o objetivo da reunião.\nUsado internamente pela equipe para preparar o atendimento.\n"
+                            },
+                            "data_selecionada": {
+                              "type": "string",
+                              "description": "Horário escolhido pelo lead para a reunião. Data no formato ISO 8601 (YYYY-MM-DDTHH:mm:ss.sss-03:00).\nExemplo: 2025-06-15T00:00:00.000-03:00. Fuso horário: America/Sao_Paulo (-03:00).\n"
+                            }
+                          }
+                        },
+                        "description": "Cria um evento de 30 minutos no Google Calendar com o horário escolhido pelo lead e envia mensagem de\nconfirmação da reunião via WhatsApp para o lead."
+                      },
+                      "messages": [
+                        {
+                          "type": "request-start",
+                          "content": "Estou reservando seu horário, só um segundo...\n",
+                          "blocking": false
+                        },
+                        {
+                          "role": "assistant",
+                          "type": "request-complete",
+                          "content": "Reunião agendada com sucesso!",
+                          "endCallAfterSpokenEnabled": false
+                        },
+                        {
+                          "type": "request-failed",
+                          "content": "Houve um erro ao criar o evento, vou pedir ajuda da equipe",
+                          "endCallAfterSpokenEnabled": false
+                        },
+                        {
+                          "type": "request-response-delayed",
+                          "content": "Ainda estou checando, obrigada pela paciência.",
+                          "timingMilliseconds": 1000
+                        }
+                      ],
+                      "orgId": "059b0fd5-531d-4010-ae33-14028db133a1",
+                      "server": {
+                        "url": "https://editwebhoock.integrasac.com.br/webhook/Google_agenda",
+                        "headers": {
+                          "X-Chat-Id": "6fb570df-a39d-44c3-8a93-c6b59911c2c5"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "firstMessage": "Oi! Eu sou a Fernanda, assistente da agencia Tomiyo Enterprise. Essa é só uma conversa de teste... mas já que too aqui, vamos bater um papo?",
+                "voicemailMessage": "Hello, this is Riley from Wellness Partners. I'm calling about your appointment. Please call us back at your earliest convenience so we can confirm your scheduling details.",
+                "endCallFunctionEnabled": true,
+                "endCallMessage": "Thank you for scheduling with Wellness Partners. Your appointment is confirmed, and we look forward to seeing you soon. Have a wonderful day!",
+                "transcriber": {
+                  "model": "nova-2",
+                  "language": "pt-BR",
+                  "provider": "deepgram",
+                  "endpointing": 150
+                },
+                "silenceTimeoutSeconds": 10,
+                "clientMessages": [
+                  "conversation-update",
+                  "function-call",
+                  "hang",
+                  "model-output",
+                  "speech-update",
+                  "status-update",
+                  "transfer-update",
+                  "transcript",
+                  "tool-calls",
+                  "user-interrupted",
+                  "voice-input",
+                  "workflow.node.started"
+                ],
+                "serverMessages": [
+                  "conversation-update",
+                  "end-of-call-report",
+                  "function-call",
+                  "hang",
+                  "speech-update",
+                  "status-update",
+                  "tool-calls",
+                  "transfer-destination-request",
+                  "user-interrupted"
+                ],
+                "endCallPhrases": [
+                  "goodbye",
+                  "talk to you soon"
+                ],
+                "hipaaEnabled": false,
+                "backgroundSound": "office",
+                "voicemailDetection": {
+                  "provider": "vapi",
+                  "backoffPlan": {
+                    "maxRetries": 6,
+                    "startAtSeconds": 5,
+                    "frequencySeconds": 5
+                  },
+                  "beepMaxAwaitSeconds": 0
+                },
+                "backgroundDenoisingEnabled": false,
+                "startSpeakingPlan": {
+                  "waitSeconds": 0,
+                  "smartEndpointingEnabled": "livekit"
+                },
+                "stopSpeakingPlan": {
+                  "numWords": 2,
+                  "backoffSeconds": 2
+                }
+              }
+            }
+          },
+          "webhookUrl": "https://editwebhoock.integrasac.com.br/webhook/Google_agenda",
+          "executionMode": "production"
+        }
+      }
+    ],
+    "Webhook1": [
+      {
+        "json": {
+          "headers": {
+            "host": "editn.integrasac.com.br",
+            "user-agent": "Tally Webhooks",
+            "content-length": "1039",
+            "accept": "application/json, text/plain, */*",
+            "accept-encoding": "gzip, br",
+            "baggage": "sentry-environment=production,sentry-release=ec6c9b99ad28edd3f6afc8046468bddbf91210ac,sentry-public_key=6af4b6673f1648edaa8fef3f2ca43405,sentry-trace_id=fd38927bafff2e6dd605f7092ee36eae,sentry-org_id=407628,sentry-sampled=false,sentry-sample_rand=0.722573667816415,sentry-sample_rate=0.01",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-connecting-ip": "34.96.41.92",
+            "cf-ipcountry": "BE",
+            "cf-ray": "95d9ee06ca094134-LHR",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-warp-tag-id": "68d41d38-86b9-4de3-ae8c-203d1c436417",
+            "content-type": "application/json",
+            "sentry-trace": "fd38927bafff2e6dd605f7092ee36eae-0a46f138b0665fdc-0",
+            "x-forwarded-for": "192.168.100.163",
+            "x-forwarded-host": "editn.integrasac.com.br",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "9d4e0aa38879",
+            "x-real-ip": "192.168.100.163"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "eventId": "56b010f5-832a-4828-aca4-9bafebfd8210",
+            "eventType": "FORM_RESPONSE",
+            "createdAt": "2025-07-11T17:13:08.918Z",
+            "data": {
+              "responseId": "b5kJ8N7",
+              "submissionId": "b5kJ8N7",
+              "respondentId": "4MvNpr",
+              "formId": "3EVN42",
+              "formName": "N8N SDR",
+              "createdAt": "2025-07-11T17:13:08.000Z",
+              "fields": [
+                {
+                  "key": "question_OXgVz7",
+                  "label": "Primeiro Nome",
+                  "type": "INPUT_TEXT",
+                  "value": "Ewerthon"
+                },
+                {
+                  "key": "question_59rBoM",
+                  "label": "WhatsApp",
+                  "type": "INPUT_PHONE_NUMBER",
+                  "value": "+5511985432245"
+                },
+                {
+                  "key": "question_d0gWXz",
+                  "label": "Email",
+                  "type": "INPUT_EMAIL",
+                  "value": "ewerthonmoura@gmail.com"
+                },
+                {
+                  "key": "question_kGpree",
+                  "label": null,
+                  "type": "CHECKBOXES",
+                  "value": [
+                    "51094469-1170-4cad-aace-2afc9688ae9d"
+                  ],
+                  "options": [
+                    {
+                      "id": "51094469-1170-4cad-aace-2afc9688ae9d",
+                      "text": "Aceito ser chamado por telefone para tirar minha ideia do papel com a Tomiyo Enterprise"
+                    }
+                  ]
+                },
+                {
+                  "key": "question_kGpree_51094469-1170-4cad-aace-2afc9688ae9d",
+                  "label": "Checkbox (Aceito ser chamado por telefone para tirar minha ideia do papel com a Tomiyo Enterprise)",
+                  "type": "CHECKBOXES",
+                  "value": true
+                }
+              ]
+            }
+          },
+          "webhookUrl": "https://editwebhoock.integrasac.com.br/webhook-test/realizar_chamada",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "versionId": "e3f4ba39-c069-4540-bf07-9c8e147aaa2b",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-07-10T18:49:21.282Z",
+      "updatedAt": "2025-07-10T18:49:21.282Z",
+      "role": "workflow:owner",
+      "workflowId": "5t6DzDdcduPftbG7",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
