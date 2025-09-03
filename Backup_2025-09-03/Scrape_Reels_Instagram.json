@@ -1,0 +1,525 @@
+{
+  "createdAt": "2025-02-03T00:15:03.170Z",
+  "updatedAt": "2025-02-03T00:27:21.086Z",
+  "id": "6vjvxFKdaSTB58ew",
+  "name": "Scrape_Reels_Instagram",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "b4785cc4-bea9-4934-89ee-f47437682080",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        320,
+        -200
+      ],
+      "id": "630d22d5-a127-4070-956d-760886f3f179",
+      "name": "Webhook",
+      "webhookId": "b4785cc4-bea9-4934-89ee-f47437682080"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f9cba1e5-5b63-4db1-bf83-111440950239",
+              "name": "body.url",
+              "value": "={{ $json.body.url.split('/')[4] }}",
+              "type": "string"
+            },
+            {
+              "id": "05ff6b67-fe05-4114-8203-fd4eb290225d",
+              "name": "ChaveIdeogram",
+              "value": "[Sua Chave Ideogram]",
+              "type": "string"
+            },
+            {
+              "id": "9da28ecc-6e8c-422d-84c8-d4305f303e22",
+              "name": "UrlWebhookMake",
+              "value": "[URL Webhook Make]",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        540,
+        -200
+      ],
+      "id": "10d934a0-fbb2-491c-be40-5fa8fc07c6e9",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c056b032-8880-420f-9582-659f4c51e043",
+              "name": "jsonScrape",
+              "value": "={{ '{\"addParentData\":false,\"directUrls\":[\"'+ $('Webhook').item.json.body.url+'\"],\"enhanceUserSearchWithFacebookPage\":false,\"isUserReelFeedURL\":false,\"isUserTaggedFeedURL\":false,\"resultsLimit\":7,\"resultsType\":\"posts\",\"searchLimit\":7}' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        760,
+        -200
+      ],
+      "id": "7ba9ad32-94c7-441b-a8e5-a5ce1d2b6c17",
+      "name": "JSON"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "id",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        -200
+      ],
+      "id": "0f75f0b5-711c-49b1-9646-515a01facf21",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "[URL Apify]",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.jsonScrape }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        940,
+        -200
+      ],
+      "id": "2865cc0e-023e-4a7c-8626-2830af0bc496",
+      "name": "Busca Postagens"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Split Out').item.json.videoUrl }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        320,
+        20
+      ],
+      "id": "c205ddbf-2f64-418e-bdb8-fa8f6c49d6a4",
+      "name": "Baixa Reels"
+    },
+    {
+      "parameters": {
+        "outputFormat": "mp3"
+      },
+      "type": "@cloudconvert/n8n-nodes-cloudconvert.cloudConvert",
+      "typeVersion": 1,
+      "position": [
+        520,
+        20
+      ],
+      "id": "2895f020-1bc1-4539-8360-b93e145bdf52",
+      "name": "Extrai Audio"
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.7,
+      "position": [
+        760,
+        20
+      ],
+      "id": "9fefed5a-4fef-490a-a761-0ff094105525",
+      "name": "Transcreve Reels"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Busca Postagens').item.json.displayUrl }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        980,
+        20
+      ],
+      "id": "dda4b517-fb84-4745-8864-89f6af1306d4",
+      "name": "Baixa Capa Reels"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.ideogram.ai/describe",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Api-Key",
+              "value": "={{ $('Edit Fields').item.json.ChaveIdeogram }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "image_file",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1180,
+        20
+      ],
+      "id": "283b37fe-263e-41bd-b48e-9ce37f55afdb",
+      "name": "Descreve Capa Reels"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.ideogram.ai/generate",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Api-Key",
+              "value": "={{ $('Edit Fields').item.json.ChaveIdeogram }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"image_request\": {\"prompt\": \"{{ $json.message.content }}\",\"aspect_ratio\": \"ASPECT_3_4\",\"model\": \"V_2\",\"style_type\": \"REALISTIC\"}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        520,
+        260
+      ],
+      "id": "96279c6b-8cd9-4587-92f2-9cabb746bbb5",
+      "name": "Clona Capa"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-2024-11-20",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-2024-11-20"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Você é um copywriter experiente que escreve textos virais para o instagram. O texto abaixo é a transcrição de um vídeo viral.\n####\n{{ $('Transcreve Reels').item.json.text }}\n####\nCrie um texto viral para a legenda em uma postagem que será enviado diretamente para o instagram, usando a transcrição como base. Mantenha a ideia geral do conteúdo. Não use emojis nem coloque o texto entre \" ou '.",
+              "role": "assistant"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.7,
+      "position": [
+        760,
+        260
+      ],
+      "id": "add68fc7-2334-4f49-a9e0-b44e6fe7b1a7",
+      "name": "OpenAI"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Edit Fields').item.json.UrlWebhookMake }}",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "urlImagem",
+              "value": "={{ $('Clona Capa').item.json.data[0].url }}"
+            },
+            {
+              "name": "legenda",
+              "value": "={{ $json.message.content }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1180,
+        260
+      ],
+      "id": "e0190d5a-5c5b-463a-837c-84de123f3a20",
+      "name": "EnviaPostagemBuffer"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-2024-11-20",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-2024-11-20"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Abaixo está a descrição de uma imagem. Retire as referências a texto que estão entre '.\nA descrição é:\n####\n{{ $json.descriptions[0].text }}\n#### "
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.7,
+      "position": [
+        160,
+        260
+      ],
+      "id": "fcb9ef7e-4018-49ae-8c55-496e778e2453",
+      "name": "Melhora Descrição"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3a2966e8-de41-41cc-b13f-b76f6dd28445",
+              "leftValue": "={{ $json.type }}",
+              "rightValue": "Video",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1340,
+        -200
+      ],
+      "id": "464a34e0-f05a-44c2-8075-755c7a00ff5c",
+      "name": "If"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JSON": {
+      "main": [
+        [
+          {
+            "node": "Busca Postagens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Busca Postagens": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baixa Reels": {
+      "main": [
+        [
+          {
+            "node": "Extrai Audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extrai Audio": {
+      "main": [
+        [
+          {
+            "node": "Transcreve Reels",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcreve Reels": {
+      "main": [
+        [
+          {
+            "node": "Baixa Capa Reels",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baixa Capa Reels": {
+      "main": [
+        [
+          {
+            "node": "Descreve Capa Reels",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Descreve Capa Reels": {
+      "main": [
+        [
+          {
+            "node": "Melhora Descrição",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clona Capa": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "EnviaPostagemBuffer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Melhora Descrição": {
+      "main": [
+        [
+          {
+            "node": "Clona Capa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Baixa Reels",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "becf56ec-c53a-4a36-8261-366e8942d0ce",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-02-03T00:15:03.170Z",
+      "updatedAt": "2025-02-03T00:15:03.170Z",
+      "role": "workflow:owner",
+      "workflowId": "6vjvxFKdaSTB58ew",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
