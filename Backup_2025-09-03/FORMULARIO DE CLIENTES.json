@@ -1,0 +1,357 @@
+{
+  "createdAt": "2025-03-14T15:31:51.112Z",
+  "updatedAt": "2025-03-14T16:04:01.516Z",
+  "id": "6KnxBu1d4B8YvEzS",
+  "name": "FORMULARIO DE CLIENTES",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Dados do cliente",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Nome da empresa",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "CNPJ",
+              "fieldType": "number",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Objetivo do site",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false,
+          "buttonLabel": "Enviar",
+          "respondWithOptions": {
+            "values": {
+              "formSubmittedText": "Seu formulário foi enviado com sucesso"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -20,
+        0
+      ],
+      "id": "89c80ea3-938f-49a6-ab1b-2463eda0c0ed",
+      "name": "Coletar dados cliente",
+      "webhookId": "cdf07d4a-f9c6-43f0-9906-6d8760b94d90"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f9d79dd8-7eff-4944-8c66-876f2f64350c",
+              "name": "Nome da empresa",
+              "value": "={{ $json['Nome da empresa'] }}",
+              "type": "string"
+            },
+            {
+              "id": "0b7668e6-7191-4ddc-8d50-08cb482b2f4b",
+              "name": "CNPJ",
+              "value": "={{ $json.CNPJ }}",
+              "type": "string"
+            },
+            {
+              "id": "fc7c59ec-32c6-44c3-a382-ff1d8e026e98",
+              "name": "Objetivo do site",
+              "value": "={{ $json['Objetivo do site'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        200,
+        0
+      ],
+      "id": "eed088f2-08f2-4655-b4be-93f34ecb5c67",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1ypuzc9Du7Dcb1HZjxNnmIS8Ll1gfmR2FubwGzK2Ydsw",
+          "mode": "list",
+          "cachedResultName": "PLANILHA TESTE",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ypuzc9Du7Dcb1HZjxNnmIS8Ll1gfmR2FubwGzK2Ydsw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ypuzc9Du7Dcb1HZjxNnmIS8Ll1gfmR2FubwGzK2Ydsw/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "NOME DA EMPRESA": "={{ $('Coletar dados cliente').item.json['Nome da empresa'] }}",
+            "CNPJ": "={{ $('Coletar dados cliente').item.json.CNPJ }}",
+            "Objetivo da Empresa": "={{ $('Coletar dados cliente').item.json['Objetivo do site'] }}",
+            "ID DO CLIENTE": "={{ $execution.id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID DO CLIENTE",
+              "displayName": "ID DO CLIENTE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "NOME DA EMPRESA",
+              "displayName": "NOME DA EMPRESA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "CNPJ",
+              "displayName": "CNPJ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Objetivo da Empresa",
+              "displayName": "Objetivo da Empresa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        420,
+        0
+      ],
+      "id": "d859d2f1-c28a-4fb5-9326-8b5c2e51c655",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "TX4UGDocUxQQXphG",
+          "name": "Google Sheets account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "name": "={{ $json['ID DO CLIENTE'] }} - {{ $('Edit Fields').item.json['Nome da empresa'] }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1TGAPfrdx62f8IdSFPNLDHfc_ztq5twwD",
+          "mode": "list",
+          "cachedResultName": "Clientes",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1TGAPfrdx62f8IdSFPNLDHfc_ztq5twwD"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        640,
+        0
+      ],
+      "id": "4b80765b-6065-4aea-8e89-e4b395b26dee",
+      "name": "Google Drive",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "FNgJWwu4RGQDmIy0",
+          "name": "Google Drive account INTEGRASAC"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "copy",
+        "fileId": {
+          "__rl": true,
+          "value": "1H6a6R9BDhUI-omQs5XxLimKLDdfNQ_sV-N7L81i0BOM",
+          "mode": "list",
+          "cachedResultName": "MODELO TESTE",
+          "cachedResultUrl": "https://docs.google.com/document/d/1H6a6R9BDhUI-omQs5XxLimKLDdfNQ_sV-N7L81i0BOM/edit?usp=drivesdk"
+        },
+        "name": "={{ $('Google Sheets').item.json['ID DO CLIENTE'] }} {{ $('Google Sheets').item.json['NOME DA EMPRESA'] }} - Contrato",
+        "sameFolder": false,
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        860,
+        0
+      ],
+      "id": "d5d0c74a-2cfb-4f8f-9906-c74b141b137f",
+      "name": "Google Drive1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "FNgJWwu4RGQDmIy0",
+          "name": "Google Drive account INTEGRASAC"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "={{ $json.id }}",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "replaceAll",
+              "text": "[nome-da-empresa]",
+              "replaceText": "={{ $('Google Sheets').item.json['NOME DA EMPRESA'] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "[cnpj]",
+              "replaceText": "={{ $('Edit Fields').item.json.CNPJ }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "[objetivo-da-empresa]",
+              "replaceText": "={{ $('Google Sheets').item.json['Objetivo da Empresa'] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        1080,
+        0
+      ],
+      "id": "e0a059de-9e97-4c11-8c13-17c737afa624",
+      "name": "Google Docs",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "hYu7E0Bn27GvajJL",
+          "name": "Google Docs account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Coletar dados cliente": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive": {
+      "main": [
+        [
+          {
+            "node": "Google Drive1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive1": {
+      "main": [
+        [
+          {
+            "node": "Google Docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "c76f8c1c-0cf7-4caf-9dc4-b7914e315d4a",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-03-14T15:31:51.112Z",
+      "updatedAt": "2025-03-14T15:31:51.112Z",
+      "role": "workflow:owner",
+      "workflowId": "6KnxBu1d4B8YvEzS",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
