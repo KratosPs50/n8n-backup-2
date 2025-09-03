@@ -1,0 +1,718 @@
+{
+  "createdAt": "2025-06-20T22:49:27.720Z",
+  "updatedAt": "2025-06-21T21:33:55.707Z",
+  "id": "Ufw7BjlZGqw3THBQ",
+  "name": "Formulario elementor",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "d0207610-995c-4723-8b61-42ad8bf48eaa",
+              "leftValue": "={{$json[\"importado\"]}}\n",
+              "rightValue": "is empty\n",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "1f52f45f-62aa-4af8-8922-b27b0122cdcc",
+      "name": "IF importado?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -700,
+        -200
+      ]
+    },
+    {
+      "parameters": {
+        "table": {
+          "__rl": true,
+          "value": "users",
+          "mode": "name"
+        },
+        "dataMode": "defineBelow",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "role_id",
+              "value": "3"
+            },
+            {
+              "column": "name",
+              "value": "={{ $json.Name }}"
+            },
+            {
+              "column": "username",
+              "value": "={{ $json.Name }}"
+            },
+            {
+              "column": "email",
+              "value": "={{ $json.Email }}"
+            },
+            {
+              "column": "password",
+              "value": "={{ $json.senhaHash }}"
+            },
+            {
+              "column": "is_active",
+              "value": "1"
+            },
+            {
+              "column": "created_at",
+              "value": "={{$now}}"
+            },
+            {
+              "column": "phone",
+              "value": "={{ $json.Telefone }}"
+            },
+            {
+              "column": "language_code",
+              "value": "pt-br"
+            },
+            {
+              "column": "language_name",
+              "value": "Português Brasileiro"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9f39c139-ebb3-448c-b9a9-634bc0095481",
+      "name": "MySQL – Insert",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        20
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "1fSum8YauGSS56h9",
+          "name": "MySQL account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://api.evolution-api.com.br/message/send",
+        "jsonParameters": true,
+        "options": {
+          "ignoreResponseCode": true
+        }
+      },
+      "id": "8c674cae-857b-492a-9be3-b8e2f679e9af",
+      "name": "WhatsApp – Evolution",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        1340,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "url": "{{WHATICKET_URL}}/api/messages",
+        "jsonParameters": true,
+        "options": {
+          "ignoreResponseCode": true
+        }
+      },
+      "id": "446772d4-726a-4118-b192-0135b04a5f56",
+      "name": "WhatsApp – Whaticket",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        1340,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "mergeByFields": {
+          "values": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "id": "905c32d7-d923-4354-8698-d2fb283575da",
+      "name": "Merge Notificações",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        1520,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of $input.all()) {\n  const nascimento = item.json[\"Data de Nascimento\"];\n  item.json.data_nascimento = new Date(nascimento).toISOString().split('T')[0];\n}\n\nreturn $input.all();\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -420,
+        -200
+      ],
+      "id": "407cb023-e4e0-4158-8b41-5a93b33ffba6",
+      "name": "Normalize Date"
+    },
+    {
+      "parameters": {
+        "jsCode": "// --- Hash Password (versão sem bcrypt, hash fixo) ---\n\n// Senha padrão que será enviada ao aluno\nconst senhaOriginal = 'HayAhMoVe2025@';\n\n// Hash pré-gerado (com bcrypt) para armazenar no banco de dados\nconst senhaHash = '$2a$12$Fu/rrbjSZVmTrsYwR0dSx.T39YSnhOm3upe8MzDtAaW2TrZY6dZq2';\n\n// Percorre os itens recebidos do node anterior\nfor (const item of $input.all()) {\n  // Adiciona a senha original e o hash no JSON\n  item.json.senhaOriginal = senhaOriginal;\n  item.json.senhaHash = senhaHash;\n}\n\nreturn $input.all();\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        -200
+      ],
+      "id": "d50b6373-8f88-41cf-aea8-674aa7f3e3d8",
+      "name": "Hash Password"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1340,
+        -160
+      ],
+      "id": "f72d7d30-3781-43d1-b989-628be2e5b75e",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of $input.all()) {\n  const nome  = item.json.Name || 'usuário';\n  const email = item.json.Email || 'email_indefinido';\n  const senha = item.json.senhaOriginal || 'senha_indefinida';\n\n  item.json.msgEmailBody = `\n    <p>Olá <strong>${nome}</strong>! ✅ Seu acesso foi criado.</p>\n    <p><strong>Usuário:</strong> ${email}<br>\n    <strong>Senha:</strong> ${senha}</p>\n    <p>Acesse: <a href=\"https://move.hayahtraining.com\" target=\"_blank\">https://move.hayahtraining.com</a></p>\n    <p>Recomendamos que você altere sua senha no primeiro acesso.</p>\n    <p>Em caso de dúvidas, estamos à disposição.<br>Equipe Hayah Training</p>\n  `.trim();\n\n  item.json.msgEmailSubject = 'Acesso liberado – Hayah Training';\n  item.json.msgEmail = email;\n  item.json.msgTexto = `Olá ${nome}! ✅ Seu acesso foi criado.\\nUsuário: ${email}\\nSenha: ${senha}\\nAcesse: https://move.hayahtraining.com`;\n}\n\nreturn $input.all();\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        520,
+        -180
+      ],
+      "id": "ef74012b-0138-486b-b72f-cfbe0ca2d8b7",
+      "name": "Set Mensagens"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1v2gZRaGIEVgPhyLZL-cmMk7tnAGdL-JY79JVDfN7iUU",
+          "mode": "list",
+          "cachedResultName": "Planilha Inscrição PAGA pronta para o Infix",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v2gZRaGIEVgPhyLZL-cmMk7tnAGdL-JY79JVDfN7iUU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 144992678,
+          "mode": "list",
+          "cachedResultName": "Português",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v2gZRaGIEVgPhyLZL-cmMk7tnAGdL-JY79JVDfN7iUU/edit#gid=144992678"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "importado": "1"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Data de Nascimento",
+              "displayName": "Data de Nascimento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Password",
+              "displayName": "Password",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "CPF / ID",
+              "displayName": "CPF / ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "CEP / Zip Code",
+              "displayName": "CEP / Zip Code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Cidade",
+              "displayName": "Cidade",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "País",
+              "displayName": "País",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Escolaridade",
+              "displayName": "Escolaridade",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "LinkedIn",
+              "displayName": "LinkedIn",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "importado",
+              "displayName": "importado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1060,
+        -180
+      ],
+      "id": "870cf9d3-3bf3-4675-9274-3f59067c5cb1",
+      "name": "Google Sheets – Flag IMPORTADO",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pb4yzlmXfMN4YYQj",
+          "name": "Google Sheets account Jefferson"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1v2gZRaGIEVgPhyLZL-cmMk7tnAGdL-JY79JVDfN7iUU",
+          "mode": "list",
+          "cachedResultName": "Planilha Inscrição PAGA pronta para o Infix",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v2gZRaGIEVgPhyLZL-cmMk7tnAGdL-JY79JVDfN7iUU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 144992678,
+          "mode": "list",
+          "cachedResultName": "Português",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v2gZRaGIEVgPhyLZL-cmMk7tnAGdL-JY79JVDfN7iUU/edit#gid=144992678"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        2360,
+        -220
+      ],
+      "id": "1970d990-98df-433b-81f6-a2b5c0d7671e",
+      "name": "Google Sheets Inglês",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "DPFDnptY8SLXS6WO",
+          "name": "Google Sheets - Hayah move triger"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1v2gZRaGIEVgPhyLZL-cmMk7tnAGdL-JY79JVDfN7iUU",
+          "mode": "list",
+          "cachedResultName": "Planilha Inscrição PAGA pronta para o Infix",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v2gZRaGIEVgPhyLZL-cmMk7tnAGdL-JY79JVDfN7iUU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 144992678,
+          "mode": "list",
+          "cachedResultName": "Português",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v2gZRaGIEVgPhyLZL-cmMk7tnAGdL-JY79JVDfN7iUU/edit#gid=144992678"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        2360,
+        -440
+      ],
+      "id": "4737d65e-1074-4878-928a-aa509b53248a",
+      "name": "Google Sheets Espanhol",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "DPFDnptY8SLXS6WO",
+          "name": "Google Sheets - Hayah move triger"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "=contato@hayahtraining.com",
+        "toEmail": "={{ $('Google Sheets').item.json.Email }}",
+        "subject": "={{ $json.msgEmailSubject }}",
+        "text": "={{ $json.msgTexto }}",
+        "options": {}
+      },
+      "id": "a47bd2d8-ace5-4daf-a588-0740fe2bcc2e",
+      "name": "E-mail – Confirmação",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [
+        760,
+        -180
+      ],
+      "webhookId": "c77a0118-0950-4910-b4b9-b4b0a73aecd9",
+      "credentials": {
+        "smtp": {
+          "id": "atvXJVDFInYVg0OS",
+          "name": "SMTP - Brevo - Ingreja"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        240,
+        -180
+      ],
+      "id": "467ca53e-03d7-41ee-b862-10cb6ad8425d",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1v2gZRaGIEVgPhyLZL-cmMk7tnAGdL-JY79JVDfN7iUU",
+          "mode": "list",
+          "cachedResultName": "Planilha Inscrição PAGA pronta para o Infix",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v2gZRaGIEVgPhyLZL-cmMk7tnAGdL-JY79JVDfN7iUU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 144992678,
+          "mode": "list",
+          "cachedResultName": "Português",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v2gZRaGIEVgPhyLZL-cmMk7tnAGdL-JY79JVDfN7iUU/edit#gid=144992678"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "importado"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        -1020,
+        -160
+      ],
+      "id": "0ef45582-f0f1-4ad0-bc05-a6a9b944c38b",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pb4yzlmXfMN4YYQj",
+          "name": "Google Sheets account Jefferson"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "WhatsApp – Evolution": {
+      "main": [
+        [
+          {
+            "node": "Merge Notificações",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp – Whaticket": {
+      "main": [
+        [
+          {
+            "node": "Merge Notificações",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Normalize Date": {
+      "main": [
+        [
+          {
+            "node": "Hash Password",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF importado?": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Normalize Date",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hash Password": {
+      "main": [
+        [
+          {
+            "node": "MySQL – Insert",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL – Insert": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Set Mensagens": {
+      "main": [
+        [
+          {
+            "node": "E-mail – Confirmação",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Set Mensagens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "IF importado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "E-mail – Confirmação": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets – Flag IMPORTADO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    },
+    "node:Google Sheets Portugues": {
+      "documentId": "1v2gZRaGIEVgPhyLZL-cmMk7tnAGdL-JY79JVDfN7iUU",
+      "sheetId": 144992678,
+      "lastRevision": 106,
+      "lastRevisionLink": "https://docs.google.com/spreadsheets/export?id=1v2gZRaGIEVgPhyLZL-cmMk7tnAGdL-JY79JVDfN7iUU&revision=106&exportFormat=xlsx"
+    },
+    "node:Google Sheets Inglês": {
+      "documentId": "1v2gZRaGIEVgPhyLZL-cmMk7tnAGdL-JY79JVDfN7iUU",
+      "sheetId": 144992678,
+      "lastRevision": 110,
+      "lastRevisionLink": "https://docs.google.com/spreadsheets/export?id=1v2gZRaGIEVgPhyLZL-cmMk7tnAGdL-JY79JVDfN7iUU&revision=110&exportFormat=xlsx"
+    },
+    "node:Google Sheets Espanhol": {
+      "documentId": "1v2gZRaGIEVgPhyLZL-cmMk7tnAGdL-JY79JVDfN7iUU",
+      "sheetId": 144992678,
+      "lastRevision": 110,
+      "lastRevisionLink": "https://docs.google.com/spreadsheets/export?id=1v2gZRaGIEVgPhyLZL-cmMk7tnAGdL-JY79JVDfN7iUU&revision=110&exportFormat=xlsx"
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "ebf9b6d3-1635-4137-981b-3dee2020ec21",
+  "triggerCount": 3,
+  "shared": [
+    {
+      "createdAt": "2025-06-20T22:49:27.720Z",
+      "updatedAt": "2025-06-20T22:49:27.720Z",
+      "role": "workflow:owner",
+      "workflowId": "Ufw7BjlZGqw3THBQ",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
