@@ -1,0 +1,3069 @@
+{
+  "createdAt": "2024-12-24T06:20:09.946Z",
+  "updatedAt": "2024-12-24T06:23:02.451Z",
+  "id": "LELJi0PkPj36hIQz",
+  "name": "Robô de SEO - Megatron",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "17338054-122b-4422-88c5-1731a4ab6331",
+      "name": "Executar",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -2220,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## TROQUE OS DADOS",
+        "height": 488.5047048797883,
+        "width": 255.5134283861179
+      },
+      "id": "fe234768-321d-4f5a-a879-411306776923",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2040,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publicação do conteúdo",
+        "height": 259.48107636182147,
+        "width": 638.3706311392759,
+        "color": 5
+      },
+      "id": "be857697-f26e-4a43-938f-68432b9de558",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        860,
+        760
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "outline_titulo",
+              "value": "={{ $node['Loop'].json.subtitulos }}"
+            },
+            {
+              "name": "outline_conteudo",
+              "value": "={{ $('Loop').context[\"currentRunIndex\"] == 0 ? '' : \"<h2>\" + $node['Loop'].json[\"subtitulos\"] + \"</h2>\" }}\n{{ $('Loop').context[\"currentRunIndex\"] == 0 ? '' : \n\n$node['Dados'].json[\"imagens_no_subtitulos\"] == \"NÃO\" ? '' :\n\n$node['Dados'].json[\"imagens_no_subtitulos\"] == \"SIM em Todos\" ?\n\"<img src='\" + $node['Wordpress - Salvar imagem em mídia'].json['source_url'] + \"' alt='\" + $node['Loop'].json['subtitulos'] + \"' title='\" + $node['Loop'].json['subtitulos'] + \"' />\" :\n\n($node['Dados'].json[\"imagens_no_subtitulos\"]+'-'+($node['Loop'].context[\"currentRunIndex\"] % 2 === 0)) == \"SIM, mas intercalando-true\" ? \"<img src='\" + $node['Wordpress - Salvar imagem em mídia'].json['source_url'] + \"' alt='\" + $node['Loop'].json['subtitulos'] + \"' title='\" + $node['Loop'].json['subtitulos'] + \"' />\"\n: ''}}\n{{ $('Loop').context[\"currentRunIndex\"] == 0 ? '' : $node[\"Dados\"].json[\"IA\"].split(' ')[0] == \"ChatGPT\" ? $node['ChatGPT - Desenvolver subtítulo'].json[\"message\"][\"content\"][\"conteudo\"] : \n\n$node[\"Dados\"].json[\"IA\"].split(' ')[0] == \"Gemini\" ? $node['Gemini - Desenvolver subtítulo'].json[\"candidates\"][0][\"content\"][\"parts\"][0][\"text\"] : \n\n$node[\"Dados\"].json[\"IA\"].split(' ')[0] == \"Claude\" ? $node['Claude - Desenvolver subtítulo'].json[\"content\"][0][\"text\"] : \n\n$node[\"Dados\"].json[\"IA\"].split(' ')[0] == \"Shopia\" ? $node['Shopia - Desenvolver subtítulo'].json[\"response\"][\"outputs\"][0] :\n\n$node[\"Dados\"].json[\"IA\"].split(' ')[0] == \"Assistants\" ? $node['Assistants - Desenvolver subtítulo'].json[\"data\"].replace(/`/g, '').replaceAll('json','').parseJson().conteudo : 'Nenhuma IA Selecionada na Planilha' }}"
+            }
+          ],
+          "number": [
+            {
+              "name": "id_imagem",
+              "value": "={{ $('Loop').context[\"currentRunIndex\"] == 0 ? $node['Wordpress - Salvar imagem em mídia'].json[\"id\"] : ''}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "622d0199-1c42-4fc3-9057-2e87f507ebdc",
+      "name": "Criar sessão do outline com imagem",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "information"
+      },
+      "id": "2eff11c8-ab66-4a00-92ef-79c6bd8728ee",
+      "name": "Pega informações",
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1,
+      "position": [
+        860,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $node['variaveis'].json[\"Marca dagua Overlay\"] ? $node['variaveis'].json[\"Marca dagua Overlay\"] : \"https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png\"}}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "frente"
+            }
+          }
+        }
+      },
+      "id": "e4b9369e-cc86-40ae-b7ce-1350f26c3ed1",
+      "name": "Imagem Overlay",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1040,
+        280
+      ],
+      "executeOnce": false,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "operation": "resize",
+        "width": "={{ $json[\"size\"][\"width\"] > 1200 ? 1200 : $json[\"size\"][\"width\"] }}",
+        "height": "={{ $json[\"size\"][\"height\"] > 630 ? 630 : $json[\"size\"][\"height\"] }}",
+        "resizeOption": "onlyIfLarger",
+        "options": {
+          "format": "webp"
+        }
+      },
+      "id": "f5e82734-9900-48f1-941d-b63b09e3e4a5",
+      "name": "redimensionar",
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "information"
+      },
+      "id": "9caaa767-5719-4e84-b9d6-4a0a9094b3f1",
+      "name": "Pega informações redimensionada",
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1,
+      "position": [
+        1240,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "multiStep",
+        "operations": {
+          "operations": [
+            {
+              "operation": "composite",
+              "dataPropertyNameComposite": "=frente"
+            },
+            {
+              "operation": "composite",
+              "dataPropertyNameComposite": "logo",
+              "positionX": "={{ ($('Pega informações redimensionada').item.json[\"size\"][\"width\"] - 10) - $('Informações logo subtitulo').item.json[\"size\"][\"width\"] }}\n",
+              "positionY": "={{ ($('Pega informações redimensionada').item.json[\"size\"][\"height\"] - 20) - $('Informações logo subtitulo').item.json[\"size\"][\"height\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "format": "jpeg"
+        }
+      },
+      "id": "d626ad63-af33-49d0-9c2d-db6ae394fc11",
+      "name": "Aplicar marca dagua",
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1,
+      "position": [
+        1240,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $node['variaveis'].json[\"URL do Site\"] }}/wp-json/wp/v2/{{ $node['variaveis'].json['Custom Post Type'] == '' ? \"posts\" : $node['variaveis'].json['Custom Post Type'] }}/",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wordpressApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "featured_media",
+              "value": "={{ $node['Combinar subtítulos'].json[\"imagem_destaque\"][0] }}"
+            },
+            {
+              "name": "date",
+              "value": "={{ $node['Dados'].json.post_data_hora }}"
+            },
+            {
+              "name": "excerpt",
+              "value": "={{ $node['Dados SEO'].json[\"descricao\"] }}"
+            },
+            {
+              "name": "title",
+              "value": "={{ $node['Dados SEO'].json[\"titulo\"] }}"
+            },
+            {
+              "name": "content",
+              "value": "={{ $node['Dados SEO'].json[\"introducao\"] }}<br/>\n{{ $node[\"Dados\"].json[\"post_video\"] == true ? '<iframe width=\"720\" height=\"405\" src=\"https://www.youtube.com/embed/' + $node[\"Dados\"].json[\"post_video_id\"] + '\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>' : '' }}\n{{ $node['Combinar subtítulos'].json[\"conteudo\"].join(' ').trim() }}\n\n"
+            },
+            {
+              "name": "slug",
+              "value": "={{ $node['Dados'].json[\"palavra_chave\"].replaceAll(\" \",\"-\").toLowerCase().normalize('NFD').replace(/\\p{Mn}/gu, \"\") }}"
+            },
+            {
+              "name": "={{ $node['variaveis'].json[\"Custom Taxonomia\"] == '' ? 'categories' : $node['variaveis'].json[\"Custom Taxonomia\"]}}",
+              "value": "={{ $node['Dados'].json[\"post_categoria_id\"] }}"
+            },
+            {
+              "name": "status",
+              "value": "={{ $node['Dados'].json[\"post_status\"] }}"
+            },
+            {
+              "name": "type",
+              "value": "={{ $node['variaveis'].json['Custom Post Type'] == '' ? \"posts\" : $node['variaveis'].json['Custom Post Type'] }}"
+            },
+            {
+              "name": "tags",
+              "value": "={{ $node['Dados'].json[\"post_tag_id\"] }}"
+            },
+            {
+              "name": "author",
+              "value": "={{ $node['Dados'].json[\"post_autor_id\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "40dc3539-95c7-4f8c-a925-247c3e50cdbf",
+      "name": "Wordpress - Publicar Post",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1100,
+        840
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "operation": "information",
+        "dataPropertyName": "logo"
+      },
+      "id": "d67bf0e0-8a2c-4cca-b5ca-cf5b6937abff",
+      "name": "Informações logo subtitulo",
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1,
+      "position": [
+        860,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 3,
+        "unit": "seconds"
+      },
+      "id": "5ecbadbb-669d-437e-85d5-8758ff1855f5",
+      "name": "aguarde 10s",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        -700,
+        620
+      ],
+      "webhookId": "5630835c-e9f4-4b5f-aa8d-b386c3cb8a14"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $node['variaveis'].json[\"Planilha ID\"] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $node['variaveis'].json[\"Planilha Aba\"] }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Execução": "=PENDENTE",
+            "row_number": "={{ $node['Google Sheets - Ler Palavras Chaves'].json[\"row_number\"] }}",
+            "Processo": "PENDENTE",
+            "ID da Execução": "={{ $execution.id }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Hora",
+              "displayName": "Hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Palavra Chave Foco",
+              "displayName": "Palavra Chave Foco",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Título",
+              "displayName": "Título",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID da Categoria",
+              "displayName": "ID da Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Categoria",
+              "displayName": "Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID das Tags",
+              "displayName": "ID das Tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Imagem",
+              "displayName": "Imagem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Outlines",
+              "displayName": "Outlines",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Link",
+              "displayName": "Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Execução",
+              "displayName": "Execução",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ID da Execução",
+              "displayName": "ID da Execução",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Posição",
+              "displayName": "Posição",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Concorrência",
+              "displayName": "Concorrência",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1fed6fcd-5d65-4443-b93a-b45ba10c1fae",
+      "name": "Google Sheets - Status Executando",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        -1540,
+        340
+      ],
+      "retryOnFail": true,
+      "maxTries": null,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $node['variaveis_erro'].json[\"Planilha ID\"] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $node['variaveis_erro'].json[\"Planilha Aba\"] }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Execução": "=ERRO",
+            "Link": "={{'=HYPERLINK(\"' + $node['variaveis_erro'].json['N8N URL'] + '/workflow/' +$node['Ocorreu Erro'].json.workflow.id + '/executions/' + $node['Ocorreu Erro'].json.execution.id + '\"' + '; \"' + 'VERIFICAR ERRO' +'\")' }}",
+            "ID da Execução": "={{ $node['Ocorreu Erro'].json.execution.id }}"
+          },
+          "matchingColumns": [
+            "ID da Execução"
+          ],
+          "schema": [
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Hora",
+              "displayName": "Hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Palavra Chave Foco",
+              "displayName": "Palavra Chave Foco",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Título",
+              "displayName": "Título",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID da Categoria",
+              "displayName": "ID da Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Categoria",
+              "displayName": "Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID das Tags",
+              "displayName": "ID das Tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Imagem",
+              "displayName": "Imagem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Outlines",
+              "displayName": "Outlines",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Link",
+              "displayName": "Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Execução",
+              "displayName": "Execução",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ID da Execução",
+              "displayName": "ID da Execução",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Posição",
+              "displayName": "Posição",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Concorrência",
+              "displayName": "Concorrência",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ]
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "abd0bb2b-9071-4769-b8c5-e04911a2882c",
+      "name": "Google Sheets - Status ERRO",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        -1740,
+        580
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "6cb1a14e-9635-4a7e-a249-139d175aa448",
+      "name": "Ocorreu Erro",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -2220,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 10
+            }
+          ]
+        }
+      },
+      "id": "52fd1c9f-0071-45b6-aeaa-6b4b2143a6b4",
+      "name": "A cada 10 min",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -2220,
+        320
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "path": "iniciar-roboseo2",
+        "options": {}
+      },
+      "id": "2ce3f23d-a9f5-46ff-8d85-bebde828cfc0",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -2220,
+        120
+      ],
+      "webhookId": "2f28ad36-5258-4fea-96fb-f1663f4513d0",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "Planilha ID"
+            },
+            {
+              "name": "Planilha Aba"
+            },
+            {
+              "name": "N8N URL"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1294bf51-2362-4aa4-8f0e-faff4ab18807",
+      "name": "variaveis_erro",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        -1960,
+        580
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Banco de imagem",
+        "height": 1037.191576472442,
+        "width": 748.5418010979713,
+        "color": 3
+      },
+      "id": "6adc7727-faba-4cee-a1d2-646d87257335",
+      "name": "Sticky Note9",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('variaveis').item.json[\"Planilha ID\"] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('variaveis').item.json[\"Planilha Aba\"] }}",
+          "mode": "id"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "=Execução"
+            }
+          ]
+        },
+        "options": {
+          "returnAllMatches": "returnFirstMatch"
+        }
+      },
+      "id": "316765c0-087c-4784-ae09-27e84308be34",
+      "name": "Google Sheets - Ler Palavras Chaves",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        -1720,
+        340
+      ],
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "url": "={{ $node['variaveis'].json[\"Logo marca dagua\"] ? $node['variaveis'].json[\"Logo marca dagua\"] : \"https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png\" }} ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "logo"
+            }
+          }
+        }
+      },
+      "id": "3871c794-113c-4c41-8f35-906e17a0033d",
+      "name": "logo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1420,
+        80
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "url": "={{ $node['variaveis'].json[\"Piwigo banco de imagem URL\"] }}?get_imagens={{ $node['Dados'].json[\"imagem\"].split(';')[$('Loop').context.currentRunIndex] ? $node['Dados'].json[\"imagem\"].split(';')[$('Loop').context.currentRunIndex].replace('tag:','').replaceAll('piwigo:','') : $node['Dados'].json[\"imagem\"].split(';')[0].replace('tag:','').replaceAll('piwigo:','') }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "5be179e9-cf5b-4448-8750-a4db17b3fe2c",
+      "name": "Piwigo subtítulo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        360,
+        60
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "url": "https://api.pexels.com/v1/search",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "={{ $node['Dados'].json[\"imagem\"].split(';')[$('Loop').context.currentRunIndex] ? $node['Dados'].json[\"imagem\"].split(';')[$('Loop').context.currentRunIndex].toLowerCase().normalize('NFD').replace(/\\p{Mn}/gu, \"\") : $node['Dados'].json[\"imagem\"].split(';')[0].toLowerCase().normalize('NFD').replace(/\\p{Mn}/gu, \"\") }}"
+            },
+            {
+              "name": "per_page",
+              "value": "1"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $node['variaveis'].json[\"Pexels API Key\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2f093313-cba8-4c74-b45a-b3f3dd472cc6",
+      "name": "Pexels subtítulo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        360,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://pixabay.com/api/",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "key",
+              "value": "={{ $node['variaveis'].json['Pixabay Key'] }}"
+            },
+            {
+              "name": "q",
+              "value": "={{ $node['Dados'].json[\"imagem\"].split(';')[$('Loop').context.currentRunIndex] ? $node['Dados'].json[\"imagem\"].split(';')[$('Loop').context.currentRunIndex].toLowerCase().normalize('NFD').replace(/\\p{Mn}/gu, \"\") : $node['Dados'].json[\"imagem\"].split(';')[0].toLowerCase().normalize('NFD').replace(/\\p{Mn}/gu, \"\") }}"
+            },
+            {
+              "name": "orientation",
+              "value": "horizontal"
+            },
+            {
+              "name": "min_width",
+              "value": "1000"
+            },
+            {
+              "name": "min_height",
+              "value": "600"
+            },
+            {
+              "name": "per_page",
+              "value": "=3"
+            },
+            {
+              "name": "lang",
+              "value": "pt"
+            },
+            {
+              "name": "page",
+              "value": "1"
+            },
+            {
+              "name": "image_type",
+              "value": "photo"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "0604d38c-d106-4680-811b-c3c6d2540bc6",
+      "name": "Pixabay subtítulo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        360,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $node['Piwigo subtítulo'].json[\"path\"] }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "id": "577242b6-8451-4ac0-8f9b-ec223dd5d0ac",
+      "name": "Piwigo - Baixar imagem subtítulo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        560,
+        60
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Pexels subtítulo').item.json[\"photos\"][0][\"src\"][\"original\"] }}?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "id": "13bfe847-5f00-4120-a29b-a613a1c8c66d",
+      "name": "Pexels - Baixar imagem subtítulo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        560,
+        220
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "url": "={{ $node['Pixabay subtítulo'].json[\"hits\"][0][\"largeImageURL\"] }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "id": "b2b55e85-943a-4923-86ac-07bf7a6acc57",
+      "name": "Pixabay - Baixar imagem subtítulo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        560,
+        380
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "content": "## Otimização + Marca d'agua + Metadados da imagem",
+        "height": 648.4663890081449,
+        "width": 770.0889492380758,
+        "color": 3
+      },
+      "id": "50c7166f-ac1c-49f7-9310-0b47ee846321",
+      "name": "Sticky Note10",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://source.unsplash.com/1200x630?{{ $node['Dados'].json[\"imagem\"].split(';')[$('Loop').context.currentRunIndex] ? $node['Dados'].json[\"imagem\"].split(';')[$('Loop').context.currentRunIndex].toLowerCase().normalize('NFD').replace(/\\p{Mn}/gu, \"\") : $node['Dados'].json[\"imagem\"].split(';')[0].toLowerCase().normalize('NFD').replace(/\\p{Mn}/gu, \"\") }}",
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "id": "c7f2c0fb-8e58-4af0-901f-b4bf6a5839f0",
+      "name": "Unsplash subtítulo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        360,
+        540
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "url": "={{ $node['Dados'].json[\"imagem\"].split(';')[$('Loop').context.currentRunIndex] ? $node['Dados'].json[\"imagem\"].split(';')[$('Loop').context.currentRunIndex].toLowerCase().normalize('NFD').replace(/\\p{Mn}/gu, \"\") : $node['Dados'].json[\"imagem\"].split(';')[0].toLowerCase().normalize('NFD').replace(/\\p{Mn}/gu, \"\") }}",
+        "options": {}
+      },
+      "id": "bd3e417c-3c9d-42ab-9588-b6bd5e914539",
+      "name": "Baixar a imagem subtítulo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        360,
+        680
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "content": "## ChatGPT SEO",
+        "height": 212.73420399021666,
+        "width": 207.78426949486476,
+        "color": 4
+      },
+      "id": "8e775246-1300-402f-9e0f-0b212eb64ca4",
+      "name": "Sticky Note18",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1020,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Shopia SEO",
+        "height": 224.41898315874025,
+        "width": 206.27413003721668,
+        "color": 6
+      },
+      "id": "004e526d-c69f-4183-ad58-a40147ccc221",
+      "name": "Sticky Note19",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1020,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Shopia Conteúdo",
+        "height": 226.09050273058924,
+        "width": 261.27245673885443,
+        "color": 6
+      },
+      "id": "db2a2bec-b003-4ced-a350-be0b09bcadef",
+      "name": "Sticky Note29",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -500,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## ChatGPT Conteúdo",
+        "height": 229.45068101711905,
+        "width": 261.27245673885443,
+        "color": 4
+      },
+      "id": "bfdc6a10-a713-47d4-84e7-3ee20a12c734",
+      "name": "Sticky Note31",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -500,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $node['variaveis'].json[\"Planilha ID\"] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $node['variaveis'].json[\"Planilha Aba\"] }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $node['Google Sheets - Ler Palavras Chaves'].json[\"row_number\"] }}",
+            "Título": "={{ $node['Dados SEO'].json[\"titulo\"] }}",
+            "Link": "={{ $node['Wordpress - Publicar Post'].json[\"link\"] }}",
+            "Execução": "CONCLUÍDO"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Hora",
+              "displayName": "Hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "IA",
+              "displayName": "IA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Palavra Chave Foco",
+              "displayName": "Palavra Chave Foco",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Título",
+              "displayName": "Título",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ID da Categoria",
+              "displayName": "ID da Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Categoria",
+              "displayName": "Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID das Tags",
+              "displayName": "ID das Tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Banco de imagem",
+              "displayName": "Banco de imagem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Imagem",
+              "displayName": "Imagem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Imagens nos Subtítulos?",
+              "displayName": "Imagens nos Subtítulos?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Quantidade de Subtítulos",
+              "displayName": "Quantidade de Subtítulos",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Subtítulos",
+              "displayName": "Subtítulos",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Link",
+              "displayName": "Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Execução",
+              "displayName": "Execução",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ID da Execução",
+              "displayName": "ID da Execução",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Indexação",
+              "displayName": "Indexação",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Posição",
+              "displayName": "Posição",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Concorrência",
+              "displayName": "Concorrência",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ]
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "f4b4c844-4810-433f-a1da-64982eb43d25",
+      "name": "Google Sheets - Status Publicado",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.3,
+      "position": [
+        1320,
+        840
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "c4d5f84d-49b9-4881-813c-8d5cfb4c0d28",
+              "leftValue": "={{ $('Loop').context[\"currentRunIndex\"] }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "df739d00-4003-47f5-bf8b-fa54cc76e708",
+      "name": "Imagem em destaque?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -700,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3e1129e4-2ecd-4ba6-af89-2f1e6e2f12ff",
+              "name": "palavra_chave",
+              "value": "={{ $node['Google Sheets - Ler Palavras Chaves'].json['Palavra Chave Foco'] }}",
+              "type": "string"
+            },
+            {
+              "id": "bdc28097-f674-473c-84ca-dfcae0f1b619",
+              "name": "post_titulo",
+              "value": "={{ $node['Google Sheets - Ler Palavras Chaves'].json['Título'] }}",
+              "type": "string"
+            },
+            {
+              "id": "efd0562b-2d4b-4bbe-8d22-14c501cf8651",
+              "name": "post_categoria_id",
+              "value": "={{ $node['Google Sheets - Ler Palavras Chaves'].json['ID da Categoria'] }}",
+              "type": "string"
+            },
+            {
+              "id": "e768f7d7-5fe2-4aec-9985-b04394315344",
+              "name": "post_tag_id",
+              "value": "={{ $node['Google Sheets - Ler Palavras Chaves'].json['ID das Tags'] }}",
+              "type": "string"
+            },
+            {
+              "id": "9afed0dd-4650-40be-9b83-157ba83f2b50",
+              "name": "banco_de_imagem",
+              "value": "={{ $node['Google Sheets - Ler Palavras Chaves'].json['Banco de imagem'] }}",
+              "type": "string"
+            },
+            {
+              "id": "57eb063f-fb87-471f-8577-ca668267094e",
+              "name": "imagem",
+              "value": "={{ $node['Google Sheets - Ler Palavras Chaves'].json['Imagem'] }}",
+              "type": "string"
+            },
+            {
+              "id": "e05029bf-0087-4b66-83f4-b55437c5c088",
+              "name": "imagens_no_subtitulos",
+              "value": "={{ $node['Google Sheets - Ler Palavras Chaves'].json['Imagens nos Subtítulos?'] }}",
+              "type": "string"
+            },
+            {
+              "id": "9fd85fde-445e-4aa8-b088-c52323a75d76",
+              "name": "post_subtitulos_quantidade",
+              "value": "={{ $node['Google Sheets - Ler Palavras Chaves'].json['Quantidade de Subtítulos'] }}",
+              "type": "string"
+            },
+            {
+              "id": "3d2c4ee5-ea4c-4afa-9667-e56f75faf6a2",
+              "name": "post_subittulos",
+              "value": "={{ $node['Google Sheets - Ler Palavras Chaves'].json['Subtítulos'] }}",
+              "type": "string"
+            },
+            {
+              "id": "08d17dfc-54bf-45b4-b39b-0dad482bd2b4",
+              "name": "post_status",
+              "value": "={{ $node['Google Sheets - Ler Palavras Chaves'].json[\"Status\"] == 'Rascunho' ? 'draft' : $node['Google Sheets - Ler Palavras Chaves'].json[\"Status\"] == 'Publicado' ? 'publish' : $node['Google Sheets - Ler Palavras Chaves'].json[\"Status\"] == 'Agendado' ? 'future' : $node['Google Sheets - Ler Palavras Chaves'].json[\"Status\"] == 'Revisão pendente' ? 'pending' : $node['Google Sheets - Ler Palavras Chaves'].json[\"Status\"] == 'Privado' ? 'private' : 'future' }}",
+              "type": "string"
+            },
+            {
+              "id": "477b7957-236d-482c-8994-e6f9a1f5680d",
+              "name": "post_autor_id",
+              "value": "={{ $node['Google Sheets - Ler Palavras Chaves'].json[\"Autor ID\"] ? $node['Google Sheets - Ler Palavras Chaves'].json[\"Autor ID\"] : NULL }}",
+              "type": "string"
+            },
+            {
+              "id": "bcd6c94d-3135-48ac-9dc8-e96dd739e264",
+              "name": "post_data_hora",
+              "value": "={{$node['Google Sheets - Ler Palavras Chaves'].json[\"Data\"].split('/').reverse().join('-') + \"T\" + ((parseInt($node['Google Sheets - Ler Palavras Chaves'].json[\"Hora\"].split(\":\")[0], 10) + 3) % 24).toString().padStart(2, '0') + \":\" + ($node['Google Sheets - Ler Palavras Chaves'].json[\"Hora\"].split(\":\")[1]).toString().padStart(2, '0') + \":00.000Z\"}}",
+              "type": "string"
+            },
+            {
+              "id": "be0c05d4-9947-48f0-bef6-a3e07a48bbe2",
+              "name": "IA",
+              "value": "={{ $node['Google Sheets - Ler Palavras Chaves'].json['IA'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {
+          "dotNotation": true
+        }
+      },
+      "id": "d889b7ce-716d-4408-b7c8-c0cde9bf415a",
+      "name": "Dados",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -1360,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e24ac621-e2d6-46e7-82e6-846d0f5d27f3",
+              "name": "titulo",
+              "value": "={{ $node['Dados'].json[\"post_titulo\"] ? \n$node['Dados'].json[\"post_titulo\"] : \n\n$node['Dados'].json[\"IA\"].split(\" \")[0] == 'ChatGPT' ?  $node['ChatGPT - SEO'].json[\"message\"][\"content\"][\"titulo\"] : \n\n$node['Dados'].json[\"IA\"].split(\" \")[0] == 'Assistants' ?  $node['Assistants - SEO'].json[\"data\"].replace(/`/g, '').replaceAll('json','').parseJson().titulo : \n\n$node['Dados'].json[\"IA\"].split(\" \")[0] == 'Claude' ? $node['Claude - SEO'].json[\"content\"][0][\"text\"].substring($node['Claude - SEO'].json[\"content\"][0][\"text\"].indexOf('{')).replace(/`/g, '').replaceAll('json','').parseJson().titulo : \n\n$node['Dados'].json[\"IA\"].split(\" \")[0] == 'Gemini' ? $node['Gemini - SEO'].json[\"candidates\"][0][\"content\"][\"parts\"][0][\"text\"].replace(/`/g, '').replaceAll('json','').parseJson().titulo : \n\n$node['Dados'].json[\"IA\"].split(\" \")[0] == 'Shopia' ? $node['Shopia - SEO'].json[\"response\"][\"outputs\"][0].substring($node['Shopia - SEO'].json[\"response\"][\"outputs\"][0].indexOf('{')).replace(/\\\\\"/g, '\"').parseJson().titulo :\n\n\n'Nenhuma IA selecionada'\n}}",
+              "type": "string"
+            },
+            {
+              "id": "4502c6f0-9081-4b33-b62f-d5d5ac78b14a",
+              "name": "descricao",
+              "value": "={{ $node['Dados'].json[\"IA\"].split(\" \")[0] == 'ChatGPT' ?  $node['ChatGPT - SEO'].json[\"message\"][\"content\"][\"descricao\"] : \n\n$node['Dados'].json[\"IA\"].split(\" \")[0] == 'Assistants' ?  $node['Assistants - SEO'].json[\"data\"].replace(/^\"|\"$/g, '').replace(/`/g, '').replaceAll('json','').parseJson().descricao : \n\n$node['Dados'].json[\"IA\"].split(\" \")[0] == 'Claude' ? $node['Claude - SEO'].json[\"content\"][0][\"text\"].substring($node['Claude - SEO'].json[\"content\"][0][\"text\"].indexOf('{')).replace(/`/g, '').replaceAll('json','').parseJson().descricao : \n\n$node['Dados'].json[\"IA\"].split(\" \")[0] == 'Gemini' ? $node['Gemini - SEO'].json[\"candidates\"][0][\"content\"][\"parts\"][0][\"text\"].replace(/`/g, '').replaceAll('json','').parseJson().descricao : \n\n$node['Dados'].json[\"IA\"].split(\" \")[0] == 'Shopia' ? $node['Shopia - SEO'].json[\"response\"][\"outputs\"][0].substring($node['Shopia - SEO'].json[\"response\"][\"outputs\"][0].indexOf('{')).replace(/\\\\\"/g, '\"').parseJson().descricao : \n\n'Nenhuma IA selecionada'\n}}",
+              "type": "string"
+            },
+            {
+              "id": "89c5ceeb-76c4-4b7b-a3f1-e36a9b6e02df",
+              "name": "subtitulos",
+              "value": "={{ $node['Dados'].json[\"post_subtitulo\"] ? \n$node['Dados'].json[\"post_subtitulo\"] : \n\n$node['Dados'].json[\"IA\"].split(\" \")[0] == 'ChatGPT' ? $node['ChatGPT - SEO'].json[\"message\"][\"content\"][\"subtitulos\"] : \n\n$node['Dados'].json[\"IA\"].split(\" \")[0] == 'Assistants' ?  $node['Assistants - SEO'].json[\"data\"].replace(/`/g, '').replaceAll('json','').parseJson().subtitulos : \n\n$node['Dados'].json[\"IA\"].split(\" \")[0] == 'Claude' ? $node['Claude - SEO'].json[\"content\"][0][\"text\"].substring($node['Claude - SEO'].json[\"content\"][0][\"text\"].indexOf('{')).replace(/`/g, '').replaceAll('json','').parseJson().subtitulos : \n\n$node['Dados'].json[\"IA\"].split(\" \")[0] == 'Gemini' ? $node['Gemini - SEO'].json[\"candidates\"][0][\"content\"][\"parts\"][0][\"text\"].replace(/`/g, '').replaceAll('json','').parseJson().subtitulos : \n\n$node['Dados'].json[\"IA\"].split(\" \")[0] == 'Shopia' ? $node['Shopia - SEO'].json[\"response\"][\"outputs\"][0].substring($node['Shopia - SEO'].json[\"response\"][\"outputs\"][0].indexOf('{')).replace(/\\\\\"/g, '\"').parseJson().subtitulos : \n\n\n'Nenhuma IA selecionada'\n}}",
+              "type": "array"
+            },
+            {
+              "id": "58d1dd67-0841-4736-86fd-6c874b6c6320",
+              "name": "introducao",
+              "value": "={{ $node['Dados'].json[\"IA\"].split(\" \")[0] == 'ChatGPT' ?  $node['ChatGPT - SEO'].json[\"message\"][\"content\"][\"introducao\"] : \n\n$node['Dados'].json[\"IA\"].split(\" \")[0] == 'Assistants' ?  $node['Assistants - SEO'].json[\"data\"].replace(/`/g, '').replaceAll('json','').parseJson().introducao : \n\n$node['Dados'].json[\"IA\"].split(\" \")[0] == 'Claude' ? $node['Claude - SEO'].json[\"content\"][0][\"text\"].substring($node['Claude - SEO'].json[\"content\"][0][\"text\"].indexOf('{')).replace(/`/g, '').replaceAll('json','').parseJson().introducao : \n\n$node['Dados'].json[\"IA\"].split(\" \")[0] == 'Gemini' ? $node['Gemini - SEO'].json[\"candidates\"][0][\"content\"][\"parts\"][0][\"text\"].replace(/`/g, '').replaceAll('json','').parseJson().introducao : \n\n$node['Dados'].json[\"IA\"].split(\" \")[0] == 'Shopia' ? $node['Shopia - SEO'].json[\"response\"][\"outputs\"][0].substring($node['Shopia - SEO'].json[\"response\"][\"outputs\"][0].indexOf('{')).replace(/\\\\\"/g, '\"').parseJson().introducao : \n\n'Nenhuma IA selecionada'\n}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {
+          "dotNotation": true
+        }
+      },
+      "id": "05217e4a-3231-45c7-9c4a-a3e1d8276e1f",
+      "name": "Dados SEO",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -700,
+        60
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {
+          "reset": false
+        }
+      },
+      "id": "a620b2a9-1fd6-4d12-a2c4-9626bf8b0e38",
+      "name": "Loop",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 2,
+      "position": [
+        -700,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "d0f8daa4-6587-49f4-b868-6d091dd16a9b",
+              "leftValue": "={{ $node['Google Sheets - Ler Palavras Chaves'].json[\"Banco de imagem\"] }}",
+              "rightValue": "Dall-e automático",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "46d361b6-945d-4d0d-a1a1-3377d4dc02a9",
+      "name": "Dall-e automático?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        180,
+        860
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "model": "gpt-4o",
+        "prompt": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "=Como um engenheiro especialista em prompts especializado em imagens geradas por IA, crie um prompt em inglês para a API DALL-E. O prompt deve sugerir uma imagem que represente visualmente uma postagem de blog, incorporando o tema '{{ $node['Dados'].json[\"imagem\"] }}'. Concentre-se em elementos visuais que unam todos esses aspectos, sem introduções ou conclusões adicionais. Siga as políticas da OpenAI para evitar a solicitação de palavras banidas pela API. Garantir que a representação seja respeitosa e esteja alinhada com as políticas de conteúdo da OpenAI."
+            },
+            {
+              "content": "=Com base no tema '{{ $node['Loop'].json[\"subtitulos\"] }}' com o contexto '{{ $node['Dados'].json[\"imagem\"] }}', crie um prompt em inglês para a API do DALL-E que reflita visualmente esses elementos em uma imagem para um post."
+            }
+          ]
+        },
+        "options": {},
+        "requestOptions": {}
+      },
+      "id": "5c1a2f9b-22e6-4b68-8704-64fb9d8fb2eb",
+      "name": "Gerar prompt da dall-e",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        360,
+        840
+      ],
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "executeOnce": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "prompt": "={{ $node['Dados'].json[\"banco_de_imagem\"] == 'Dall-e automático' ? $json.message.content.replaceAll('\"','') : $node['Dados'].json[\"imagem\"].split(';')[$('Loop').context[\"currentRunIndex\"]] ? $node['Dados'].json[\"imagem\"].split(';')[$('Loop').context[\"currentRunIndex\"]] : $node['Dados'].json[\"imagem\"].split(';')[0] }}",
+        "model": "dall-e-3",
+        "options": {
+          "n": 1,
+          "size": "1792x1024"
+        },
+        "requestOptions": {}
+      },
+      "id": "10f55205-1efa-4f8d-9e92-0e617635cfd4",
+      "name": "Dall-e",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        560,
+        860
+      ],
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('variaveis').item.json[\"URL do Site\"] }}/wp-json/wp/v2/media/",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wordpressApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "cache-control",
+              "value": "no-cache"
+            },
+            {
+              "name": "content-disposition",
+              "value": "=attachment; filename={{ $node['Loop'].json[\"subtitulos\"]\n.replaceAll(\" \",\"-\")\n.toLowerCase()\n.normalize('NFD')\n.replace(/\\p{Mn}/gu, \"\")\n.replaceAll(\".\",\"\")\n.replaceAll(\",\",\"\")\n.replaceAll(\"\\n\",\"\")\n.replaceAll(\"\\r\",\"\")\n.slice(0, 100) }}.{{ $binary.data.fileExtension }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "608a7d93-cc13-4a47-8e16-64b08a91af59",
+      "name": "Wordpress - Salvar imagem em mídia",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1420,
+        280
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $node['variaveis'].json[\"URL do Site\"] }}/wp-json/wp/v2/media/{{ $node['Wordpress - Salvar imagem em mídia'].json[\"id\"] }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wordpressApi",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "alt_text",
+              "value": "={{ $node['Loop'].json[\"subtitulos\"] }}"
+            },
+            {
+              "name": "title",
+              "value": "={{ $node['Loop'].json[\"subtitulos\"] }}"
+            },
+            {
+              "name": "description",
+              "value": "={{ $node['Loop'].json[\"subtitulos\"] }}"
+            },
+            {
+              "name": "caption",
+              "value": "={{ $node['Loop'].json[\"subtitulos\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "63b62a1b-8bc0-4b75-80db-fe739bd09595",
+      "name": "Wordpress - Atualizar Atributos da imagem",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        860,
+        460
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "outline_conteudo",
+              "renameField": true,
+              "outputFieldName": "conteudo"
+            },
+            {
+              "fieldToAggregate": "id_imagem",
+              "renameField": true,
+              "outputFieldName": "imagem_destaque"
+            }
+          ]
+        },
+        "options": {
+          "mergeLists": true
+        }
+      },
+      "id": "c249f375-1574-4897-bfad-ac4ae3c19e95",
+      "name": "Combinar subtítulos",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        900,
+        840
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extraindo os dados do node \"Dados SEO\"\nconst subtitulos = $node[\"Dados SEO\"].json['subtitulos'];\nconst titulo = $node[\"Dados SEO\"].json['titulo'];\nsubtitulos.unshift(titulo);\n\n// Criando uma array de objetos com a estrutura esperada pelo n8n\nconst resultado = subtitulos.map(subtitulo => ({ json: { subtitulos: subtitulo } }));\n\nreturn resultado;"
+      },
+      "id": "0bb2e955-44be-44e5-b3d9-bd74420e28bc",
+      "name": "Separar Dados",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -700,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $node['Google Sheets - Ler Palavras Chaves'].json['Imagens nos Subtítulos?'] }}-{{ $('Loop').context[\"currentRunIndex\"] % 2 === 1 }}",
+                    "rightValue": "SIM em Todos",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "SIM em Todos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "f7d3e12b-e419-4c7c-9757-2340398854fb",
+                    "leftValue": "={{ $node['Google Sheets - Ler Palavras Chaves'].json['Imagens nos Subtítulos?'] }}-{{ $('Loop').context[\"currentRunIndex\"] % 2 === 1 }}",
+                    "rightValue": "SIM, mas intercalando-false",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Intercalando Sim"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "37f3bc2c-eb0e-44ef-a75d-d2998e58a62c",
+                    "leftValue": "={{ $node['Google Sheets - Ler Palavras Chaves'].json['Imagens nos Subtítulos?'] }}-{{ $('Loop').context[\"currentRunIndex\"] % 2 === 1 }}",
+                    "rightValue": "SIM, mas intercalando-true",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Intercalando Não"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "5665fae6-3da8-4aa5-ab2c-1c6addd42ed6",
+                    "leftValue": "={{ $node['Google Sheets - Ler Palavras Chaves'].json['Imagens nos Subtítulos?'] }}-{{ $('Loop').context[\"currentRunIndex\"] % 2 === 1 }}",
+                    "rightValue": "NÃO",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "NÃO"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "none"
+        }
+      },
+      "id": "aaf50094-c148-4641-933a-131c5928fb78",
+      "name": "Imagem no subtítulo?",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        -180,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $node['Dados'].json[\"IA\"] }}",
+                    "rightValue": "ChatGPT",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ChatGPT"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "acd3986c-9cc5-48dd-ae9d-0a0537f15bff",
+                    "leftValue": "={{ $node['Dados'].json[\"IA\"] }}",
+                    "rightValue": "Shopia",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Shopia"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e176b88a-5d07-4d80-94b3-b4077936dcac",
+      "name": "Qual IA para SEO?",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        -1180,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $node['Dados'].json[\"banco_de_imagem\"] }}",
+                    "rightValue": "tag:",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Piwigo"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "f7d3e12b-e419-4c7c-9757-2340398854fb",
+                    "leftValue": "={{ $node['Dados'].json[\"banco_de_imagem\"] }}",
+                    "rightValue": "Piwigo",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Piwigo"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "37f3bc2c-eb0e-44ef-a75d-d2998e58a62c",
+                    "leftValue": "={{ $node['Dados'].json[\"banco_de_imagem\"] }}",
+                    "rightValue": "Pexels",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Pexels"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "c8eef311-967a-452c-8adc-dcefc22e1d1b",
+                    "leftValue": "={{ $node['Dados'].json[\"banco_de_imagem\"] }}",
+                    "rightValue": "Pixabay",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Pixabay"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "adc61235-f6dc-4a1a-9a1d-212d998ad8b3",
+                    "leftValue": "={{ $node['Dados'].json[\"banco_de_imagem\"] }}",
+                    "rightValue": "Unsplash",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Unsplash"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "0b302740-8d86-4c99-a7e3-cda692a6fb81",
+                    "leftValue": "={{ $node['Dados'].json[\"banco_de_imagem\"] }}",
+                    "rightValue": "URL",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "URL"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "e22ceb13-bb84-432c-9982-2c1165d3f9c0",
+                    "leftValue": "={{ $node['Dados'].json[\"banco_de_imagem\"] }}",
+                    "rightValue": "Dall-e",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Dall-e"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "none"
+        }
+      },
+      "id": "4fd6b6a4-636f-47ee-a745-80b9727d00ad",
+      "name": "Qual banco de imagem?",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        60,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $node['Dados'].json[\"IA\"] }}",
+                    "rightValue": "ChatGPT",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ChatGPT"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "acd3986c-9cc5-48dd-ae9d-0a0537f15bff",
+                    "leftValue": "={{ $node['Dados'].json[\"IA\"] }}",
+                    "rightValue": "Shopia",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Shopia"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "36e8e938-c92a-4782-89e6-2ddabf6e05a0",
+      "name": "Selecionar ia para conteúdo",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        -700,
+        980
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0abbf40e-3ffc-435b-bea2-55b6a1336e84",
+              "name": "Planilha ID",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "b838f160-f284-46d4-a20b-6f461959fdb9",
+              "name": "Planilha Aba",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "dcca4f81-4546-42c9-99c4-f3264b9e69ff",
+              "name": "URL do Site",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "166f4b24-1e8b-425c-a4e8-99431346705c",
+              "name": "Piwigo banco de imagem URL",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "9a3636c6-459f-4b0e-94b4-491a7f9fb2b5",
+              "name": "Logo marca dagua",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "332b6bc1-1f7f-4080-b516-a7fa7243b7c3",
+              "name": "Marca dagua Overlay",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "1d0f61fd-262b-4cc9-9853-3606e1a742d8",
+              "name": "Custom Post Type",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "8daea85b-4615-47c6-b76e-7ec897d6c8b5",
+              "name": "Custom Taxonomia",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "dfa4e91e-b808-46f5-9b96-01792f6af76f",
+              "name": "Pexels API Key",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "afc85346-7721-4abe-8604-e41b90dbc06c",
+              "name": "Pixabay Key",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "8e8211eb-a461-478b-a42f-d6e6b8ed74ae",
+              "name": "Shopia Token",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "5477c320-5497-4740-b005-09710830e4fd",
+              "name": "Shopia Workflow ID Dados do SEO",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "7fbd0ec9-510b-4df4-b27c-547169d3a932",
+              "name": "Shopia Workflow ID Conteúdo",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "17636e7a-e15d-4c88-9a7e-e852a2502b24",
+      "name": "variaveis",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -1960,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://app.shopia.ai/api/1.1/wf/run_workflow_api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "token",
+              "value": "={{ $node['variaveis'].json[\"Shopia Token\"] }}"
+            },
+            {
+              "name": "workflow",
+              "value": "={{ $node['variaveis'].json[\"Shopia Workflow ID Dados do SEO\"] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "inputs[0]",
+              "value": "={{ $node['Dados'].json[\"palavra_chave\"] }}"
+            },
+            {
+              "name": "inputs[1]",
+              "value": "={{ $node['Dados'].json[\"post_subtitulos_quantidade\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c36384c1-cbf3-42ac-be25-de9d0e02ef73",
+      "name": "Shopia - SEO",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -960,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://app.shopia.ai/api/1.1/wf/run_workflow_api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "token",
+              "value": "={{ $node['variaveis'].json[\"Shopia Token\"] }}"
+            },
+            {
+              "name": "workflow",
+              "value": "={{ $node['variaveis'].json[\"Shopia Workflow ID Conteúdo\"] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "inputs[0]",
+              "value": "={{ $node['Dados'].json[\"palavra_chave\"] }}"
+            },
+            {
+              "name": "inputs[1]",
+              "value": "={{ $node['Dados SEO'].json[\"titulo\"] }}"
+            },
+            {
+              "name": "inputs[2]",
+              "value": "={{ $node['Loop'].json[\"subtitulos\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e0a4771a-6246-41a5-b8b2-8e0b03b3ffcb",
+      "name": "Shopia - Desenvolver subtítulo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -420,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "={{ $node['Dados'].json[\"IA\"] == \"ChatGPT 3.5\" ? \"gpt-3.5-turbo\" : $node['Dados'].json[\"IA\"] == \"ChatGPT 4 Turbo\" ? \"gpt-4-turbo\" : $node['Dados'].json[\"IA\"] == \"ChatGPT 4o\" ? 'gpt-4o' : 'Nenhuma API Definida' }}",
+          "mode": "id"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are an SEO Specialist designed to output JSON with SEO results.",
+              "role": "system"
+            },
+            {
+              "content": "=Gere um objeto JSON com os seguintes itens para um post de blog, com base na palavra chave '{{ $node['Dados'].json[\"palavra_chave\"] }}' e nas regras específicas:\n\n- 'titulo': Crie um título que gere curiosidade e incentivará cliques nos resultados de busca, o título deve conter entre 45 e 63 caracteres, use a palavra chave de forma proeminente no início;\n\n- 'descricao': Crie uma descrição com até 20 palavras, use a palavra chave de forma proeminente no início;\n\n- 'subtitulos': Crie apenas {{ $node['Dados'].json[\"post_subtitulos_quantidade\"] ? $node['Dados'].json[\"post_subtitulos_quantidade\"] : 3 }} subtítulos distintos;\n\n- 'introducao': Crie uma introdução para capturar a atenção do leitor, inclua palavras-chave relevante para SEO no primeiro parágrafo, evite criar títulos, use marcações HTML, considere readability com 70 – 80 de escore e 7th grade, leve em consideração os subtítulos criados;\n\nNão altere os nomes dos atributos. \nNão crie nenhuma intro nos resultados ou prefixo.\nEscreva em português (brasileiro);"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "id": "8b1c0bbe-d3f4-4318-bda6-4118f2b8dde9",
+      "name": "ChatGPT - SEO",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.3,
+      "position": [
+        -960,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "={{ $node['Dados'].json[\"IA\"] == \"ChatGPT 3.5\" ? \"gpt-3.5-turbo\" : $node['Dados'].json[\"IA\"] == \"ChatGPT 4 Turbo\" ? \"gpt-4-turbo\" : $node['Dados'].json[\"IA\"] == \"ChatGPT 4o\" ? 'gpt-4o' : 'Nenhuma API Definida' }}",
+          "mode": "id"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are an SEO Specialist designed to output JSON with SEO results.",
+              "role": "system"
+            },
+            {
+              "content": "=Como especialista em SEO, gere um objeto conteúdo de um subtítulo para um post de blog, com base no subtítulo '{{ $node['Loop'].json[\"subtitulos\"] }}' seguind as regras específicas:\n\n- 'conteudo': Crie o conteúdo para o subtítulo, utilize somente marcações HTML, não adicione título <h2> ou <h3> no início, evite criar conclusões, evite criar introdução, Consider the Flesch Reading Ease Score scoring 70 – 80 in 7th grade, faça uma abordagem abrangente sobre o artigo com o título '{{ $node['Dados SEO'].json[\"titulo\"]}}', crie um conteúdo detalhado, utilize <strong> ou <h3> quando for possível.\n\nNão altere o nome dos atributo;\nNão crie nenhuma intro nos resultados ou prefixo.\nEscreva em português (brasileiro);\nEvite gerar conteúdo duplicado, leve em consideração os subtítulos: '{{ $node[\"Dados SEO\"].json[\"subtitulos\"].join(\", \") }}';"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "id": "ddf1c41a-dc93-4fe1-81ec-19da6d0a290e",
+      "name": "ChatGPT - Desenvolver subtítulo",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.3,
+      "position": [
+        -420,
+        240
+      ]
+    }
+  ],
+  "connections": {
+    "Pega informações": {
+      "main": [
+        [
+          {
+            "node": "redimensionar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Imagem Overlay": {
+      "main": [
+        [
+          {
+            "node": "Aplicar marca dagua",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "redimensionar": {
+      "main": [
+        [
+          {
+            "node": "Pega informações redimensionada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pega informações redimensionada": {
+      "main": [
+        [
+          {
+            "node": "logo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aplicar marca dagua": {
+      "main": [
+        [
+          {
+            "node": "Wordpress - Salvar imagem em mídia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Informações logo subtitulo": {
+      "main": [
+        [
+          {
+            "node": "Imagem Overlay",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "aguarde 10s": {
+      "main": [
+        [
+          {
+            "node": "Imagem em destaque?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ocorreu Erro": {
+      "main": [
+        [
+          {
+            "node": "variaveis_erro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "variaveis_erro": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Status ERRO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar sessão do outline com imagem": {
+      "main": [
+        [
+          {
+            "node": "Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets - Ler Palavras Chaves": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Status Executando",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Executar": {
+      "main": [
+        [
+          {
+            "node": "variaveis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "logo": {
+      "main": [
+        [
+          {
+            "node": "Informações logo subtitulo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Piwigo subtítulo": {
+      "main": [
+        [
+          {
+            "node": "Piwigo - Baixar imagem subtítulo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pexels subtítulo": {
+      "main": [
+        [
+          {
+            "node": "Pexels - Baixar imagem subtítulo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pixabay subtítulo": {
+      "main": [
+        [
+          {
+            "node": "Pixabay - Baixar imagem subtítulo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Piwigo - Baixar imagem subtítulo": {
+      "main": [
+        [
+          {
+            "node": "Pega informações",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pexels - Baixar imagem subtítulo": {
+      "main": [
+        [
+          {
+            "node": "Pega informações",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Criar sessão do outline com imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pixabay - Baixar imagem subtítulo": {
+      "main": [
+        [
+          {
+            "node": "Pega informações",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Criar sessão do outline com imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Unsplash subtítulo": {
+      "main": [
+        [
+          {
+            "node": "Pega informações",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Criar sessão do outline com imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baixar a imagem subtítulo": {
+      "main": [
+        [
+          {
+            "node": "Pega informações",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Criar sessão do outline com imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wordpress - Publicar Post": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Status Publicado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Imagem em destaque?": {
+      "main": [
+        [
+          {
+            "node": "Qual banco de imagem?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Selecionar ia para conteúdo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dados SEO": {
+      "main": [
+        [
+          {
+            "node": "Separar Dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop": {
+      "main": [
+        [
+          {
+            "node": "aguarde 10s",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Combinar subtítulos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dall-e automático?": {
+      "main": [
+        [
+          {
+            "node": "Gerar prompt da dall-e",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Dall-e",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar prompt da dall-e": {
+      "main": [
+        [
+          {
+            "node": "Dall-e",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dall-e": {
+      "main": [
+        [
+          {
+            "node": "Pega informações",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wordpress - Salvar imagem em mídia": {
+      "main": [
+        [
+          {
+            "node": "Wordpress - Atualizar Atributos da imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wordpress - Atualizar Atributos da imagem": {
+      "main": [
+        [
+          {
+            "node": "Criar sessão do outline com imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Combinar subtítulos": {
+      "main": [
+        [
+          {
+            "node": "Wordpress - Publicar Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Separar Dados": {
+      "main": [
+        [
+          {
+            "node": "Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dados": {
+      "main": [
+        [
+          {
+            "node": "Qual IA para SEO?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Imagem no subtítulo?": {
+      "main": [
+        [
+          {
+            "node": "Qual banco de imagem?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Qual banco de imagem?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Criar sessão do outline com imagem",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Criar sessão do outline com imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qual IA para SEO?": {
+      "main": [
+        [
+          {
+            "node": "ChatGPT - SEO",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Shopia - SEO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qual banco de imagem?": {
+      "main": [
+        [
+          {
+            "node": "Piwigo subtítulo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Piwigo subtítulo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pexels subtítulo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pixabay subtítulo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Unsplash subtítulo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Baixar a imagem subtítulo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Dall-e automático?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Selecionar ia para conteúdo": {
+      "main": [
+        [
+          {
+            "node": "ChatGPT - Desenvolver subtítulo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Shopia - Desenvolver subtítulo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "variaveis": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Ler Palavras Chaves",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Shopia - SEO": {
+      "main": [
+        [
+          {
+            "node": "Dados SEO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Shopia - Desenvolver subtítulo": {
+      "main": [
+        [
+          {
+            "node": "Imagem no subtítulo?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets - Status Executando": {
+      "main": [
+        [
+          {
+            "node": "Dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ChatGPT - SEO": {
+      "main": [
+        [
+          {
+            "node": "Dados SEO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ChatGPT - Desenvolver subtítulo": {
+      "main": [
+        [
+          {
+            "node": "Imagem no subtítulo?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "039504dc-132a-45db-9fd8-fdbac5ff6ff0",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2024-12-24T06:20:09.946Z",
+      "updatedAt": "2024-12-24T06:20:09.946Z",
+      "role": "workflow:owner",
+      "workflowId": "LELJi0PkPj36hIQz",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": [
+    {
+      "createdAt": "2024-12-04T18:30:58.053Z",
+      "updatedAt": "2024-12-04T18:30:58.053Z",
+      "id": "KzUxwsDiweJ4ud6F",
+      "name": "Robô de SEO"
+    }
+  ]
+}
