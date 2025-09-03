@@ -1,0 +1,1260 @@
+{
+  "createdAt": "2025-05-28T17:19:15.320Z",
+  "updatedAt": "2025-06-08T00:08:00.546Z",
+  "id": "T1lROHvafQBAPuFg",
+  "name": "Google Driver Backup",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "triggerTimes": {
+          "item": [
+            {}
+          ]
+        }
+      },
+      "name": "Cron",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [
+        -100,
+        380
+      ],
+      "id": "6feabaf4-b63d-466a-bbc3-c7c5b521cbba",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "ultimaDataBackup",
+              "value": "2024-01-01T00:00:00Z"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Setar Última Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        360,
+        380
+      ],
+      "id": "05825cc6-e47e-4c2a-a7d3-9a82c5778cdb"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "list",
+        "options": {}
+      },
+      "name": "Listar Arquivos da Origem",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 1,
+      "position": [
+        560,
+        380
+      ],
+      "id": "6cd7954e-0f91-4442-a4b9-9e12b70c202f",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "P5zicQ8z3U7TgqHz",
+          "name": "Google Drive account CONTA FORTUNE"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [],
+          "dateTime": [
+            {
+              "value1": "={{$json.modifiedTime}}",
+              "value2": "={{$node[\"Setar Última Data\"].json[\"ultimaDataBackup\"]}}"
+            }
+          ]
+        }
+      },
+      "name": "Verificar se Foi Atualizado",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        760,
+        380
+      ],
+      "id": "5d8c2348-1cc2-45d7-96ba-419e20bee0ad"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "download",
+        "fileId": "={{$json.id}}",
+        "options": {}
+      },
+      "name": "Baixar Arquivo",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 1,
+      "position": [
+        960,
+        280
+      ],
+      "id": "a1a2a214-7c3c-4d51-9983-ae582c0dc8f0",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "P5zicQ8z3U7TgqHz",
+          "name": "Google Drive account CONTA FORTUNE"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "binaryData": true,
+        "name": ".pdf",
+        "parents": [
+          "1ZBoyHFbnPRtTzKKedOQ15NVNFa7aPETO"
+        ],
+        "options": {}
+      },
+      "name": "Enviar para Drive Destino",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 1,
+      "position": [
+        1220,
+        280
+      ],
+      "id": "2b165bad-17ff-4569-a992-88e4a12a2952",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "P5zicQ8z3U7TgqHz",
+          "name": "Google Drive account CONTA FORTUNE"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "binaryData": true
+      },
+      "name": "Enviar para OneDrive",
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        1220,
+        700
+      ],
+      "id": "d7fb2574-2be0-4f05-820d-2af7ffc9c428"
+    },
+    {
+      "parameters": {},
+      "name": "Cron1",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [
+        160,
+        800
+      ],
+      "id": "5526a49f-74e7-436e-b2c5-2e1ffb13ab41"
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "ultimaDataBackup",
+              "value": "2024-01-01T00:00:00Z"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Setar Última Data1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        360,
+        800
+      ],
+      "id": "16b1191d-825d-493b-9199-7e3e5fe85cbf"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "list",
+        "options": {}
+      },
+      "name": "Listar Arquivos da Origem1",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 1,
+      "position": [
+        560,
+        800
+      ],
+      "id": "121ffb91-6233-4165-842b-1036895f7d7a",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "P5zicQ8z3U7TgqHz",
+          "name": "Google Drive account CONTA FORTUNE"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "dateTime": [
+            {
+              "value1": "={{$json.modifiedTime}}",
+              "value2": "={{$node[\"Setar Última Data1\"].json[\"ultimaDataBackup\"]}}"
+            }
+          ]
+        }
+      },
+      "name": "Verificar se Foi Atualizado1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        760,
+        800
+      ],
+      "id": "89823c96-6f51-4445-85d0-3d9e91fa0c62"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "download",
+        "fileId": "={{$json.id}}",
+        "options": {}
+      },
+      "name": "Baixar Arquivo1",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 1,
+      "position": [
+        960,
+        700
+      ],
+      "id": "dc13d0f2-546a-4f5c-b7b6-edc9c078b89c",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "P5zicQ8z3U7TgqHz",
+          "name": "Google Drive account CONTA FORTUNE"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "height": 380,
+        "width": 1420
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        80,
+        660
+      ],
+      "typeVersion": 1,
+      "id": "e7d08de2-5250-45fe-8257-55a72a87f6b0",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "height": 380,
+        "width": 1420
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        80,
+        220
+      ],
+      "typeVersion": 1,
+      "id": "cb459820-788b-41c2-94f0-0de060dbf32a",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {},
+      "name": "Iniciar Backup (Cron)",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [
+        -20,
+        1240
+      ],
+      "id": "1ff5f27d-759d-499a-bf29-9e06a69726c3"
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "ultimaDataBackup",
+              "value": "2024-01-01T00:00:00Z"
+            },
+            {
+              "name": "velocidadeUploadMBps",
+              "value": "5"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Configuração Inicial",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        180,
+        1240
+      ],
+      "id": "fb2a6fb8-cd33-408d-8cb3-210c644a2b48"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "list",
+        "options": {}
+      },
+      "name": "Listar Arquivos Google Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 1,
+      "position": [
+        380,
+        1240
+      ],
+      "id": "ed3a781a-6581-4f92-8dba-bab08e40f515",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "FNgJWwu4RGQDmIy0",
+          "name": "Google Drive account INTEGRASAC"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "name": "SplitInBatches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        580,
+        1240
+      ],
+      "id": "fb7757b8-e20c-4499-a7ee-78d46528de65"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "dateTime": [
+            {
+              "value1": "={{$json.modifiedTime}}",
+              "value2": "={{$node[\"Configuração Inicial\"].json[\"ultimaDataBackup\"]}}"
+            }
+          ]
+        }
+      },
+      "name": "Verificar Atualização",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        780,
+        1240
+      ],
+      "id": "e2a1623c-675b-460f-9a23-dbede2dca701"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "append",
+        "sheetId": "SEU_SHEET_ID",
+        "range": "LogBackup!A:E",
+        "options": {}
+      },
+      "name": "Registrar no Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        1440,
+        1240
+      ],
+      "id": "f486e28e-8f3e-4b55-81bd-c96669874c84",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "QoOkWaTYmCHsMVUl",
+          "name": "Google Sheets account V"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "download",
+        "fileId": "={{$json.id}}",
+        "options": {}
+      },
+      "name": "Baixar Arquivo2",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 1,
+      "position": [
+        980,
+        1240
+      ],
+      "id": "61440987-006f-4979-a728-4cf87741867e",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "P5zicQ8z3U7TgqHz",
+          "name": "Google Drive account CONTA FORTUNE"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "binaryData": true
+      },
+      "name": "Enviar para OneDrive1",
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        1240
+      ],
+      "id": "49352ccc-7392-4a59-9158-5ad06ec799d7"
+    },
+    {
+      "parameters": {
+        "content": "## I'm a note \n✅ Primeira parte do fluxo adicionada! Aqui está o que já incluí no arquivo JSON:\n\n🚀 Fluxo Principal até o Log\nCron — Inicia a execução automaticamente (a cada hora)\n\nConfiguração Inicial — Define timestamp do último backup e velocidade estimada (5MB/s)\n\nListar Arquivos Google Drive — Busca todos os arquivos da pasta origem\n\nSplitInBatches — Processa 1 arquivo por vez (controle de memória)\n\nVerificar Atualização — Verifica se o arquivo foi modificado desde o último backup\n\nBaixar Arquivo — Faz o download do Google Drive\n\nEnviar para OneDrive — Faz upload para o destino\n\nRegistrar no Google Sheets — Adiciona entrada no log da aba LogBackup",
+        "height": 400,
+        "width": 620
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -100,
+        1500
+      ],
+      "typeVersion": 1,
+      "id": "7d84d9fc-14d9-493e-bd7b-4831e33a8727",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "height": 320,
+        "width": 1760
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -100,
+        1140
+      ],
+      "typeVersion": 1,
+      "id": "7178d307-c1c6-4796-90bb-6df0286ee421",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "append",
+        "sheetId": "SEU_SHEET_ID",
+        "range": "LogBackup!A:E",
+        "options": {}
+      },
+      "name": "Registrar Falha (Opcional)",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        1320,
+        2420
+      ],
+      "id": "3f28742d-e312-4394-9c23-8977abace61f",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "QoOkWaTYmCHsMVUl",
+          "name": "Google Sheets account V"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "name": "Iniciar Backup (Cron)1",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [
+        120,
+        2220
+      ],
+      "id": "22b5cf58-20c5-46a5-8a42-f6a1608e769d"
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "ultimaDataBackup",
+              "value": "2024-01-01T00:00:00Z"
+            },
+            {
+              "name": "velocidadeUploadMBps",
+              "value": "5"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Configuração Inicial1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        320,
+        2220
+      ],
+      "id": "b3448d39-f1a3-4880-9161-ad96206c6035"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "list",
+        "options": {}
+      },
+      "name": "Listar Arquivos Google Drive1",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 1,
+      "position": [
+        520,
+        2220
+      ],
+      "id": "d715c170-309c-4805-9881-3d615ddd594f",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "FNgJWwu4RGQDmIy0",
+          "name": "Google Drive account INTEGRASAC"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "name": "SplitInBatches1",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        720,
+        2220
+      ],
+      "id": "61a76a0a-ad06-4cb3-a0a1-1067c57f399f"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "dateTime": [
+            {
+              "value1": "={{$json.modifiedTime}}",
+              "value2": "={{$node[\"Configuração Inicial1\"].json[\"ultimaDataBackup\"]}}"
+            }
+          ]
+        }
+      },
+      "name": "Verificar Atualização1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        920,
+        2220
+      ],
+      "id": "042af1a5-6dce-4942-997f-de134e4ec7eb"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "download",
+        "fileId": "={{$json.id}}",
+        "options": {}
+      },
+      "name": "Baixar Arquivo3",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        2220
+      ],
+      "id": "80722fe8-e30b-49b9-8df7-68d4dac0396a",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "P5zicQ8z3U7TgqHz",
+          "name": "Google Drive account CONTA FORTUNE"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "binaryData": true
+      },
+      "name": "Enviar para OneDrive2",
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        1320,
+        2220
+      ],
+      "id": "2a72c41b-fe3c-44da-a4af-1604047c4ad0"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "sheetId": "SEU_SHEET_ID",
+        "range": "LogBackup!A:E",
+        "options": {}
+      },
+      "name": "Registrar no Google Sheets1",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        1520,
+        2220
+      ],
+      "id": "48b07190-8762-4fc1-b86a-6a00968b5429"
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "resumoHtml",
+              "value": "<h2>Backup Concluído</h2><p>Arquivos transferidos com sucesso. Verifique o Google Sheets para detalhes.</p>"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Resumo HTML",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        1420,
+        3160
+      ],
+      "id": "20ea96a1-b976-4dc6-8598-1fe1c4308f34"
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "resumoJson",
+              "value": "{\"status\":\"concluido\",\"origem\":\"Google Drive\",\"destino\":\"OneDrive\"}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Resumo JSON",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        1440,
+        3420
+      ],
+      "id": "9c7e9e6c-4467-4bb8-923d-3a71e590c2a3"
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "resumoTexto",
+              "value": "Backup finalizado com sucesso. Verifique o log no Google Sheets."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Resumo Texto",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        1420,
+        3660
+      ],
+      "id": "2618eb27-bda8-4074-96bf-02439d78115d"
+    },
+    {
+      "parameters": {
+        "fromEmail": "backup@seudominio.com",
+        "toEmail": "destinatario@empresa.com",
+        "subject": "Resumo do Backup",
+        "html": "={{$node[\"Resumo HTML\"].json[\"resumoHtml\"]}}",
+        "options": {}
+      },
+      "name": "Enviar Email (Opcional)",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [
+        1680,
+        3160
+      ],
+      "id": "5c1de390-e339-477c-ae4c-b19237e7ff52",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "chatId": "@seu_usuario",
+        "text": "={{$node[\"Resumo Texto\"].json[\"resumoTexto\"]}}",
+        "additionalFields": {}
+      },
+      "name": "Enviar Telegram (Opcional)",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        1680,
+        3400
+      ],
+      "id": "be61a081-0c35-43ad-a509-f44358e4ee21",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "resumo-backup",
+        "options": {}
+      },
+      "name": "Webhook Final (Opcional)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        1660,
+        3660
+      ],
+      "id": "fd1f541f-06e8-40ea-93bd-50246c27648a",
+      "webhookId": "82554b0a-3dfa-4baa-b52e-e1c6220e4414",
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "name": "Iniciar Backup (Cron)2",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [
+        -120,
+        3280
+      ],
+      "id": "68a9ebec-e152-4caf-be20-7c29d4ce6fe1"
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "ultimaDataBackup",
+              "value": "2024-01-01T00:00:00Z"
+            },
+            {
+              "name": "velocidadeUploadMBps",
+              "value": "5"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Configuração Inicial2",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        80,
+        3280
+      ],
+      "id": "b1513d3a-2085-47cd-979c-841f5a4ddffd"
+    },
+    {
+      "parameters": {
+        "operation": "list",
+        "options": {}
+      },
+      "name": "Listar Arquivos Google Drive2",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 1,
+      "position": [
+        280,
+        3280
+      ],
+      "id": "a509d6df-192a-4891-b465-cb2fd104262f"
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "name": "SplitInBatches2",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        480,
+        3280
+      ],
+      "id": "312c62ca-dfe1-48ce-94bd-e00a5cb1c146"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "dateTime": [
+            {
+              "value1": "={{$json.modifiedTime}}",
+              "value2": "={{$node[\"Configuração Inicial2\"].json[\"ultimaDataBackup\"]}}"
+            }
+          ]
+        }
+      },
+      "name": "Verificar Atualização2",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        680,
+        3280
+      ],
+      "id": "66f5be62-9b0d-4e36-8bc3-158597aa071f"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": "={{$json.id}}",
+        "options": {}
+      },
+      "name": "Baixar Arquivo4",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 1,
+      "position": [
+        900,
+        3160
+      ],
+      "id": "00e4b3ff-096b-4c75-b6dd-9cbb72695423"
+    },
+    {
+      "parameters": {
+        "binaryData": true
+      },
+      "name": "Enviar para OneDrive3",
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        1680,
+        2960
+      ],
+      "id": "5ef280c3-f717-40f2-9aef-c4aa0752960c"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "sheetId": "SEU_SHEET_ID",
+        "range": "LogBackup!A:E",
+        "options": {}
+      },
+      "name": "Registrar no Google Sheets2",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        1160,
+        3160
+      ],
+      "id": "23ec993d-dd94-48d4-9a7c-5a6972e8eaf4"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "sheetId": "SEU_SHEET_ID",
+        "range": "LogBackup!A:E",
+        "options": {}
+      },
+      "name": "Registrar Falha (Opcional)1",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        3520
+      ],
+      "id": "23e8ce72-a391-4ea2-b6af-7200ff37e66b",
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        160,
+        380
+      ],
+      "id": "b6668825-e4ea-44c8-bcce-284cec317d9e",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "height": 640,
+        "width": 2020,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -120,
+        2080
+      ],
+      "typeVersion": 1,
+      "id": "cfc06b58-bdb4-4373-9039-0583f4cbe98b",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "height": 1020,
+        "width": 2340,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -300,
+        2900
+      ],
+      "typeVersion": 1,
+      "id": "80cd7f93-106a-457f-b1b0-ad1837e32dce",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "e5e00fe3-d7c0-4ef4-a629-f5980f6160cf",
+      "name": "Listar Arquivos",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 2,
+      "position": [
+        240,
+        4320
+      ],
+      "action": "list"
+    },
+    {
+      "parameters": {
+        "name": "={{ $json.name }}",
+        "parents": [
+          "ID_PASTA_DESTINO"
+        ],
+        "options": {}
+      },
+      "id": "5bde1450-cf11-4835-bdb9-73175d6b3160",
+      "name": "Upload Destino",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 2,
+      "position": [
+        640,
+        4320
+      ],
+      "action": "upload"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "bf99e4ee-8eba-41eb-b092-394ae0e95338",
+      "name": "Baixar Arquivo5",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 2,
+      "position": [
+        440,
+        4320
+      ],
+      "action": "download"
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "6e32e2cb-62d0-4fdf-8c86-ae6dce85a421",
+      "name": "Dividir em Lotes",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        -100,
+        4700
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "76dc877f-3853-4f1e-a6cc-6a40ce75dbf8",
+      "name": "Próximo?",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        500,
+        4720
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "2e56f4d7-d9df-4f85-ae18-e7630eb3dec9",
+      "name": "Listar Arquivos1",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 2,
+      "position": [
+        -300,
+        4700
+      ],
+      "action": "list"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "27089f12-ec98-497f-a3e1-2bc22facffb9",
+      "name": "Baixar Arquivo6",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 2,
+      "position": [
+        100,
+        4700
+      ],
+      "action": "download"
+    },
+    {
+      "parameters": {
+        "name": "={{ $json.name }}",
+        "parents": [
+          "ID_PASTA_DESTINO"
+        ],
+        "options": {}
+      },
+      "id": "bb4fda29-9af1-482f-924f-a00e7c865c94",
+      "name": "Upload Destino1",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 2,
+      "position": [
+        300,
+        4700
+      ],
+      "action": "upload"
+    }
+  ],
+  "connections": {
+    "Cron": {
+      "main": [
+        []
+      ]
+    },
+    "Setar Última Data": {
+      "main": [
+        [
+          {
+            "node": "Listar Arquivos da Origem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Listar Arquivos da Origem": {
+      "main": [
+        [
+          {
+            "node": "Verificar se Foi Atualizado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar se Foi Atualizado": {
+      "main": [
+        [
+          {
+            "node": "Baixar Arquivo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baixar Arquivo": {
+      "main": [
+        [
+          {
+            "node": "Enviar para Drive Destino",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cron1": {
+      "main": [
+        [
+          {
+            "node": "Setar Última Data1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Setar Última Data1": {
+      "main": [
+        [
+          {
+            "node": "Listar Arquivos da Origem1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Listar Arquivos da Origem1": {
+      "main": [
+        [
+          {
+            "node": "Verificar se Foi Atualizado1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar se Foi Atualizado1": {
+      "main": [
+        [
+          {
+            "node": "Baixar Arquivo1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baixar Arquivo1": {
+      "main": [
+        [
+          {
+            "node": "Enviar para OneDrive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Iniciar Backup (Cron)2": {
+      "main": [
+        [
+          {
+            "node": "Configuração Inicial2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Configuração Inicial2": {
+      "main": [
+        [
+          {
+            "node": "Listar Arquivos Google Drive2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Listar Arquivos Google Drive2": {
+      "main": [
+        [
+          {
+            "node": "SplitInBatches2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SplitInBatches2": {
+      "main": [
+        [
+          {
+            "node": "Verificar Atualização2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar Atualização2": {
+      "main": [
+        [
+          {
+            "node": "Baixar Arquivo4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baixar Arquivo4": {
+      "main": [
+        [
+          {
+            "node": "Registrar no Google Sheets2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registrar no Google Sheets2": {
+      "main": [
+        [
+          {
+            "node": "Resumo HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resumo HTML": {
+      "main": [
+        [
+          {
+            "node": "Enviar Email (Opcional)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Setar Última Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "cc85a107-718a-4246-beb9-0839d243a262",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-05-28T17:19:15.320Z",
+      "updatedAt": "2025-05-28T17:19:15.320Z",
+      "role": "workflow:owner",
+      "workflowId": "T1lROHvafQBAPuFg",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
