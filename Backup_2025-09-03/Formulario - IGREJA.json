@@ -1,0 +1,856 @@
+{
+  "createdAt": "2025-06-21T21:44:12.128Z",
+  "updatedAt": "2025-06-23T22:44:23.458Z",
+  "id": "BQzhauBySQN5oHF0",
+  "name": "Formulario - IGREJA",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "73d11353-5c28-4f0f-a509-2d555055dc84",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "7405478c-9305-4038-98f0-f58149c607e4",
+      "name": "IF – Já existe?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -2380,
+        -1020
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// --- Hash Password (versão sem bcrypt, hash fixo) ---\n\n// Senha padrão que será enviada ao aluno\nconst senhaOriginal = 'HayAhMoVe2025@';\n\n// Hash pré-gerado (com bcrypt) para armazenar no banco de dados\nconst senhaHash = '$2a$12$Fu/rrbjSZVmTrsYwR0dSx.T39YSnhOm3upe8MzDtAaW2TrZY6dZq2';\n\n// Percorre os itens recebidos do node anterior\nfor (const item of $input.all()) {\n  // Adiciona a senha original e o hash no JSON\n  item.json.senhaOriginal = senhaOriginal;\n  item.json.senhaHash = senhaHash;\n}\n\nreturn $input.all();\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2720,
+        -780
+      ],
+      "id": "555428fb-1e4b-40e5-a4a8-63cdeef93eaf",
+      "name": "Hash Password2"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -3640,
+        -1020
+      ],
+      "id": "5e80b64b-46ee-4d80-aa22-ac748d761d16",
+      "name": "Schedule Trigger1"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1v2gZRaGIEVgPhyLZL-cmMk7tnAGdL-JY79JVDfN7iUU",
+          "mode": "list",
+          "cachedResultName": "Planilha Inscrição PAGA 22-06-2025",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v2gZRaGIEVgPhyLZL-cmMk7tnAGdL-JY79JVDfN7iUU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 144992678,
+          "mode": "list",
+          "cachedResultName": "Português",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v2gZRaGIEVgPhyLZL-cmMk7tnAGdL-JY79JVDfN7iUU/edit#gid=144992678"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Enviado por E-mail"
+            },
+            {
+              "lookupColumn": "Enviado por Whatsapp"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        -3420,
+        -1020
+      ],
+      "id": "12123538-75d3-4ed5-bdb5-80051491a2b7",
+      "name": "Google Sheets2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pb4yzlmXfMN4YYQj",
+          "name": "Google Sheets account Jefferson"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "FORMULARIO - IGREJA \n",
+        "height": 980,
+        "width": 1540,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3220,
+        -1260
+      ],
+      "typeVersion": 1,
+      "id": "2b104f11-b301-4180-9e77-ee3b95437ffc",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Recebe todos os dados da planilha\nconst items = $input.all();\n\n// Encontra o item com o maior row_number\nconst ultimo = items.reduce((anterior, atual) => {\n  return (anterior.json.row_number > atual.json.row_number) ? anterior : atual;\n});\n\n// Retorna apenas o último item\nreturn [ultimo];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3200,
+        -1020
+      ],
+      "id": "303180f0-aefc-42f6-a735-5ba7cad9cdd3",
+      "name": "Code – Mantém só últimoe2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "d0207610-995c-4723-8b61-42ad8bf48eaa",
+              "leftValue": "={{$json[\"Enviado por E-mail\"]}}\n{{$json[\"Enviado por Whatsapp\"]}}\n",
+              "rightValue": "is empty\n",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "49509c2a-3946-4009-b2db-a095d6554a54",
+      "name": "IF importado?2",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -3020,
+        -1020
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of $input.all()) {\n  const nascimento = item.json[\"Data de Nascimento\"];\n  item.json.data_nascimento = new Date(nascimento).toISOString().split('T')[0];\n}\n\nreturn $input.all();\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2940,
+        -780
+      ],
+      "id": "45b835b5-7ab1-413b-b3ba-9dbfc9ee67da",
+      "name": "Normalize Date2"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id FROM users WHERE LOWER(email) = LOWER('{{ $json.Email }}')\n\n",
+        "options": {}
+      },
+      "id": "bbd02571-893b-4624-aba2-7c093cfc37fa",
+      "name": "MySQL – Verifica usuário1",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2,
+      "position": [
+        -2660,
+        -1020
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "1fSum8YauGSS56h9",
+          "name": "MySQL - IGREJA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "table": {
+          "__rl": true,
+          "value": "users",
+          "mode": "name"
+        },
+        "dataMode": "defineBelow",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "role_id",
+              "value": "3"
+            },
+            {
+              "column": "name",
+              "value": "={{ $('Hash Password2').item.json.Name }}"
+            },
+            {
+              "column": "username",
+              "value": "={{ $('Hash Password2').item.json.Name }}"
+            },
+            {
+              "column": "email",
+              "value": "={{ $('Hash Password2').item.json.Email }}"
+            },
+            {
+              "column": "password",
+              "value": "={{ $('Hash Password2').item.json.senhaOriginal }}"
+            },
+            {
+              "column": "is_active",
+              "value": "1"
+            },
+            {
+              "column": "created_at",
+              "value": "={{$now}}"
+            },
+            {
+              "column": "phone",
+              "value": "={{ $('Hash Password2').item.json.Telefone }}"
+            },
+            {
+              "column": "language_code",
+              "value": "pt-br"
+            },
+            {
+              "column": "language_name",
+              "value": "Português Brasileiro"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "13b46b71-4433-4731-acd2-4295dcc24018",
+      "name": "MySQL – Insert (novo)",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2,
+      "position": [
+        -2460,
+        -700
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "mySql": {
+          "id": "1fSum8YauGSS56h9",
+          "name": "MySQL - IGREJA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "ENVIO DE MENSAGEM DO ALUNO",
+        "height": 980,
+        "width": 440
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1680,
+        -1260
+      ],
+      "typeVersion": 1,
+      "id": "a57ef605-acf3-4bd5-9392-7359150d822b",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "CADASTRO PLANILHA",
+        "height": 980,
+        "width": 500,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3720,
+        -1260
+      ],
+      "typeVersion": 1,
+      "id": "3be7ff41-78b6-42a4-8093-a92641dd2060",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of $input.all()) {\n  const n=item.json.Name||'usuário';\n  const e=item.json.Email||'';\n  item.json.assunto='Você já possui cadastro – Hayah Training';\n  item.json.msg=`Olá ${n}! ✅ Nosso sistema indica que o seu e-mail (${e}) já possui acesso.\\nSe esqueceu a senha, use o link “Esqueci minha senha” na página de login.`;\n}\nreturn $input.all();"
+      },
+      "id": "675ed38f-bfcc-41f5-8bfe-a5293e3d8e04",
+      "name": "Set Mensagens – Já cadastrado",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2400,
+        -1220
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "value": "users",
+          "mode": "name"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "=email",
+              "value": "={{ $('Hash Password2').item.json.Email }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "01e99ea9-d0bc-49c3-b20f-b97b270bad37",
+      "name": "MySQL – Insert (novo)1",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2,
+      "position": [
+        -2280,
+        -700
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "mySql": {
+          "id": "1fSum8YauGSS56h9",
+          "name": "MySQL - IGREJA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "ENVIO DE MENSAGEM PARA O RESPONSAVEL DA EMPRESA",
+        "height": 980,
+        "width": 500,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1260,
+        -1260
+      ],
+      "typeVersion": 1,
+      "id": "f193203c-aa2a-46ae-a57c-e86991e449a6",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://atendiapi.integrasac.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer GkNn1tcD07FwhDkPiNTCUnEP2lgzYm"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "=5511993776119"
+            },
+            {
+              "name": "body",
+              "value": "={{ $json.msgWhatsappResponsavel }}"
+            },
+            {
+              "name": "sendSignature",
+              "value": "true"
+            },
+            {
+              "name": "closeTicket",
+              "value": "false"
+            },
+            {
+              "name": "sendSignature",
+              "value": "false"
+            },
+            {
+              "name": "closeTicket",
+              "value": "false"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1040,
+        -940
+      ],
+      "id": "b0b643a8-5c74-4320-a97a-8910065823a7",
+      "name": "ENVIO DE MENSAGEM PARA WHATSAPP DO RESPONSAVEL"
+    },
+    {
+      "parameters": {
+        "fromEmail": "=inscricao@hayahtraining.com",
+        "toEmail": "=inscricao@hayahtraining.com",
+        "subject": "={{ $json.msgEmailSubject_responsavel }}",
+        "text": "={{ $json.msgEmailBody_responsavel }}",
+        "options": {}
+      },
+      "id": "4fb2623d-5033-47de-b5eb-6cfc87927a96",
+      "name": "ENVIO DE MENSAGEM PARA E-MAIL DO RESPONSAVEL",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [
+        -1040,
+        -720
+      ],
+      "webhookId": "c77a0118-0950-4910-b4b9-b4b0a73aecd9",
+      "credentials": {
+        "smtp": {
+          "id": "atvXJVDFInYVg0OS",
+          "name": "SMTP - Brevo - Ingreja"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://atendiapi.integrasac.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer GkNn1tcD07FwhDkPiNTCUnEP2lgzYm"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Hash Password2').item.json.Telefone.toString().replace(/[^0-9]/g, '') }}"
+            },
+            {
+              "name": "body",
+              "value": "={{ $json.msgTexto }}"
+            },
+            {
+              "name": "sendSignature",
+              "value": "true"
+            },
+            {
+              "name": "closeTicket",
+              "value": "false"
+            },
+            {
+              "name": "sendSignature",
+              "value": "false"
+            },
+            {
+              "name": "closeTicket",
+              "value": "false"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1540,
+        -1120
+      ],
+      "id": "79fc47b0-3d2f-4080-9842-448d76bf7d92",
+      "name": "ENVIO DE MENSAGEM PARA WHATSAPP DO ALUNO"
+    },
+    {
+      "parameters": {
+        "fromEmail": "=inscricao@hayahtraining.com",
+        "toEmail": "={{ $('Google Sheets2').item.json.Email }}",
+        "subject": "={{ $json.msgEmailSubject }}",
+        "text": "={{ $json.msgEmailBody }}",
+        "options": {}
+      },
+      "id": "0ef4141e-0135-4a10-b986-494aa9c1765d",
+      "name": "ENVIO DE MENSAGEM PARA WHATSAPP DO ALUNO1",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [
+        -1520,
+        -500
+      ],
+      "webhookId": "c77a0118-0950-4910-b4b9-b4b0a73aecd9",
+      "credentials": {
+        "smtp": {
+          "id": "atvXJVDFInYVg0OS",
+          "name": "SMTP - Brevo - Ingreja"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  if (item.json?.email && item.json?.password) {\n    const nome = item.json.name || 'usuário';\n    const email = item.json.email;\n    const senha = item.json.password;\n    \n    item.json.msgEmailBody = `\n      <p>Olá <strong>${nome}</strong>! ✅ Seu acesso foi criado.</p>\n      <p><strong>Usuário:</strong> ${email}<br>\n      <strong>Senha:</strong> ${senha}</p>\n      <p>Acesse: <a href=\"https://move.hayahtraining.com\" target=\"_blank\">https://move.hayahtraining.com/login</a></p>\n      <p>Recomendamos que você altere sua senha no primeiro acesso.</p>\n      <p>Em caso de dúvidas, estamos à disposição.<br>Equipe Hayah Training</p>\n    `.trim();\n    \n    item.json.msgEmailSubject = 'Acesso liberado – Hayah Training';\n    item.json.msgTexto = `Olá ${nome}! ✅ Seu acesso foi criado.\\nUsuário: ${email}\\nSenha: ${senha}\\nAcesse: https://move.hayahtraining.com/login/`;\n  }\n  return item;\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1900,
+        -500
+      ],
+      "id": "144882ed-b927-48a4-9568-cd9ecefcfb7d",
+      "name": "Set Mensagens HTML",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      msgTexto: `📩 Boas-vindas à plataforma Hayah Move, ${$json.name}!\n\nSeu acesso foi criado com sucesso! Agora você faz parte de uma jornada que vai transformar sua trajetória profissional. 🚀\n\n👤 Usuário: ${$json.email}\n🔐 Senha provisória: ${$json.password}\n🌐 Acesse agora: https://move.hayahtraining.com/login\n\n⚠️ Importante: No primeiro acesso, altere sua senha para garantir mais segurança.\n\n📲 Entre no nosso grupo oficial!\nhttps://chat.whatsapp.com/ISHOcRt3TlpFeOBt3CFvUh\n\nPor lá, vamos enviar avisos importantes, atualizações e conteúdos exclusivos durante todo o evento. Não saia do grupo! 😉\n\n📞 Se precisar de ajuda, nosso time está à disposição.\n\nBoa jornada e conte com a gente!\nEquipe Hayah Training`\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1920,
+        -1120
+      ],
+      "id": "366f2543-57f8-4daf-9000-3cdaf909ab23",
+      "name": "CONVERTER TEXTO PARA WHATSAPP"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  if (item.json?.email && item.json?.password) {\n    const nomeAluno = item.json.name || 'Novo usuário';\n    const emailAluno = item.json.email;\n    const senhaAluno = item.json.password;\n    const telefoneAluno = item.json.phone || 'Não informado';\n    const dataCadastro = new Date().toLocaleDateString('pt-BR');\n\n    // Mensagem HTML para o responsável\n    item.json.msgEmailBody_responsavel = `\n      <p>📢 <strong>Notificação de novo cadastro</strong></p>\n      <p>Um novo aluno foi registrado na plataforma Hayah Move.</p>\n      <ul>\n        <li><strong>Nome:</strong> ${nomeAluno}</li>\n        <li><strong>E-mail:</strong> ${emailAluno}</li>\n        <li><strong>Telefone:</strong> ${telefoneAluno}</li>\n        <li><strong>Data de cadastro:</strong> ${dataCadastro}</li>\n      </ul>\n      <p>🔗 Acesse o painel administrativo para mais detalhes.</p>\n      <p>— Equipe Hayah Training</p>\n    `.trim();\n\n    // Assunto do e-mail\n    item.json.msgEmailSubject_responsavel = '📥 Novo cadastro na plataforma – Hayah Move';\n\n    // Texto puro para WhatsApp do responsável (se necessário)\n    item.json.msgTexto_responsavel = `\n📢 Novo cadastro na plataforma!\n\n👤 Nome: ${nomeAluno}\n📧 E-mail: ${emailAluno}\n📱 Telefone: ${telefoneAluno}\n📆 Data: ${dataCadastro}\n\nAcesse o painel administrativo para mais informações.\nEquipe Hayah Training.\n    `.trim();\n  }\n  return item;\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1880,
+        -720
+      ],
+      "id": "c1fa25dc-5c3e-4829-b9bf-29ab79a9650a",
+      "name": "Set Mensagens HTML1",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  const nome = item.json.name || 'Desconhecido';\n  const email = item.json.email || '-';\n  const telefone = item.json.phone || '-';\n  const dataCadastro = new Date(item.json.created_at).toLocaleDateString('pt-BR');\n\n  item.json.msgWhatsappResponsavel = \n`📢 Notificação de novo cadastro\n\nUm novo aluno foi registrado na plataforma Hayah Move.\n\n👤 Nome: ${nome}\n📧 E-mail: ${email}\n📱 Telefone: ${telefone}\n🗓️ Data de cadastro: ${dataCadastro}\n\n🔗 Acesse o painel administrativo para mais detalhes.\n\n— Equipe Hayah Training`;\n\n  return item;\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1880,
+        -920
+      ],
+      "id": "c19120e5-be48-4912-be8a-a6c22d5d426f",
+      "name": "CONVERTER TEXTO PARA WHATSAPP1"
+    },
+    {
+      "parameters": {
+        "amount": 45
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -1440,
+        -920
+      ],
+      "id": "04ad4017-17d6-4a31-90d2-26dea8688aaf",
+      "name": "Wait",
+      "webhookId": "070fd8f0-62f6-426b-8e5a-ccaae6fc7ae8"
+    },
+    {
+      "parameters": {
+        "amount": 20
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -1440,
+        -720
+      ],
+      "id": "3434bebf-61a4-4901-9fa4-af5e45f71ec5",
+      "name": "Wait1",
+      "webhookId": "070fd8f0-62f6-426b-8e5a-ccaae6fc7ae8"
+    }
+  ],
+  "connections": {
+    "IF – Já existe?": {
+      "main": [
+        [
+          {
+            "node": "Set Mensagens – Já cadastrado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "MySQL – Insert (novo)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hash Password2": {
+      "main": [
+        [
+          {
+            "node": "MySQL – Verifica usuário1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets2": {
+      "main": [
+        [
+          {
+            "node": "Code – Mantém só últimoe2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code – Mantém só últimoe2": {
+      "main": [
+        [
+          {
+            "node": "IF importado?2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF importado?2": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Normalize Date2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Date2": {
+      "main": [
+        [
+          {
+            "node": "Hash Password2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL – Verifica usuário1": {
+      "main": [
+        [
+          {
+            "node": "IF – Já existe?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL – Insert (novo)": {
+      "main": [
+        [
+          {
+            "node": "MySQL – Insert (novo)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL – Insert (novo)1": {
+      "main": [
+        [
+          {
+            "node": "Set Mensagens HTML",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Set Mensagens HTML1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ENVIO DE MENSAGEM PARA WHATSAPP DO ALUNO": {
+      "main": [
+        []
+      ]
+    },
+    "ENVIO DE MENSAGEM PARA WHATSAPP DO ALUNO1": {
+      "main": [
+        []
+      ]
+    },
+    "Set Mensagens HTML": {
+      "main": [
+        [
+          {
+            "node": "ENVIO DE MENSAGEM PARA WHATSAPP DO ALUNO1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "CONVERTER TEXTO PARA WHATSAPP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CONVERTER TEXTO PARA WHATSAPP": {
+      "main": [
+        [
+          {
+            "node": "ENVIO DE MENSAGEM PARA WHATSAPP DO ALUNO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Mensagens HTML1": {
+      "main": [
+        [
+          {
+            "node": "CONVERTER TEXTO PARA WHATSAPP1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CONVERTER TEXTO PARA WHATSAPP1": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "ENVIO DE MENSAGEM PARA WHATSAPP DO RESPONSAVEL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "ENVIO DE MENSAGEM PARA E-MAIL DO RESPONSAVEL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    },
+    "node:Google Sheets Inglês": {},
+    "node:Schedule Trigger1": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "0504ea0b-1531-4a1c-948f-f4f2174ba937",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-06-21T21:44:12.128Z",
+      "updatedAt": "2025-06-21T21:44:12.128Z",
+      "role": "workflow:owner",
+      "workflowId": "BQzhauBySQN5oHF0",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
