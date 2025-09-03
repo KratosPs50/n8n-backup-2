@@ -1,0 +1,3310 @@
+{
+  "createdAt": "2024-12-12T19:32:09.832Z",
+  "updatedAt": "2024-12-12T23:27:06.812Z",
+  "id": "ywQS8lTp7Tg9kuE8",
+  "name": "Postagem Produtos Noticias AFILIADO AMAZON",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "title": "={{ $('Remove aspas').item.json[\"titulo\"] }}\n\n",
+        "additionalFields": {
+          "content": "={{ $('Rate').item.json[\"html\"] }}\n{{ $('Link geral').item.json[\"html\"] }}\n{{ $('ProContras').item.json[\"html\"]}}\n{{ $node[\"Code botao\"].json.html }}\n{{ $('Link Top3').item.json[\"html\"] }}\n\n\n",
+          "categories": "={{ $('Google Sheets').item.json[\"ID da Categoria\"] }}"
+        }
+      },
+      "id": "49e2a658-9e57-4005-8c6c-7487bbe14ff2",
+      "name": "Wordpress",
+      "type": "n8n-nodes-base.wordpress",
+      "typeVersion": 1,
+      "position": [
+        4920,
+        2180
+      ],
+      "credentials": {
+        "wordpressApi": {
+          "id": "iLNORR1kudnZqHXh",
+          "name": "Wordpress account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "model": "gpt-4",
+        "prompt": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "=Sou um profissional especialista em copywriting com 15 anos de experiência nessa área, capaz de produzir artigos com SEO aprimorado que rankeiam conteúdo de posts Review de produtos nas primeiras posições do google. \n\nPor favor, Crie o conteúdo para um artigo Review, que seja bem detalhado e extenso, sobre este produto: {{ $('HTML info').item.json[\"Titulo\"] }} com pelo menos 1800 palavras, contendo todas as informações sobre o produto, ATENÇÃO ao desenvolver o conteúdo Review do post nos detalhes do produto, que estão nessa pagina de venda do produto: {{ $('Google Sheets').item.json['Url Produto'] }}\n\nPor favor siga exatamente essa estrutura com as Tags do HTML, e também o tema escrito em cada subtítulo nessas 6 Outlines para escrever o conteúdo desse post Review:\n\n<h2>Detalhes sobre o Produto</h2>\n9 Parágrafos com texto persuasivo  \n\n<h2>Recursos Importantes</h2>\n9 Parágrafos com texto persuasivo\n\n<h2>Sugestoes de uso e utilidades</h2>\n9 Parágrafos com texto persuasivo\n\n<h2>Nota Geral do Produto</h2>\nUtilize  exatamente essa informação: {{ $('HTML info').item.json[\"Nota\"]}} , bem estruturada e organizada para criar o texto sobre as Notas do produto, que seja um texto bem detalhado e informativo, escreva sempre cada nota uma abaixo da outra em formato de lista, e também sempre use negrito ou a tag do html: strong para destacar cada nota da avaliação do produto em cada linha que constar uma nota. Além disso Avise também que essas notas podem mudar de acordo com as novas avaliações. No caso do produto não possuir uma nota de classificação explique neste caso que o Produto é novo na Amazon, e devido a isso ainda não tem uma classificação geral de notas, mas que em breve terá: somente escreva isso se o produto não tiver nenhuma nota.\n\n<h2>Perguntas Frequentes sobre o Produto {{ $('HTML info').item.json[\"Titulo\"] }}</h2>\nUtilize como base real o recurso de pesquisa do Google: \"As pessoas também perguntam\" e mais algumas informações relevantes do produto aqui: \"{{  $('HTML info').item.json[\"Itens\"][2] }}\" e crie 5 perguntas e respostas mais frequentes para esse Produto que vende na Amazon: {{ $('HTML info').item.json[\"Titulo\"] }}. As respostas deverão ser verdadeiras, objetivas, precisas e exatas, numere as perguntas de 1 a 5, NÃO utilize o formato de lista nas perguntas,  Não aborde a questão de garantia e validade do produto, vou usar isso em outro lugar, nunca escreva a palavra \"pergunta\"  no texto da pergunta realizada, somente faça a pergunta, e nunca escreva a palavra \"resposta\" no texto da resposta, somente escreva a resposta completa. Sempre destaque as Perguntas com negrito ou com a tag do html: strong. A Resposta deve estar sempre abaixo da pergunta, não utilize espaço entre os parágrafos da Pergunta e da Resposta.\n\n<h2>Opinião da Nossa Equipe</h2>\n10 Parágrafos com texto persuasivo e sincero\n\n1. Ao redigir os parágrafos, utilize um tom e linguagem persuasivo e envolvente, evitando o uso da voz passiva;\n\n2. Além disso, reescreva o texto de forma mais humanizada, profissional , fluida e legível, utilizando frases de transição apropriadas;\n\n3. Inclua palavras de introdução no início dos parágrafos e seções. Use palavras de continuação para conectar ideias relacionadas;\n\n4. Insira palavras de tempo onde for relevante para sequenciar eventos ou etapas. Utilize palavras de semelhança e comparação para comparar conceitos;\n\n5. Adicione palavras de conclusão para finalizar ideias e parágrafos;\n\n6. Incorpore termos de transição gerais onde couber para suavizar a transição entre tópicos e conceitos;\n\n7. Sempre Retorne o texto deste post Review utilizando no conteúdo as tags corretas de estrutura HTML, como: p, strong, itálico, ul, li, h2, h3; \n\n8. Utilize também Hightlight HTML para destacar o conteúdo;\n\n9. Nunca Retorne o Titulo do artigo na página, vou usar em outro lugar;\n\n10. Sempre que você utilizar alguma numeração ou lista neste post use a tag do html <strong> para que todos os números fiquem destacados em negrito;\n\n11. Sempre inclua em todo contexto do conteúdo deste Post Review, em todas as Outlines o Nome 100% Completo e Original do Produto, sem nenhum tipo de corte ou alteração, este nome:{{ $('HTML info').item.json[\"Titulo\"] }};\n\n12. Mantenha este nome 100% completo: {{ $('HTML info').item.json[\"Titulo\"] }} e sempre CITE este nome 100% completo {{ $('HTML info').item.json[\"Titulo\"] }} sem nenhum tipo de alteração ou corte, pelo menos uma vez em cada conteúdo dos subtítulos nas Outlines;\n\n13. Não escreva neste post nada sobre Prós e Contras do produto, vou usar isso em outro lugar;\n \n14. Considere readability com 71 – 85 de escore e 7th grade;"
+            }
+          ]
+        },
+        "simplifyOutput": false,
+        "options": {
+          "temperature": 0.5
+        },
+        "requestOptions": {}
+      },
+      "id": "4dd7aaf8-1d73-4351-a488-232ff24e3198",
+      "name": "ChatGPT",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        1540,
+        2120
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "AK2JwQJlNiAowLd0",
+          "name": "OpenAi account FORTUNE HOG"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "Titulo",
+              "cssSelector": "#productTitle",
+              "returnValue": "=text"
+            },
+            {
+              "key": "Itens",
+              "cssSelector": ".a-spacing-mini",
+              "returnArray": true
+            },
+            {
+              "key": "Imagem",
+              "cssSelector": "#altImages img[src*=\"_AC_\"]",
+              "returnValue": "attribute",
+              "attribute": "src",
+              "returnArray": true
+            },
+            {
+              "key": "Nota",
+              "cssSelector": ".cr-widget-TitleRatingsHistogram",
+              "returnArray": true
+            },
+            {
+              "key": "Notag",
+              "cssSelector": ".a-icon-alt",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "edd12e1e-618f-4486-bd79-decac43a3c65",
+      "name": "HTML info",
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1,
+      "position": [
+        2480,
+        1880
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "model": "gpt-4-1106-preview",
+        "prompt": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "=Sou um profissional especialista em copywriting com 15 anos de experiência, capaz de produzir Títulos com SEO aprimorado que rankeiam Títulos de posts Review de produtos nas primeiras posições do google. \n\nCrie um Titulo para um post Review sobre este produto {{ $('HTML info').item.json[\"Titulo\"] }} com essa palavra chave relacionada ao titulo sempre no inicio da frase: {{ $('Google Sheets').item.json[\"Palavra Chave Foco\"] }} , que seja um titulo humanizado, criativo, exclusivo, e também atraente e envolvente para o consumidor. \n\nPor favor, siga exatamente essas regras:\n\n1. NÃO Retorne o novo Titulo deste Post Review na página, vou usar em outro lugar;\n2. No máximo 65 caracteres de quantidade total na criação do titulo;\n3. Somente use o novo Titulo deste Post Review no Título do Artigo, não use no texto do Post Review; \n4. Nunca use no Título deste post Review a palavra:\"Descubra\";\n5. Nunca coloque ASPAS entre o nome do Titulo deste post, o Título precisa ser sempre limpo e sem nenhum tipo de símbolo;\n6. A palavra chave {{ $('Google Sheets').item.json[\"Palavra Chave Foco\"] }} SEMPRE deverá ser a primeira palavra utilizada no novo titulo gerado;\n7. Considere readability com 71 – 85 de escore e 7th grade;"
+            },
+            {
+              "content": "="
+            }
+          ]
+        },
+        "simplifyOutput": false,
+        "options": {
+          "temperature": 0.5
+        },
+        "requestOptions": {}
+      },
+      "id": "af1bac87-8eea-4aaf-aaf5-e726ab8bf100",
+      "name": "Título",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        1080,
+        2120
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "AK2JwQJlNiAowLd0",
+          "name": "OpenAi account FORTUNE HOG"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Variáveis').item.json[\"url_site\"] }}/wp-json/wp/v2/media/",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wordpressApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "cache-control",
+              "value": "no-cache"
+            },
+            {
+              "name": "content-disposition",
+              "value": "=attachment; filename={{ $binary.data.fileName }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "412297f0-0195-4aa2-8ec3-480947493251",
+      "name": "Salvar imagem em mídia",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        4780,
+        2460
+      ],
+      "credentials": {
+        "wordpressApi": {
+          "id": "iLNORR1kudnZqHXh",
+          "name": "Wordpress account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Replace imagem').item.json[\"imagem\"] }}",
+        "options": {}
+      },
+      "id": "60495182-d69d-4eb7-b4ed-79970b5b95c5",
+      "name": "Baixar a imagem",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        4600,
+        2460
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const urlProduto = $('Google Sheets').item.json['Url Produto'];\nlet urlImagem = $('HTML info').item.json[\"Imagem\"][0];\n\n// Verifique se urlImagem é uma string e substitua o final da URL\nif (typeof urlImagem === 'string') {\n  urlImagem = urlImagem.replace(/(AC).*/, \"$1_SL1200_.jpg\"); \n}\n\nreturn {\n  imagem: urlImagem\n};"
+      },
+      "id": "7f9ae6c1-f3da-4b94-9c74-0ca550b6de33",
+      "name": "Replace imagem",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2160,
+        2240
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const urlProduto = $('Google Sheets').item.json['Url Produto'];\nconst botcor = $node['Variáveis'].json.botao;\n\nconst html = `\n  <div align=\"center\">\n    <a href=\"${urlProduto}\" target=\"_blank\">\n   <button type=\"button\" style=\"background-color:${botcor}; padding:9px; border:1px solid black; margin:0; border-radius:7px;\"><strong>+ Confira Aqui Mais Detalhes desse Produto…</strong></button>   \n    </a>\n  </div>\n`;\n\nreturn { html };"
+      },
+      "id": "3b71997f-853e-4b72-8db1-1a85afce1865",
+      "name": "Code botao",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        2120
+      ]
+    },
+    {
+      "parameters": {
+        "content": "\nInsira os seus dados na planilha:\n\n- A url principal de afiliado da Amazon do produto para Review ( use de preferência as urls de afiliados encurtadas que a a Amazon gera, se houver alguma instabilidade mude para a url completa ).\n- ID da categoria do Post\n- 3 urls de afiliado relacionado ao produto principal, para formar o TOP 3 automático ( opcional ), caso não queira é só deixar vazio as\ncolunas: top1, top2,top3. Mas é muito recomendável que você use esse recurso. A imagem do produto será sempre a primeira a imagem que está na Amazon ( padrão ).\n- Dois números para as imagens do produto do Review  ( o padrão é 1 e 2 ), mas costuma ter até o número 5, você pode escolher, mas veja antes na página do produto.\n- Palavra chave: uma das palavras que estão no título do produto Review que você vai gerar, escolha no página do produto na Amazon.\n- Data e Hora de agendamento do post review ( só se vc for usar ) não obrigatório\n\nObservação1: Não repita as mesmas palavras chaves nas linhas da planilha, ou a planilha não será atualizada após a publicação, com o OK final e o novo titulo. \nSe for usar a mesma palavra chave exclua essa palavra antes na planilha do artigo anterior que já foi processado. \n\nObservação2: Não escreva nada na coluna: Novo título, esse titulo será criado automaticamente com SEO otimizado, baseado no titulo original do produto da Amazon.\n\n\nPara que não ocorra erros...é obrigatório:\n\n1. A coluna palavra chave não pode ficar vazia sem alguma palavra\n2. A coluna Novo titulo tem que ficar vazia\n3. O produto da Amazon tem que ter no mínimo 3 imagens na página de venda na Amazon\n4. É obrigatório ter os números da imagens na coluna de imagens da planilha ( padrão 1 e 2 ou 0 e 1 ) não pode ficar vazio ou irá gerar erro\n\n\nPreencha os seus dados no Nó de variáveis:\n\n- Suas credenciais\n- Seus dados do google sheets\n- Seu prefixo da tabela do banco de dados para otimizar o Rankmath\n- Cor de fundo do botão automático  ( em inglês ) exemplo: red\n- Cor de fundo do painel de Prós e Contras\n- Tamanho dos subtítulos H\n- Cor das estrelas na nota geral ( em inglês ) exemplo: blue\n- Setor: seu seguimento do Review, exemplo:  utilidades domésticas ( necessário preencher )\n- Número de repetições do título, link inserido no texto automaticamente ( no máximo de 6 )\n\nObservação3: Os dados que já estão nesse nó d variáveis são os valores padrão.\n\nEssa Automação não usa API da Amazon, então use com moderação para evitar o Bloqueio do seu IP.\nO número total de palavras vária entre 1000 a 1600 palavras, depende do modelo de chat GPT que você usar. \nCom GPT4 a qualidade do Review será considerável melhor !\n\nBoas Vendas !\n\n\n",
+        "height": 905.6597104592174,
+        "width": 1502.852335969994
+      },
+      "id": "492a940a-4ca5-45f1-9d80-f14dd0a2430f",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Replace imagem1').item.json[\"imagem\"] }}",
+        "options": {}
+      },
+      "id": "8d5d3619-3fbc-4416-ab84-acef9f6bab91",
+      "name": "Baixar a imagem1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1000,
+        1260
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Variáveis').item.json[\"url_site\"] }}/wp-json/wp/v2/media/",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wordpressApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "cache-control",
+              "value": "no-cache"
+            },
+            {
+              "name": "content-disposition",
+              "value": "=attachment; filename={{ $binary.data.fileName }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "7c4ad2d4-bd12-49f9-8f5f-c928305577d5",
+      "name": "Salvar imagem em mídia1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1420,
+        1260
+      ],
+      "credentials": {
+        "wordpressApi": {
+          "id": "iLNORR1kudnZqHXh",
+          "name": "Wordpress account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const urlProduto = $('Google Sheets').item.json['Url Produto'];\nconst numero_img1 = $('Google Sheets').item.json['img1'];\nlet urlImagem = $('HTML info').item.json[\"Imagem\"][numero_img1]; // Substitua 1 por numero_img1\n\n// Verifique se urlImagem é uma string e substitua o final da URL\nif (typeof urlImagem === 'string') {\n  urlImagem = urlImagem.replace(/(AC).*/, \"$1_SL1200_.jpg\"); \n}\n\nreturn {\n  imagem: urlImagem\n}"
+      },
+      "id": "8a93a9f1-705c-467d-ae04-99ddf9baf2e7",
+      "name": "Replace imagem1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2380,
+        2240
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "conteudo",
+              "value": "={{ $('ChatGPT').item.json[\"choices\"][0][\"message\"][\"content\"].replaceAll(\"\\\\n\",\"<br />\").replaceAll(\"\\\\n\\\\n\",\"<br /><br />\").replaceAll(\"\\\\n\\\\n\\\\n\",\"<br /><br /><br />\").replaceAll(\"\\\\\\n\",\"<br />\").replaceAll(\"\\\\\\n\\\\n\",\"<br /><br />\")}}"
+            },
+            {
+              "name": "Img1",
+              "value": "=<a href='{{ $('Google Sheets').item.json['Url Produto'] }}' target='_blank'><img src='{{ $('Salvar imagem em mídia1').item.json[\"source_url\"] }}' alt='{{ $('HTML info').item.json[\"Titulo\"] }}' title='{{ $('HTML info').item.json[\"Titulo\"] }}'/></a>"
+            },
+            {
+              "name": "Img2",
+              "value": "=<a href='{{ $('Google Sheets').item.json['Url Produto'] }}' target='_blank'><img src='{{ $('Salvar imagem em mídia2').item.json[\"source_url\"] }}' alt='{{ $('HTML info').item.json[\"Titulo\"] }}' title='{{ $('HTML info').item.json[\"Titulo\"] }}'/></a>"
+            },
+            {
+              "name": "Prós",
+              "value": "={{ $('Pros').item.json[\"choices\"][0][\"message\"][\"content\"].replaceAll(\"\\\\n\",\"<br />\").replaceAll(\"\\\\n\\\\n\",\"<br /><br />\").replaceAll(\"\\\\n\\\\n\\\\n\",\"<br /><br /><br />\").replaceAll(\"\\\\\\n\",\"<br />\").replaceAll(\"\\\\\\n\\\\n\",\"<br /><br />\")}}"
+            },
+            {
+              "name": "Contras",
+              "value": "={{ $('Contras').item.json[\"choices\"][0][\"message\"][\"content\"].replaceAll(\"\\\\n\",\"<br />\").replaceAll(\"\\\\n\\\\n\",\"<br /><br />\").replaceAll(\"\\\\n\\\\n\\\\n\",\"<br /><br /><br />\").replaceAll(\"\\\\\\n\",\"<br />\").replaceAll(\"\\\\\\n\\\\n\",\"<br /><br />\")}}"
+            },
+            {
+              "name": "Prós e Contras",
+              "value": "={{ $('ProContras').item.json[\"html\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7692ae88-6349-4631-8426-d4ee40ef2d93",
+      "name": "Artigo com imagem",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        2440,
+        1260
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const urlProduto = $('Google Sheets').item.json['Url Produto'];\nconst numero_img2 = $('Google Sheets').item.json['img2'];\nlet urlImagem = $('HTML info').item.json[\"Imagem\"][numero_img2]; \n\n// Verifique se urlImagem é uma string e substitua o final da URL\nif (typeof urlImagem === 'string') {\n  urlImagem = urlImagem.replace(/(AC).*/, \"$1_SL1200_.jpg\"); \n}\n\nreturn {\n  imagem: urlImagem\n}"
+      },
+      "id": "c63e26b8-4fd0-4f50-9d4b-fd08b156d779",
+      "name": "Replace imagem2",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2580,
+        2240
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Replace imagem2').item.json[\"imagem\"] }}",
+        "options": {}
+      },
+      "id": "372b189d-6d1d-4053-ac4d-fe1f9953ff0a",
+      "name": "Baixar a imagem2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1900,
+        1260
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Variáveis').item.json[\"url_site\"] }}/wp-json/wp/v2/media/",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wordpressApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "cache-control",
+              "value": "no-cache"
+            },
+            {
+              "name": "content-disposition",
+              "value": "=attachment; filename={{ $binary.data.fileName }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "cb26bd0a-6fa6-4cb4-bda3-a515c9e77d53",
+      "name": "Salvar imagem em mídia2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        2200,
+        1260
+      ],
+      "credentials": {
+        "wordpressApi": {
+          "id": "iLNORR1kudnZqHXh",
+          "name": "Wordpress account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "a0bb648c-bbdd-40eb-93e4-cc117921bb1d",
+      "name": "Executar",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        740,
+        1740
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 5,
+        "unit": "seconds"
+      },
+      "id": "83e21b07-67ae-4fca-84f8-107ef86c1c5c",
+      "name": "Aguarde",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        3300,
+        2220
+      ],
+      "webhookId": "7c82cdc7-f47d-4d80-bfd9-bb30f7e83d19"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Primeiro, obtenha o título do nó 'Título'\nlet titulo = $('Título').item.json[\"choices\"][0][\"message\"][\"content\"];\n\n// Em seguida, use o método replace para remover todas as aspas duplas\ntitulo = titulo.replace(/\"/g, '');\n\n// Retorne o título como um item\nreturn [\n    {\n        json: {\n            titulo: titulo\n        }\n    }\n];"
+      },
+      "id": "fce90402-a95a-4108-a6e8-6a66307bf013",
+      "name": "Remove aspas",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1300,
+        2120
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Variáveis').item.json[\"Planilha ID\"] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('Variáveis').item.json[\"Planilha Aba\"] }}",
+          "mode": "id"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "=Status"
+            }
+          ]
+        },
+        "options": {
+          "returnAllMatches": "returnAllMatches"
+        }
+      },
+      "id": "bf45ea36-2c6f-47b8-8b76-0999e595853e",
+      "name": "Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        1340,
+        1740
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "TX4UGDocUxQQXphG",
+          "name": "Google Sheets account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 30
+            }
+          ]
+        }
+      },
+      "id": "89411b4f-7748-4ceb-93bc-06385e286f80",
+      "name": "A cada 30 min",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        300,
+        1420
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 10,
+        "unit": "seconds"
+      },
+      "id": "1f5bd109-4569-4d4b-905f-81699b164eab",
+      "name": "Aguarde1",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        5180,
+        1340
+      ],
+      "webhookId": "23e09645-27a0-4b20-a027-41f489b67809"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json['Url Produto'] }}",
+        "options": {}
+      },
+      "id": "c3ba7ad9-1d9d-4ba4-ad45-17655becc45b",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        2200,
+        1880
+      ],
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $node['Variáveis'].json[\"Planilha ID\"] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $node['Variáveis'].json[\"Planilha Aba\"] }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Status": "OK",
+            "Link": "={{ $node['Wordpress'].json[\"link\"] }}",
+            "Título": "={{ $('Remove aspas').item.json[\"titulo\"] }}",
+            "Palavra Chave Foco": "={{ $('Google Sheets').item.json['Palavra Chave Foco'] }}",
+            "Título Novo": "={{ $('Remove aspas').item.json[\"titulo\"] }}"
+          },
+          "matchingColumns": [
+            "Palavra Chave Foco"
+          ],
+          "schema": [
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Hora",
+              "displayName": "Hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Url Produto",
+              "displayName": "Url Produto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "img1",
+              "displayName": "img1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "img2",
+              "displayName": "img2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "top1",
+              "displayName": "top1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "top2",
+              "displayName": "top2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "top3",
+              "displayName": "top3",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Palavra Chave Foco",
+              "displayName": "Palavra Chave Foco",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Título Novo",
+              "displayName": "Título Novo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ID da Categoria",
+              "displayName": "ID da Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Categoria",
+              "displayName": "Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Link",
+              "displayName": "Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c279895f-c608-46de-9ea5-2486374fd045",
+      "name": "Google Sheets - Atualizar",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        5040,
+        1940
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "TX4UGDocUxQQXphG",
+          "name": "Google Sheets account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const urlProduto = $('Google Sheets').item.json['top1'];\nlet urlImagem = $('HTML top1').item.json[\"Imagem\"][0];\n\n// Verifique se urlImagem é uma string e substitua o final da URL\nif (typeof urlImagem === 'string') {\n  urlImagem = urlImagem.replace(/(AC).*/, \"$1_SL1200_.jpg\"); \n}\n\nreturn {\n  imagem: urlImagem\n};"
+      },
+      "id": "d7af7ae2-f1d5-494f-87d7-498cbf0f0c11",
+      "name": "Imagem top1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2760,
+        1600
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Imagem top1').item.json[\"imagem\"] }}",
+        "options": {}
+      },
+      "id": "591883f4-b1bb-470f-95fb-1433b7beb519",
+      "name": "Baixar a imagem top1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        2920,
+        1960
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Obter dados dos nodes anteriores\nconst urlAfiliado = $('Google Sheets').item.json['Url Produto'];\nconst titulo = $node['HTML info'].json['Titulo'];\nlet conteudo = $node['Artigo com imagem'].json['conteudo'];  \nconst repeticoes = $node['Variáveis'].json.repeticoes;\n\n// Obter URLs das imagens\nconst imagem1 = $node[\"Salvar imagem em mídia1\"].json[\"source_url\"];\nconst imagem2 = $node[\"Salvar imagem em mídia2\"].json[\"source_url\"];  \n\n// Verificar se obteve o título\nif (!titulo) {\n  return { error: \"Título não obtido\" }; \n}\n\n// Função para inserir links automáticos\nfunction inserirLinksAutomaticamente(conteudo, titulo, url, repeticoes) {\n  \n  let contador = 0;\n  let palavrasTitulo = titulo.split(\" \");\n  let palavrasDeLigacao = [\"de\", \"o\", \"a\", \"os\", \"-\", \"as\", \"um\", \"uns\", \"uma\", \"umas\", \"do\", \"dos\", \"da\", \"das\", \"no\", \"nos\", \"na\", \"nas\", \"pelo\", \"pelos\", \"pela\", \"pelas\", \"em\", \"por\", \"com\", \"para\", \"que\", \"e\"];\n\n  let novoConteudo = conteudo.replace(/(<h[23]>.*<\\/h[23]>)(\\s*[\\s\\S]*?)(?=<h[23]>|$)/g, function(match, p1, p2) {\n\n    if (contador < repeticoes) {\n      if (p2.includes(titulo)) {\n        p2 = p2.replace(titulo, `<a href=\"${url}\" target=\"_blank\">${titulo}</a>`);\n        contador++;\n      } else {\n        for (let palavra of palavrasTitulo) {\n          if (p2.includes(palavra) && !palavrasDeLigacao.includes(palavra.toLowerCase()) && isNaN(palavra)) {\n            p2 = p2.replace(palavra, `<a href=\"${url}\" target=\"_blank\">${palavra}</a>`);\n            contador++;\n            break;\n          }\n        }\n      }\n    }\n\n    return p1 + p2;\n\n  });\n\n  return novoConteudo;\n\n}\n\n// Função para inserir imagens\nfunction inserirImagens(conteudo, imagem1, imagem2, urlAfiliado, titulo) {\n\n  conteudo = conteudo.replace(\n    /<h2>Recursos Importantes<\\/h2>/g,\n    `<h2>Recursos Importantes</h2>\\n` +\n    `<div align=\"center\">\\n` +\n    `<a href=\"${urlAfiliado}\" target=\"_blank\">\\n` +   \n    `<img src=\"${imagem1}\" alt=\"${titulo}\" style=\"width: 600px; height: auto;\" />\\n` +\n    `</a>\\n` +\n    `</div>`\n  );\n\n  conteudo = conteudo.replace(\n    /<h2>Opinião da Nossa Equipe<\\/h2>/,  \n    `<h2>Opinião da Nossa Equipe</h2>\\n` +\n    `<div align=\"center\">\\n` +\n    `<a href=\"${urlAfiliado}\" target=\"_blank\">\\n` +\n    `<img src=\"${imagem2}\" alt=\"${titulo}\" style=\"width: 600px; height: auto;\" />\\n` +\n    `</a>\\n` +\n    `</div>`\n  );\n\n  return conteudo;\n\n}\n\n// Aplicar funções\nlet conteudoComLinks = inserirLinksAutomaticamente(conteudo, titulo, urlAfiliado, repeticoes);\n\nlet conteudoFinal = inserirImagens(conteudoComLinks, imagem1, imagem2, urlAfiliado, titulo);\n\n// Retornar HTML final \nreturn { html: conteudoFinal }"
+      },
+      "id": "05aec3e4-e492-4cdd-b75c-f5c2434ccd74",
+      "name": "Link geral",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4740,
+        2180
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $('Google Sheets').item.json['top1'] }}",
+              "operation": "isNotEmpty"
+            },
+            {
+              "value1": "={{ $('Google Sheets').item.json['top2'] }}",
+              "operation": "isNotEmpty"
+            },
+            {
+              "value1": "={{ $('Google Sheets').item.json['top3'] }}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "id": "cf89e7cc-08ed-487d-85a5-b039d66a6b95",
+      "name": "Rota",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        2680,
+        1260
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "Titulo",
+              "cssSelector": "#productTitle",
+              "returnValue": "=text"
+            },
+            {
+              "key": "Itens",
+              "cssSelector": ".a-spacing-mini",
+              "returnArray": true
+            },
+            {
+              "key": "Imagem",
+              "cssSelector": "#altImages img[src*=\"_AC_\"]",
+              "returnValue": "attribute",
+              "attribute": "src",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "66d99510-6a27-49f3-b1f5-21f062dcad93",
+      "name": "HTML top1",
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1,
+      "position": [
+        2560,
+        1600
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Google Sheets').item.json['top1'] }}",
+        "options": {}
+      },
+      "id": "605a034d-71bf-4c74-bea9-2350f19080bc",
+      "name": "HTTP top1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        2320,
+        1600
+      ],
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "jsCode": "// Obter dados dos nodes anteriores\nconst urlAfiliadoa = $('Google Sheets').item.json['top1'];\nconst urlAfiliadob = $('Google Sheets').item.json['top2'];\nconst urlAfiliadoc = $('Google Sheets').item.json['top3'];\nconst tituloa = $node['HTML top1'].json['Titulo'];\nconst titulob = $node['HTML top2'].json['Titulo'];\nconst tituloc = $node['HTML top3'].json['Titulo'];\nconst botcor = $node['Variáveis'].json.botao;\nconst h = $node['Variáveis'].json.ht;\nconst estcor = $node['Variáveis'].json.estrela;\nlet conteudo = $node['Artigo com Top3'].json['conteudo'];\n\n// Obter URLs das imagens\nconst imagem1 = $node[\"Salvar imagem em mídia top1\"].json[\"source_url\"];\nconst imagem2 = $node[\"Salvar imagem em mídia top2\"].json[\"source_url\"];\nconst imagem3 = $node[\"Salvar imagem em mídia top3\"].json[\"source_url\"];\n\n// Função para inserir imagens\nfunction inserirImagens(conteudo, imagem1, imagem2, imagem3,  urlAfiliadoa, urlAfiliadob, urlAfiliadoc, tituloa, titulob, tituloc) {\n\nlet blocot = `<h2>Nossas Outras Dicas Relacionadas - TOP 3</h2>\\n` +\n    `\\n` +   \n    `\\n`;\n    \nlet bloco1 = `<${h}><span style=\"color:${estcor};\">&#9733;</span>Top 1 - ${tituloa}</${h}>\\n` +\n    `<div align=\"center\">\\n` +\n    `<a href=\"${urlAfiliadoa}\" target=\"_blank\">\\n` +   \n    `<img src=\"${imagem1}\" alt=\"${tituloa}\" title=\"${tituloa}\" style=\"width: 300px; height: auto;\" />\\n` +\n    `</a>\\n` +\n    `<a href=\"${urlAfiliadoa}\" target=\"_blank\"><button type=\"button\" style=\"background-color:${botcor}; padding:9px; border:1px solid black; margin:0; border-radius:7px;\"><strong>+ Confira Aqui Mais Detalhes desse Produto…</strong></button></a>\\n` +\n    `</div>`;\n\n  let bloco2 = `<${h}><span style=\"color:${estcor};\">&#9733;</span>Top 2 - ${titulob}</${h}>\\n` +\n    `<div align=\"center\">\\n` +\n    `<a href=\"${urlAfiliadob}\" target=\"_blank\">\\n` +\n    `<img src=\"${imagem2}\" alt=\"${titulob}\" title=\"${titulob}\"  style=\"width:300px; height: auto;\" />\\n` +\n    `</a>\\n` +\n    `<a href=\"${urlAfiliadob}\" target=\"_blank\"><button type=\"button\" style=\"background-color:${botcor}; padding:9px; border:1px solid black; margin:0; border-radius:7px;\"><strong>+ Confira Aqui Mais Detalhes desse Produto…</strong></button></a>\\n` +\n    `</div>`;\n\n  let bloco3 = `<${h}><span style=\"color:${estcor};\">&#9733;</span>Top 3 - ${tituloc}</${h}>\\n` +\n    `<div align=\"center\">\\n` +\n    `<a href=\"${urlAfiliadoc}\" target=\"_blank\">\\n` +\n    `<img src=\"${imagem3}\" alt=\"${tituloc}\" title=\"${tituloc}\"  style=\"width:300px; height: auto;\" />\\n` +\n    `</a>\\n` +\n    `<a href=\"${urlAfiliadoc}\" target=\"_blank\"><button type=\"button\" style=\"background-color:${botcor}; padding:9px; border:1px solid black; margin:0; border-radius:7px;\"><strong>+ Confira Aqui Mais Detalhes desse Produto…</strong></button></a>\\n` +\n    `\\n` +\n    `\\n` + \n      `</div>\\n` +  \n    `<p></p>`;\n     \n   \n\n  conteudo = conteudo + blocot + bloco1 + bloco2 + bloco3;\n\n  return conteudo;\n\n}\n\nlet conteudoFinal = inserirImagens(conteudo, imagem1, imagem2, imagem3, urlAfiliadoa, urlAfiliadob, urlAfiliadoc, tituloa, titulob, tituloc);\n\n// Retornar HTML final \nreturn { html: conteudoFinal }"
+      },
+      "id": "a1ac1a61-27df-40a8-8f2c-0c4a4b15c718",
+      "name": "Link Top3",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4320,
+        2180
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "model": "gpt-4",
+        "prompt": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "=Por favor siga exatamente essa estrutura com as Tags do HTML, e também o tema escrito na Outline para escrever o conteúdo:\n\n<h2>Ajudando você a Decidir...</h2>\nCrie nessa Outline apenas uma introdução profissional e objetiva sobre a nossa experiência e confiabilidade em testar produtos para Review neste seguimento: {{ $('Variáveis').params[\"values\"][\"string\"][1][\"value\"] }}, com no maximo 100 palavras. \n\n1.Somente escreva a introdução, não cite ou relacione nenhum produto;\n\n2.Não escreva nomes de produtos e nem liste nada após a introdução, vou usar isso em outro lugar;\n\n3.Não use os termos \"nosso site\", \"nosso blog\";\n\n4.Sempre Retorne o texto utilizando no conteúdo as tags corretas de estrutura HTML, como: p, strong, itálico, ul, li, h2, h3; \n\n5. Nunca Retorne o Titulo do artigo na página, vou usar em outro lugar;\n\n6. Sempre que você utilizar alguma numeração no post use a tag do html <strong> para que os números fiquem destacados em negrito;\n\n7. Considere readability com 71 – 85 de escore e 7th grade;"
+            }
+          ]
+        },
+        "simplifyOutput": false,
+        "options": {
+          "temperature": 0.5
+        },
+        "requestOptions": {}
+      },
+      "id": "fa16df6d-f159-481a-8694-60b6e3b8ec56",
+      "name": "Resumo top3",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        4220,
+        1600
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "AK2JwQJlNiAowLd0",
+          "name": "OpenAi account FORTUNE HOG"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "conteudob",
+              "value": "={{ $('ChatGPT').item.json[\"choices\"][0][\"message\"][\"content\"].replaceAll(\"\\\\n\",\"<br />\").replaceAll(\"\\\\n\\\\n\",\"<br /><br />\").replaceAll(\"\\\\n\\\\n\\\\n\",\"<br /><br /><br />\").replaceAll(\"\\\\\\n\",\"<br />\").replaceAll(\"\\\\\\n\\\\n\",\"<br /><br />\")}}"
+            },
+            {
+              "name": "conteudo",
+              "value": "={{ $('Resumo top3').item.json[\"choices\"][0][\"message\"][\"content\"].replaceAll(\"\\\\n\",\"<br />\").replaceAll(\"\\\\n\\\\n\",\"<br /><br />\").replaceAll(\"\\\\n\\\\n\\\\n\",\"<br /><br /><br />\").replaceAll(\"\\\\\\n\",\"<br />\").replaceAll(\"\\\\\\n\\\\n\",\"<br /><br />\")}}"
+            },
+            {
+              "name": "Prós",
+              "value": "={{ $('Pros').item.json[\"choices\"][0][\"message\"][\"content\"].replaceAll(\"\\\\n\",\"<br />\").replaceAll(\"\\\\n\\\\n\",\"<br /><br />\").replaceAll(\"\\\\n\\\\n\\\\n\",\"<br /><br /><br />\").replaceAll(\"\\\\\\n\",\"<br />\").replaceAll(\"\\\\\\n\\\\n\",\"<br /><br />\")}}"
+            },
+            {
+              "name": "Contras",
+              "value": "={{ $('Contras').item.json[\"choices\"][0][\"message\"][\"content\"].replaceAll(\"\\\\n\",\"<br />\").replaceAll(\"\\\\n\\\\n\",\"<br /><br />\").replaceAll(\"\\\\n\\\\n\\\\n\",\"<br /><br /><br />\").replaceAll(\"\\\\\\n\",\"<br />\").replaceAll(\"\\\\\\n\\\\n\",\"<br /><br />\")}}"
+            },
+            {
+              "name": "Prós e Contras",
+              "value": "={{ $('ProContras').item.json[\"html\"] }}"
+            },
+            {
+              "name": "img1",
+              "value": "=<a href='{{ $('Google Sheets').item.json['Url Produto'] }}' target='_blank'><img src='{{ $('Salvar imagem em mídia1').item.json[\"source_url\"] }}' alt='{{ $('HTML info').item.json[\"Titulo\"] }}' title='{{ $('HTML info').item.json[\"Titulo\"] }}'/></a>"
+            },
+            {
+              "name": "img2",
+              "value": "=<a href='{{ $('Google Sheets').item.json['Url Produto'] }}' target='_blank'><img src='{{ $('Salvar imagem em mídia2').item.json[\"source_url\"] }}' alt='{{ $('HTML info').item.json[\"Titulo\"] }}' title='{{ $('HTML info').item.json[\"Titulo\"] }}'/></a>"
+            },
+            {
+              "name": "Imgtop1",
+              "value": "=<a href='{{ $('Google Sheets').item.json['top1'] }}' target='_blank'><img src='{{ $('Salvar imagem em mídia top1').item.json[\"source_url\"] }}' title='{{ $('HTML top1').item.json[\"Titulo\"] }}' alt='{{ $('HTML top1').item.json[\"Titulo\"] }}'/></a>\n\n"
+            },
+            {
+              "name": "Imgtop2",
+              "value": "=<a href='{{ $('Google Sheets').item.json['top2'] }}' target='_blank'><img src='{{ $('Salvar imagem em mídia top2').item.json[\"source_url\"] }}' title='{{ $('HTML top2').item.json[\"Titulo\"] }}' alt='{{ $('HTML top2').item.json[\"Titulo\"] }}'/></a>\n"
+            },
+            {
+              "name": "Imgtop3",
+              "value": "=<a href='{{ $('Google Sheets').item.json['top3'] }}' target='_blank'><img src='{{ $('Salvar imagem em mídia top3').item.json[\"source_url\"] }}' title='{{ $('HTML top3').item.json[\"Titulo\"] }}' alt='{{ $('HTML top3').item.json[\"Titulo\"] }}'/></a>\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "616b0386-4e52-4079-b22c-44880671b670",
+      "name": "Artigo com Top3",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        4120,
+        2180
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const urlProduto = $('Google Sheets').item.json['top2'];\nlet urlImagem = $('HTML top2').item.json[\"Imagem\"][0];\n\n// Verifique se urlImagem é uma string e substitua o final da URL\nif (typeof urlImagem === 'string') {\n  urlImagem = urlImagem.replace(/(AC).*/, \"$1_SL1200_.jpg\"); \n}\n\nreturn {\n  imagem: urlImagem\n};"
+      },
+      "id": "8fd0e841-c56b-49fe-b130-7ba6cae5293e",
+      "name": "Imagem top2",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3340,
+        1600
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const urlProduto = $('Google Sheets').item.json['top3'];\nlet urlImagem = $('HTML top3').item.json[\"Imagem\"][0];\n\n// Verifique se urlImagem é uma string e substitua o final da URL\nif (typeof urlImagem === 'string') {\n  urlImagem = urlImagem.replace(/(AC).*/, \"$1_SL1200_.jpg\"); \n}\n\nreturn {\n  imagem: urlImagem\n};"
+      },
+      "id": "0a94d954-439a-4063-846a-14723e7a7af3",
+      "name": "Imagem top3",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4020,
+        1600
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Google Sheets').item.json['top2'] }}",
+        "options": {}
+      },
+      "id": "2a1fa9b9-3581-44a5-b047-2c26d3ced39c",
+      "name": "HTTP top2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        2940,
+        1600
+      ],
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Google Sheets').item.json['top3'] }}",
+        "options": {}
+      },
+      "id": "2356498e-c9ed-4a00-a952-6fd4fadb8e29",
+      "name": "HTTP top3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        3560,
+        1600
+      ],
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "Titulo",
+              "cssSelector": "#productTitle",
+              "returnValue": "=text"
+            },
+            {
+              "key": "Itens",
+              "cssSelector": ".a-spacing-mini",
+              "returnArray": true
+            },
+            {
+              "key": "Imagem",
+              "cssSelector": "#altImages img[src*=\"_AC_\"]",
+              "returnValue": "attribute",
+              "attribute": "src",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "87592674-e5fa-4f11-8488-880dff5fd073",
+      "name": "HTML top2",
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1,
+      "position": [
+        3140,
+        1600
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "Titulo",
+              "cssSelector": "#productTitle",
+              "returnValue": "=text"
+            },
+            {
+              "key": "Itens",
+              "cssSelector": ".a-spacing-mini",
+              "returnArray": true
+            },
+            {
+              "key": "Imagem",
+              "cssSelector": "#altImages img[src*=\"_AC_\"]",
+              "returnValue": "attribute",
+              "attribute": "src",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a674c538-7f6d-4691-b34b-f5523470484e",
+      "name": "HTML top3",
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1,
+      "position": [
+        3800,
+        1600
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Imagem top2').item.json[\"imagem\"] }}",
+        "options": {}
+      },
+      "id": "132b7c8c-277d-4658-b698-ac09327d6216",
+      "name": "Baixar a imagem top2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        3340,
+        1960
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Imagem top3').item.json[\"imagem\"] }}",
+        "options": {}
+      },
+      "id": "2f722d79-b7dd-41ff-a409-e2b9917e92ff",
+      "name": "Baixar a imagem top3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        3760,
+        1960
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Variáveis').item.json[\"url_site\"] }}/wp-json/wp/v2/media/",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wordpressApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "cache-control",
+              "value": "no-cache"
+            },
+            {
+              "name": "content-disposition",
+              "value": "=attachment; filename={{ $binary.data.fileName }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "fea50ce9-a61e-4206-8ade-9faf3094ca63",
+      "name": "Salvar imagem em mídia top3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        4000,
+        1960
+      ],
+      "credentials": {
+        "wordpressApi": {
+          "id": "iLNORR1kudnZqHXh",
+          "name": "Wordpress account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Variáveis').item.json[\"url_site\"] }}/wp-json/wp/v2/media/",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wordpressApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "cache-control",
+              "value": "no-cache"
+            },
+            {
+              "name": "content-disposition",
+              "value": "=attachment; filename={{ $binary.data.fileName }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "61fa024c-40ff-4c4c-ba66-c5c3000ad01c",
+      "name": "Salvar imagem em mídia top1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        3120,
+        1960
+      ],
+      "credentials": {
+        "wordpressApi": {
+          "id": "iLNORR1kudnZqHXh",
+          "name": "Wordpress account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Variáveis').item.json[\"url_site\"] }}/wp-json/wp/v2/media/",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wordpressApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "cache-control",
+              "value": "no-cache"
+            },
+            {
+              "name": "content-disposition",
+              "value": "=attachment; filename={{ $binary.data.fileName }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "7858dd52-2afc-4bc6-a230-f743b3c4eeda",
+      "name": "Salvar imagem em mídia top2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        3560,
+        1960
+      ],
+      "credentials": {
+        "wordpressApi": {
+          "id": "iLNORR1kudnZqHXh",
+          "name": "Wordpress account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "table": {
+          "__rl": true,
+          "value": "={{ $('Variáveis').item.json[\"Banco de dados Prefixo das tabelas\"] }}postmeta",
+          "mode": "name"
+        },
+        "dataMode": "defineBelow",
+        "columnToMatchOn": "=meta_id",
+        "valueToMatchOn": "={{ $('Rank Math - Buscar Descrição').item.json[\"meta_id\"] }}",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "=meta_key",
+              "value": "rank_math_description"
+            },
+            {
+              "column": "=meta_value",
+              "value": "={{ $('ChatGPT').item.json[\"choices\"][0][\"message\"][\"content\"] }}\n\n"
+            },
+            {
+              "column": "=post_id",
+              "value": "={{ $('Wordpress').item.json[\"id\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "012d3fc5-380b-4c59-b812-e4dd2bcde763",
+      "name": "Rank Math - Atualizar Descrição",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        4820,
+        1940
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "9ZzSHzNcvWMPNu1G",
+          "name": "MySQL account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "value": "={{ $('Variáveis').item.json[\"Banco de dados Prefixo das tabelas\"] }}postmeta",
+          "mode": "name"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "=post_id",
+              "value": "={{ $('Wordpress').item.json[\"id\"] }}"
+            },
+            {
+              "column": "=meta_key",
+              "value": "rank_math_focus_keyword"
+            }
+          ]
+        },
+        "options": {
+          "detailedOutput": false
+        }
+      },
+      "id": "736ac7a6-793a-4db3-9deb-173660092e0c",
+      "name": "Rank Math - Buscar Palavra Chave",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        4580,
+        1620
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "9ZzSHzNcvWMPNu1G",
+          "name": "MySQL account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "table": {
+          "__rl": true,
+          "value": "={{ $('Variáveis').item.json[\"Banco de dados Prefixo das tabelas\"] }}postmeta",
+          "mode": "name"
+        },
+        "dataMode": "defineBelow",
+        "columnToMatchOn": "=meta_id",
+        "valueToMatchOn": "={{ $('Google Sheets').item.json['Palavra Chave Foco'] }}",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "=meta_value",
+              "value": "={{ $('Google Sheets').item.json['Palavra Chave Foco'] }}"
+            },
+            {
+              "column": "=meta_key",
+              "value": "rank_math_focus_keyword"
+            },
+            {
+              "column": "=post_id",
+              "value": "={{ $('Wordpress').item.json[\"id\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "detailedOutput": false
+        }
+      },
+      "id": "8b5c994c-d0b8-4ec9-b21d-010d33b3170d",
+      "name": "Rank Math - Atualizar Palavra Chave",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        4780,
+        1620
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "9ZzSHzNcvWMPNu1G",
+          "name": "MySQL account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "value": "={{ $('Variáveis').item.json[\"Banco de dados Prefixo das tabelas\"] }}postmeta",
+          "mode": "name"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "=post_id",
+              "value": "={{ $('Wordpress').item.json[\"id\"] }}"
+            },
+            {
+              "column": "=meta_key",
+              "value": "=rank_math_title"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6be74976-95c4-49e3-9a92-fecdffc988b9",
+      "name": "Rank Math - Buscar título",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        4980,
+        1620
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "9ZzSHzNcvWMPNu1G",
+          "name": "MySQL account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "table": {
+          "__rl": true,
+          "value": "={{ $('Variáveis').item.json[\"Banco de dados Prefixo das tabelas\"] }}postmeta",
+          "mode": "name"
+        },
+        "dataMode": "defineBelow",
+        "columnToMatchOn": "=meta_id",
+        "valueToMatchOn": "={{ $('Rank Math - Buscar título').item.json[\"meta_id\"] }}",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "=meta_key",
+              "value": "rank_math_title"
+            },
+            {
+              "column": "=meta_value",
+              "value": "={{ $('Remove aspas').item.json[\"titulo\"] }}\n"
+            },
+            {
+              "column": "=post_id",
+              "value": "={{ $('Wordpress').item.json[\"id\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "80ee38cd-52b4-44c0-8b3a-a29b4a60334d",
+      "name": "Rank Math - Atualizar título",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        4420,
+        1940
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "9ZzSHzNcvWMPNu1G",
+          "name": "MySQL account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "value": "={{ $('Variáveis').item.json[\"Banco de dados Prefixo das tabelas\"] }}postmeta",
+          "mode": "name"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "=post_id",
+              "value": "={{ $('Wordpress').item.json[\"id\"] }}"
+            },
+            {
+              "column": "=meta_key",
+              "value": "rank_math_description"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "cb510c67-1e8d-4d3f-8ed0-8e2b7e5b1774",
+      "name": "Rank Math - Buscar Descrição",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        4620,
+        1940
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "9ZzSHzNcvWMPNu1G",
+          "name": "MySQL account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 5,
+        "unit": "seconds"
+      },
+      "id": "1d68aa73-e34f-4cf9-b81c-f0c4807fe107",
+      "name": "Aguarde6",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        1660,
+        1260
+      ],
+      "webhookId": "244a610b-1ff3-47aa-a660-566a252d90c0"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Obter dados dos nodes anteriores\nconst urlAfiliado = $('Google Sheets').item.json['Url Produto'];\nconst titulo = $node['HTML info'].json['Titulo'];\nlet conteudo = $node['Artigo com imagem'].json['conteudo'];  \nconst repeticoes = $node['Variáveis'].json.repeticoes;\n\n// Obter URLs das imagens\nconst imagem1 = $node[\"Salvar imagem em mídia1\"].json[\"source_url\"];\nconst imagem2 = $node[\"Salvar imagem em mídia2\"].json[\"source_url\"];  \n\n// Verificar se obteve o título\nif (!titulo) {\n  return { error: \"Título não obtido\" }; \n}\n\n// Função para inserir links automáticos\nfunction inserirLinksAutomaticamente(conteudo, titulo, url, repeticoes) {\n  \n  let contador = 0;\n  let palavrasTitulo = titulo.split(\" \");\n  let palavrasDeLigacao = [\"de\", \"o\", \"a\", \"os\", \"-\", \"as\", \"um\", \"uns\", \"uma\", \"umas\", \"do\", \"dos\", \"da\", \"das\", \"no\", \"nos\", \"na\", \"nas\", \"pelo\", \"pelos\", \"pela\", \"pelas\", \"em\", \"por\", \"com\", \"para\", \"que\", \"e\"];\n\n  let novoConteudo = conteudo.replace(/(<h[23]>.*<\\/h[23]>)(\\s*[\\s\\S]*?)(?=<h[23]>|$)/g, function(match, p1, p2) {\n\n    if (contador < repeticoes) {\n      if (p2.includes(titulo)) {\n        p2 = p2.replace(titulo, `<a href=\"${url}\" target=\"_blank\">${titulo}</a>`);\n        contador++;\n      } else {\n        for (let palavra of palavrasTitulo) {\n          if (p2.includes(palavra) && !palavrasDeLigacao.includes(palavra.toLowerCase()) && isNaN(palavra)) {\n            p2 = p2.replace(palavra, `<a href=\"${url}\" target=\"_blank\">${palavra}</a>`);\n            contador++;\n            break;\n          }\n        }\n      }\n    }\n\n    return p1 + p2;\n\n  });\n\n  return novoConteudo;\n\n}\n\n// Função para inserir imagens\nfunction inserirImagens(conteudo, imagem1, imagem2, urlAfiliado, titulo) {\n\n  conteudo = conteudo.replace(\n    /<h2>Recursos Importantes<\\/h2>/g,\n    `<h2>Recursos Importantes</h2>\\n` +\n    `<div align=\"center\">\\n` +\n    `<a href=\"${urlAfiliado}\" target=\"_blank\">\\n` +   \n    `<img src=\"${imagem1}\" alt=\"${titulo}\" style=\"width: 600px; height: auto;\" />\\n` +\n    `</a>\\n` +\n    `</div>`\n  );\n\n  conteudo = conteudo.replace(\n    /<h2>Opinião da Nossa Equipe<\\/h2>/,  \n    `<h2>Opinião da Nossa Equipe</h2>\\n` +\n    `<div align=\"center\">\\n` +\n    `<a href=\"${urlAfiliado}\" target=\"_blank\">\\n` +\n    `<img src=\"${imagem2}\" alt=\"${titulo}\" style=\"width: 600px; height: auto;\" />\\n` +\n    `</a>\\n` +\n    `</div>`\n  );\n\n  return conteudo;\n\n}\n\n// Aplicar funções\nlet conteudoComLinks = inserirLinksAutomaticamente(conteudo, titulo, urlAfiliado, repeticoes);\n\nlet conteudoFinal = inserirImagens(conteudoComLinks, imagem1, imagem2, urlAfiliado, titulo);\n\n// Retornar HTML final \nreturn { html: conteudoFinal }"
+      },
+      "id": "40b46c8a-de42-4d7e-b255-d3930f4580db",
+      "name": "Link geral2",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2920,
+        1280
+      ]
+    },
+    {
+      "parameters": {
+        "title": "={{ $('Remove aspas').item.json[\"titulo\"] }}",
+        "additionalFields": {
+          "content": "={{ $('Rate').item.json[\"html\"] }}\n{{ $('Link geral2').item.json[\"html\"] }}\n{{ $('ProContras').item.json[\"html\"]}}\n{{ $node[\"Code botao\"].json.html }}\n\n\n",
+          "categories": "={{ $('Google Sheets').item.json[\"ID da Categoria\"] }}"
+        }
+      },
+      "id": "48caf321-6bb6-4246-89bb-6545a59ba123",
+      "name": "Wordpress2",
+      "type": "n8n-nodes-base.wordpress",
+      "typeVersion": 1,
+      "position": [
+        3120,
+        1280
+      ],
+      "credentials": {
+        "wordpressApi": {
+          "id": "iLNORR1kudnZqHXh",
+          "name": "Wordpress account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "value": "={{ $('Variáveis').item.json[\"Banco de dados Prefixo das tabelas\"] }}postmeta",
+          "mode": "name"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "=post_id",
+              "value": "={{ $('Wordpress2').item.json[\"id\"] }}"
+            },
+            {
+              "column": "=meta_key",
+              "value": "rank_math_focus_keyword"
+            }
+          ]
+        },
+        "options": {
+          "detailedOutput": false
+        }
+      },
+      "id": "7a7eea99-8bae-4343-ae9e-dca6e2675d8d",
+      "name": "Rank Math - Buscar Palavra Chave2",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        3300,
+        720
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "9ZzSHzNcvWMPNu1G",
+          "name": "MySQL account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "table": {
+          "__rl": true,
+          "value": "={{ $('Variáveis').item.json[\"Banco de dados Prefixo das tabelas\"] }}postmeta",
+          "mode": "name"
+        },
+        "dataMode": "defineBelow",
+        "columnToMatchOn": "=meta_id",
+        "valueToMatchOn": "={{ $('Google Sheets').item.json['Palavra Chave Foco'] }}",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "=meta_value",
+              "value": "={{ $('Google Sheets').item.json['Palavra Chave Foco'] }}"
+            },
+            {
+              "column": "=meta_key",
+              "value": "rank_math_focus_keyword"
+            },
+            {
+              "column": "=post_id",
+              "value": "={{ $('Wordpress2').item.json[\"id\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "detailedOutput": false
+        }
+      },
+      "id": "0e68cf75-60a0-4f1a-8265-49c62495a21e",
+      "name": "Rank Math - Atualizar Palavra Chave2",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        3480,
+        720
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "9ZzSHzNcvWMPNu1G",
+          "name": "MySQL account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "value": "={{ $('Variáveis').item.json[\"Banco de dados Prefixo das tabelas\"] }}postmeta",
+          "mode": "name"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "=post_id",
+              "value": "={{ $('Wordpress2').item.json[\"id\"] }}"
+            },
+            {
+              "column": "=meta_key",
+              "value": "=rank_math_title"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2c9b6910-65a8-4c60-87ce-7975d22ef48b",
+      "name": "Rank Math - Buscar título2",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        3700,
+        720
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "9ZzSHzNcvWMPNu1G",
+          "name": "MySQL account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "table": {
+          "__rl": true,
+          "value": "={{ $('Variáveis').item.json[\"Banco de dados Prefixo das tabelas\"] }}postmeta",
+          "mode": "name"
+        },
+        "dataMode": "defineBelow",
+        "columnToMatchOn": "=meta_id",
+        "valueToMatchOn": "={{ $('Rank Math - Buscar título2').item.json[\"meta_id\"] }}",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "=meta_key",
+              "value": "rank_math_title"
+            },
+            {
+              "column": "=meta_value",
+              "value": "={{ $('Remove aspas').item.json[\"titulo\"] }}\n"
+            },
+            {
+              "column": "=post_id",
+              "value": "={{ $('Wordpress2').item.json[\"id\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2b395d58-193d-44a9-b010-7edc5204f951",
+      "name": "Rank Math - Atualizar título2",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        3300,
+        980
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "9ZzSHzNcvWMPNu1G",
+          "name": "MySQL account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "value": "={{ $('Variáveis').item.json[\"Banco de dados Prefixo das tabelas\"] }}postmeta",
+          "mode": "name"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "=post_id",
+              "value": "={{ $('Wordpress2').item.json[\"id\"] }}"
+            },
+            {
+              "column": "=meta_key",
+              "value": "rank_math_description"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b7c71d79-fe57-438b-9209-3145b3410dce",
+      "name": "Rank Math - Buscar Descrição2",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        3500,
+        980
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "9ZzSHzNcvWMPNu1G",
+          "name": "MySQL account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "table": {
+          "__rl": true,
+          "value": "={{ $('Variáveis').item.json[\"Banco de dados Prefixo das tabelas\"] }}postmeta",
+          "mode": "name"
+        },
+        "dataMode": "defineBelow",
+        "columnToMatchOn": "=meta_id",
+        "valueToMatchOn": "={{ $('Rank Math - Buscar Descrição2').item.json[\"meta_id\"] }}",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "=meta_key",
+              "value": "rank_math_description"
+            },
+            {
+              "column": "=meta_value",
+              "value": "={{ $('ChatGPT').item.json[\"choices\"][0][\"message\"][\"content\"] }}\n\n"
+            },
+            {
+              "column": "=post_id",
+              "value": "={{ $('Wordpress2').item.json[\"id\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ac3bb5ce-7995-4a99-adac-b776190b6756",
+      "name": "Rank Math - Atualizar Descrição2",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.1,
+      "position": [
+        3700,
+        980
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "9ZzSHzNcvWMPNu1G",
+          "name": "MySQL account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 10,
+        "unit": "seconds"
+      },
+      "id": "c0bb539b-3b3e-4d0a-88ef-9e94a1d11de1",
+      "name": "Aguarde7",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        4160,
+        980
+      ],
+      "webhookId": "b69fce45-3e60-4eec-a33a-78528723766b"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Replace imagem').item.json[\"imagem\"] }}",
+        "options": {}
+      },
+      "id": "e4caa126-65b6-42bc-b727-9b8a11467ce7",
+      "name": "Baixar imagem sem top3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        2180,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Variáveis').item.json[\"url_site\"] }}/wp-json/wp/v2/media/",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wordpressApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "cache-control",
+              "value": "no-cache"
+            },
+            {
+              "name": "content-disposition",
+              "value": "=attachment; filename={{ $binary.data.fileName }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "7a65c2a5-eb2b-4c65-b5dc-007237185694",
+      "name": "Salvar imagem sem top3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        2460,
+        720
+      ],
+      "credentials": {
+        "wordpressApi": {
+          "id": "iLNORR1kudnZqHXh",
+          "name": "Wordpress account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Variáveis').item.json[\"url_site\"] }}/wp-json/wp/v2/posts/{{ $('Wordpress2').item.json[\"id\"] }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wordpressApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "featured_media",
+              "value": "={{ $('Salvar imagem sem top3').item.json[\"id\"] }}"
+            },
+            {
+              "name": "date",
+              "value": "={{$node['Google Sheets'].json[\"Data\"].split('/').reverse().join('-') + \"T\" + ((parseInt($node['Google Sheets'].json[\"Hora\"].split(\":\")[0], 10) + 3) % 24).toString().padStart(2, '0') + \":\" + ($node['Google Sheets'].json[\"Hora\"].split(\":\")[1]).toString().padStart(2, '0') + \":00.000Z\"}}"
+            },
+            {
+              "name": "status",
+              "value": "future"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "4a4c9b9b-65b3-4e1d-a897-80ec1035de4a",
+      "name": "Atualizar Post sem top 3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        3040,
+        720
+      ],
+      "credentials": {
+        "wordpressApi": {
+          "id": "iLNORR1kudnZqHXh",
+          "name": "Wordpress account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "url_site",
+              "value": "=https://portalhogwarts.com.br/"
+            },
+            {
+              "name": "setor",
+              "value": "Geek"
+            },
+            {
+              "name": "botao",
+              "value": "yellow"
+            },
+            {
+              "name": "proscontras",
+              "value": "#f5f5f5"
+            },
+            {
+              "name": "letrasproscontras",
+              "value": "#000000"
+            },
+            {
+              "name": "estrela",
+              "value": "red"
+            },
+            {
+              "name": "ht",
+              "value": "h5"
+            },
+            {
+              "name": "repeticoes",
+              "value": "6"
+            },
+            {
+              "name": "Banco de dados Prefixo das tabelas",
+              "value": "=wp_"
+            },
+            {
+              "name": "Planilha ID",
+              "value": "1ZhxLUH49X3VNaCGUjvvA5R9RvMGfVXNRb6I9OD-f_X0"
+            },
+            {
+              "name": "Planilha Aba",
+              "value": "1155758183"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "bed91f59-a954-44c1-bc74-01ad4fd1b939",
+      "name": "Variáveis",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        1060,
+        1740
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {
+          "reset": false
+        }
+      },
+      "id": "24eadc1a-57a6-4461-ae30-5fe7a9ccee99",
+      "name": "Loop",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 2,
+      "position": [
+        1600,
+        1740
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $('Loop').item.json[\"Data\"] }}{{ $('Loop').item.json[\"Hora\"] }}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "id": "d2b5b69b-0f61-4bff-b41e-b82b81d7cd18",
+      "name": "Tem data de agendamento?1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        2760,
+        720
+      ],
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Variáveis').item.json[\"url_site\"] }}/wp-json/wp/v2/posts/{{ $('Wordpress2').item.json[\"id\"] }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wordpressApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "featured_media",
+              "value": "={{ $('Salvar imagem sem top3').item.json[\"id\"] }}"
+            },
+            {
+              "name": "status",
+              "value": "draft"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "e7fcad2a-d58b-498c-bfdf-073ca95451eb",
+      "name": "Atualizar Post sem data2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        3040,
+        900
+      ],
+      "credentials": {
+        "wordpressApi": {
+          "id": "iLNORR1kudnZqHXh",
+          "name": "Wordpress account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $('Loop').item.json[\"Data\"] }}{{ $('Loop').item.json[\"Hora\"] }}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "id": "6b018d76-79a2-495b-bcb2-8c4a7a1a6286",
+      "name": "Tem data de agendamento?2",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        4980,
+        2460
+      ],
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Variáveis').item.json[\"url_site\"] }}/wp-json/wp/v2/posts/{{ $('Wordpress').item.json[\"id\"] }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wordpressApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "featured_media",
+              "value": "={{ $('Salvar imagem em mídia').item.json[\"id\"] }}"
+            },
+            {
+              "name": "date",
+              "value": "={{$node['Google Sheets'].json[\"Data\"].split('/').reverse().join('-') + \"T\" + ((parseInt($node['Google Sheets'].json[\"Hora\"].split(\":\")[0], 10) + 3) % 24).toString().padStart(2, '0') + \":\" + ($node['Google Sheets'].json[\"Hora\"].split(\":\")[1]).toString().padStart(2, '0') + \":00.000Z\"}}"
+            },
+            {
+              "name": "status",
+              "value": "future"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "b3aeb2a1-1e11-4c69-8163-fd27c093b3bc",
+      "name": "Atualizar Post com top3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        5240,
+        2260
+      ],
+      "credentials": {
+        "wordpressApi": {
+          "id": "iLNORR1kudnZqHXh",
+          "name": "Wordpress account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Variáveis').item.json[\"url_site\"] }}/wp-json/wp/v2/posts/{{ $('Wordpress').item.json[\"id\"] }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wordpressApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "featured_media",
+              "value": "={{ $('Salvar imagem em mídia').item.json[\"id\"] }}"
+            },
+            {
+              "name": "status",
+              "value": "draft"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "5508c423-92c7-43c6-b563-d32cc1961e75",
+      "name": "Atualizar Post sem data",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        5240,
+        2480
+      ],
+      "credentials": {
+        "wordpressApi": {
+          "id": "iLNORR1kudnZqHXh",
+          "name": "Wordpress account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $node['Variáveis'].json[\"Planilha ID\"] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $node['Variáveis'].json[\"Planilha Aba\"] }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Status": "OK",
+            "Link": "={{ $node['Wordpress2'].json[\"link\"] }}",
+            "Título": "={{ $('Remove aspas').item.json[\"titulo\"] }}",
+            "Palavra Chave Foco": "={{ $('Google Sheets').item.json['Palavra Chave Foco'] }}",
+            "Título Novo": "={{ $('Remove aspas').item.json[\"titulo\"] }}"
+          },
+          "matchingColumns": [
+            "Palavra Chave Foco"
+          ],
+          "schema": [
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Hora",
+              "displayName": "Hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Url Produto",
+              "displayName": "Url Produto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "img1",
+              "displayName": "img1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "img2",
+              "displayName": "img2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "top1",
+              "displayName": "top1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "top2",
+              "displayName": "top2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "top3",
+              "displayName": "top3",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Palavra Chave Foco",
+              "displayName": "Palavra Chave Foco",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Título Novo",
+              "displayName": "Título Novo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ID da Categoria",
+              "displayName": "ID da Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Categoria",
+              "displayName": "Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Link",
+              "displayName": "Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "526e7d45-830a-4d84-b8d9-1c1f86209da6",
+      "name": "Google Sheets - Atualizar1",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        3920,
+        980
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "TX4UGDocUxQQXphG",
+          "name": "Google Sheets account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const estcor = $node['Variáveis'].json.estrela;\n\nfunction gerarEstrelas(avaliacao, maximo) {\n    if (avaliacao === 0 || isNaN(avaliacao)) {\n        return ``;\n    }\n    let estrelasCheias = Math.floor(avaliacao);\n    let meiaEstrela = avaliacao % 1 !== 0;\n    let estrelasVazias = Math.floor(maximo - avaliacao);\n\n    let estrelas = '';\n    for(let i=0; i<estrelasCheias; i++) {\n        estrelas += `<span style=\"font-size:35px;color:${estcor}\">★</span>`; // Estrela cheia\n    }\n    if(meiaEstrela) {\n        estrelas += `<span style=\"font-size:35px;position:relative;\">` +\n                    `<span style=\"color:${estcor};position:absolute;width:50%;overflow:hidden;\">★</span>` +\n                    `<span style=\"color:lightgray;\">★</span>` +\n                    `</span>`; // Meia estrela\n    }\n    for(let i=0; i<estrelasVazias; i++) {\n        estrelas += '<span style=\"font-size:35px;color:lightgray\">★</span>'; // Estrela vazia\n    }\n    return estrelas;\n}\n\nlet notarate = $('HTML info').item.json[\"Notag\"][0];\nlet avaliacao = parseFloat(notarate.split(' ')[0].replace(',', '.'));\nlet maximo = parseFloat(notarate.split(' ')[2]);\n\nlet estrelas = gerarEstrelas(avaliacao, maximo);\n\nlet html = estrelas + '<br>' + 'Avaliação dos Clientes: ' + (isNaN(avaliacao) ? '<strong>Este Produto é Novo na Amazon!</strong>' : avaliacao + ' de ' + maximo + ' estrelas.');\n\n// Retornar o objeto de saída\nreturn { html: html };"
+      },
+      "id": "84a9babe-deef-4550-868d-ec01c45923be",
+      "name": "Rate",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        2240
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "model": "gpt-4",
+        "prompt": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "=Por favor, siga exatamente essa estrutura e regras:\n\nCrie 7 Prós sobre este produto:\n{{ $('HTML info').item.json[\"Titulo\"] }}\n\nATENÇÃO ao desenvolver os Prós nos detalhes do produto, que estão nessa página de venda do produto: {{ $('Google Sheets').item.json['Url Produto'] }} e nessas outras informações:  {{ $('ChatGPT').item.json[\"choices\"][0][\"message\"][\"content\"] }}\n\n\n1. Utilize cada item de Prós um abaixo do outro, nunca utilize bullet points, traços e números nos itens, sempre substitua bullet points, traços ou números por este simbolo do HTML: &#10004;  que representa a confirmação ou a indicação de que algo foi concluído com sucesso ou está correto, relacionado a tradicional \"marca de verificação\" ou \"check mark\"\n\n2. Então sempre acrescente o símbolo do HTML correspondente a \"marca de verificação\" na frente de cada item da lista de Prós, este simbolo:  &#10004;\n\n3. Nunca utilize números, traços ou bullet points nessa lista;\n\n4. Ao gerar o texto de cada item do Pró utilize um tom de linguagem objetiva e profissional, com um texto curto de no máximo 5 palavras em cada item do Prós;\n\n5. Não escreva nenhum tipo de comentário ou avaliação, apenas liste os itens de Prós;\n\n6. Não escreva nenhuma conclusão;\n\n7. Não escreva o Título do produto, vou usar em outro lugar;\n\n8. Não escreva a palavra: \"Prós\" , vou usar em outro lugar;\n\n9. Considere readability com 71 – 85 de escore e 7th grade;"
+            },
+            {
+              "content": "="
+            }
+          ]
+        },
+        "simplifyOutput": false,
+        "options": {
+          "temperature": 0.5
+        },
+        "requestOptions": {}
+      },
+      "id": "8829b002-76c1-428e-bfca-b44c8a660ee0",
+      "name": "Pros",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        1280,
+        1920
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "AK2JwQJlNiAowLd0",
+          "name": "OpenAi account FORTUNE HOG"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "model": "gpt-4",
+        "prompt": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "=Por favor siga exatamente essa estrutura e regras:\n\nCrie 3 Contras sobre este produto: \n{{ $('HTML info').item.json[\"Titulo\"] }}\n\nATENÇÃO ao desenvolver os Contras nos detalhes do produto, que estão nessa página de venda do produto: {{ $('Google Sheets').item.json['Url Produto'] }} e nessas outras informações:  {{ $('ChatGPT').item.json[\"choices\"][0][\"message\"][\"content\"] }}\n\n\n1. Utilize cade item do Contras um abaixo do outro, nunca use bullet points, traços ou números nos itens, sempre substitua, traços, bullet points ou números, pelo simbolo de erro do HTML, este simbolo: &#10060;\n\n2. Então Sempre acrescente esse simbolo de HTML na frente de cada item da lista de Contras: &#10060; que significa e representa o sinal de erro. Não utilize números, traços ou bullet points nessa lista;\n\n3. Ao gerar o texto de cada item do Contra utilize um tom de linguagem objetiva e profissional, com texto curto de no máximo 6 palavras em cada item do Contras; \n\n4. Não escreva nenhum tipo de comentário ou avaliação, apenas liste os itens de Contras;\n\n5. Não escreva nenhuma conclusão;\n\n6. Não escreva o Título do produto, vou usar em outro lugar;\n\n7. Não escreva a palavra: \"Contras\" , vou usar em outro lugar;\n\n8. Considere readability com 71 – 85 de escore e 7th grade;"
+            },
+            {
+              "content": "="
+            }
+          ]
+        },
+        "simplifyOutput": false,
+        "options": {
+          "temperature": 0.5
+        },
+        "requestOptions": {}
+      },
+      "id": "d3f9f142-61e5-4ad6-a0a1-dc3f4a9b4058",
+      "name": "Contras",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        1480,
+        1920
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "AK2JwQJlNiAowLd0",
+          "name": "OpenAi account FORTUNE HOG"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "let texta = $('Pros').item.json[\"choices\"][0][\"message\"][\"content\"];\nlet textb = $('Contras').item.json[\"choices\"][0][\"message\"][\"content\"];\nconst proscontras = $node['Variáveis'].json.proscontras;\nconst letrasproscontras = $node['Variáveis'].json.letrasproscontras;\n\n\nlet panel = `\n<p></p>\n<div style=\"background-color:${proscontras}; color:${letrasproscontras}; border-radius: 25px; padding:20px; width:90%; margin:auto; display: flex; flex-direction: column; align-items: center;\">\n  <div style=\"background-color:#4EFF00; border:1px solid #000; border-radius:50%; width: 80px; height:80px; display: flex; justify-content: center; align-items: center; font-size: 45px;\">\n    <span style=\"margin-top: -9px;\">&#128077;</span>\n    <p></p>\n   </div>\n <p><h5>Prós</h5></p>\n  <p>${texta}</p>\n</div>\n\n<div style=\"background-color:${proscontras}; color:${letrasproscontras}; border-radius: 25px; padding:20px; width:90%; margin:auto; margin-top: 20px; display: flex; flex-direction: column; align-items: center;\">\n  <div style=\"background-color:#F44336; border:1px solid #000; border-radius:50%; width: 80px; height:80px; display: flex; justify-content: center; align-items: center; font-size: 45px;\">\n    <span>&#128078;</span>\n      <p></p>\n     </div>\n<p><h5>Contras</h5></p>\n <p>${textb}</p>\n</div>\n`;\n\nfunction inserirNovoBloco(texta, textb, panel, proscontras, letrasproscontras ) {\n  let conteudo = `${panel}`;\n  return conteudo;\n}\n\n// Retornar HTML final \nreturn { html: inserirNovoBloco(texta, textb, panel, proscontras, letrasproscontras ) }"
+      },
+      "id": "633d43e2-6818-465e-866b-df39e89add9a",
+      "name": "ProContras",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        1260
+      ]
+    }
+  ],
+  "connections": {
+    "Baixar a imagem": {
+      "main": [
+        [
+          {
+            "node": "Salvar imagem em mídia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salvar imagem em mídia": {
+      "main": [
+        [
+          {
+            "node": "Tem data de agendamento?2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace imagem": {
+      "main": [
+        [
+          {
+            "node": "Replace imagem1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baixar a imagem1": {
+      "main": [
+        [
+          {
+            "node": "Salvar imagem em mídia1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baixar a imagem2": {
+      "main": [
+        [
+          {
+            "node": "Salvar imagem em mídia2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salvar imagem em mídia2": {
+      "main": [
+        [
+          {
+            "node": "Artigo com imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wordpress": {
+      "main": [
+        [
+          {
+            "node": "Baixar a imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTML info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Título": {
+      "main": [
+        [
+          {
+            "node": "Remove aspas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets - Atualizar": {
+      "main": [
+        [
+          {
+            "node": "Aguarde1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace imagem1": {
+      "main": [
+        [
+          {
+            "node": "Replace imagem2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code botao": {
+      "main": [
+        [
+          {
+            "node": "Título",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baixar a imagem top1": {
+      "main": [
+        [
+          {
+            "node": "Salvar imagem em mídia top1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Link geral": {
+      "main": [
+        [
+          {
+            "node": "Wordpress",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aguarde": {
+      "main": [
+        [
+          {
+            "node": "Baixar a imagem top1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML top1": {
+      "main": [
+        [
+          {
+            "node": "Imagem top1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP top1": {
+      "main": [
+        [
+          {
+            "node": "HTML top1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Link Top3": {
+      "main": [
+        [
+          {
+            "node": "Link geral",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resumo top3": {
+      "main": [
+        [
+          {
+            "node": "Aguarde",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Artigo com Top3": {
+      "main": [
+        [
+          {
+            "node": "Link Top3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Imagem top1": {
+      "main": [
+        [
+          {
+            "node": "HTTP top2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP top2": {
+      "main": [
+        [
+          {
+            "node": "HTML top2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML top2": {
+      "main": [
+        [
+          {
+            "node": "Imagem top2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Imagem top2": {
+      "main": [
+        [
+          {
+            "node": "HTTP top3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP top3": {
+      "main": [
+        [
+          {
+            "node": "HTML top3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML top3": {
+      "main": [
+        [
+          {
+            "node": "Imagem top3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Imagem top3": {
+      "main": [
+        [
+          {
+            "node": "Resumo top3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baixar a imagem top2": {
+      "main": [
+        [
+          {
+            "node": "Salvar imagem em mídia top2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baixar a imagem top3": {
+      "main": [
+        [
+          {
+            "node": "Salvar imagem em mídia top3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salvar imagem em mídia top3": {
+      "main": [
+        [
+          {
+            "node": "Artigo com Top3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salvar imagem em mídia top1": {
+      "main": [
+        [
+          {
+            "node": "Baixar a imagem top2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salvar imagem em mídia top2": {
+      "main": [
+        [
+          {
+            "node": "Baixar a imagem top3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rank Math - Buscar Palavra Chave": {
+      "main": [
+        [
+          {
+            "node": "Rank Math - Atualizar Palavra Chave",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rank Math - Atualizar Palavra Chave": {
+      "main": [
+        [
+          {
+            "node": "Rank Math - Buscar título",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rank Math - Buscar título": {
+      "main": [
+        [
+          {
+            "node": "Rank Math - Atualizar título",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rank Math - Atualizar título": {
+      "main": [
+        [
+          {
+            "node": "Rank Math - Buscar Descrição",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rank Math - Buscar Descrição": {
+      "main": [
+        [
+          {
+            "node": "Rank Math - Atualizar Descrição",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rank Math - Atualizar Descrição": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Atualizar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Artigo com imagem": {
+      "main": [
+        [
+          {
+            "node": "Rota",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aguarde6": {
+      "main": [
+        [
+          {
+            "node": "Baixar a imagem2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rota": {
+      "main": [
+        [
+          {
+            "node": "HTTP top1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Link geral2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Link geral2": {
+      "main": [
+        [
+          {
+            "node": "Wordpress2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rank Math - Buscar Palavra Chave2": {
+      "main": [
+        [
+          {
+            "node": "Rank Math - Atualizar Palavra Chave2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rank Math - Atualizar Palavra Chave2": {
+      "main": [
+        [
+          {
+            "node": "Rank Math - Buscar título2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rank Math - Buscar título2": {
+      "main": [
+        [
+          {
+            "node": "Rank Math - Atualizar título2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rank Math - Atualizar título2": {
+      "main": [
+        [
+          {
+            "node": "Rank Math - Buscar Descrição2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rank Math - Buscar Descrição2": {
+      "main": [
+        [
+          {
+            "node": "Rank Math - Atualizar Descrição2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rank Math - Atualizar Descrição2": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Atualizar1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baixar imagem sem top3": {
+      "main": [
+        [
+          {
+            "node": "Salvar imagem sem top3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salvar imagem sem top3": {
+      "main": [
+        [
+          {
+            "node": "Tem data de agendamento?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Atualizar Post sem top 3": {
+      "main": [
+        [
+          {
+            "node": "Rank Math - Buscar Palavra Chave2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wordpress2": {
+      "main": [
+        [
+          {
+            "node": "Baixar imagem sem top3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Variáveis": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aguarde1": {
+      "main": [
+        [
+          {
+            "node": "Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tem data de agendamento?1": {
+      "main": [
+        [
+          {
+            "node": "Atualizar Post sem top 3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Atualizar Post sem data2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Atualizar Post sem data2": {
+      "main": [
+        [
+          {
+            "node": "Rank Math - Buscar Palavra Chave2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aguarde7": {
+      "main": [
+        [
+          {
+            "node": "Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Executar": {
+      "main": [
+        [
+          {
+            "node": "Variáveis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tem data de agendamento?2": {
+      "main": [
+        [
+          {
+            "node": "Atualizar Post com top3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Atualizar Post sem data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Atualizar Post com top3": {
+      "main": [
+        [
+          {
+            "node": "Rank Math - Buscar Palavra Chave",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Atualizar Post sem data": {
+      "main": [
+        [
+          {
+            "node": "Rank Math - Buscar Palavra Chave",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets - Atualizar1": {
+      "main": [
+        [
+          {
+            "node": "Aguarde7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace imagem2": {
+      "main": [
+        [
+          {
+            "node": "Code botao",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rate": {
+      "main": [
+        [
+          {
+            "node": "Replace imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pros": {
+      "main": [
+        [
+          {
+            "node": "Contras",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove aspas": {
+      "main": [
+        [
+          {
+            "node": "ChatGPT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contras": {
+      "main": [
+        [
+          {
+            "node": "ProContras",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ProContras": {
+      "main": [
+        [
+          {
+            "node": "Baixar a imagem1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ChatGPT": {
+      "main": [
+        [
+          {
+            "node": "Pros",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML info": {
+      "main": [
+        [
+          {
+            "node": "Rate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salvar imagem em mídia1": {
+      "main": [
+        [
+          {
+            "node": "Aguarde6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:A cada 30 min": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "8bdbf9b0-7cad-4b24-9950-be8cbfa0d626",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2024-12-12T19:32:09.832Z",
+      "updatedAt": "2024-12-12T19:32:09.832Z",
+      "role": "workflow:owner",
+      "workflowId": "ywQS8lTp7Tg9kuE8",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
