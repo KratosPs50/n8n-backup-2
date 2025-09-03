@@ -1,0 +1,1221 @@
+{
+  "createdAt": "2025-08-28T18:53:20.802Z",
+  "updatedAt": "2025-09-03T16:48:44.394Z",
+  "id": "DK91PBliohuBqcdO",
+  "name": "Criador de Imóveis",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $json[\"Planilha ID\"] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $json[\"Planilha Aba\"] }}",
+          "mode": "id"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Execução"
+            }
+          ]
+        },
+        "options": {
+          "returnAllMatches": "returnFirstMatch"
+        }
+      },
+      "id": "0f241b0b-4418-4740-a7c0-7f7f0f40faf9",
+      "name": "Google Sheets – Ler (Propriedades)",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        -576,
+        176
+      ],
+      "retryOnFail": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pb4yzlmXfMN4YYQj",
+          "name": "Google Sheets account Jefferson"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "61167699-f2a3-46df-af2b-95e2d851a4aa",
+      "name": "Processar em Lotes (1 por vez)",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        -288,
+        176
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json['Status'] || $json.status || ''}}",
+              "value2": "novo"
+            }
+          ]
+        }
+      },
+      "id": "9afcd085-ddf9-465b-a49f-55b86b57b67f",
+      "name": "Se Status = novo",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        176
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "// FUNCTION (processa TODOS os itens recebidos)\nreturn items.map(({ json: r }) => {\n  const get = (...keys) => { for (const k of keys) { if (r[k] !== undefined && r[k] !== null && r[k] !== '') return r[k]; } };\n  const num = (v) => v===''||v==null?null:parseFloat(String(v).replace(/\\./g,'').replace(',','.'))||null;\n  const int = (v) => v===''||v==null?null:parseInt(v,10)||null;\n  const mapType = (t) => { const s=String(t||'').toLowerCase(); if(['venda','sale'].includes(s)) return 'sale'; if(['aluguel','rent','locação','locacao'].includes(s)) return 'rent'; return 'sale'; };\n  const mapPeriod = (p)=>{ const s=String(p||'').toLowerCase(); if(['dia','day'].includes(s)) return 'day'; if(['mês','mes','month'].includes(s)) return 'month'; if(['ano','year'].includes(s)) return 'year'; return 'day'; };\n  const esc = (s)=> (s??'').toString();\n\n  const name = esc(get('Nome do Empreendimento','name','Nome','Título','Titulo'));\n  const type = mapType(get('Tipo (Venda/Aluguel)','type'));\n  const price = num(get('Preço (número)','price'));\n  const bedrooms = int(get('Quartos','number_bedroom'));\n  const bathrooms = int(get('Banheiros','number_bathroom'));\n  const floors = int(get('Andares do prédio','number_floor'));\n  const square = num(get('Área privativa (m²)','square'));\n  const address = esc(get('Endereço (texto livre)','location'));\n  const latitude = esc(get('Latitude','latitude'));\n  const longitude = esc(get('Longitude','longitude'));\n  const country_id = int(get('País (ID)','country_id'));\n  const state_id = int(get('Estado (ID)','state_id'));\n  const city_id = int(get('Cidade (ID)','city_id'));\n  const period = mapPeriod(get('Período (dia/mês/ano)','period'));\n  const currency_id = int(get('Moeda (ID)','currency_id',4));\n  const project_id = int(get('Projeto (ID)','project_id',0));\n  const is_featured = int(get('Anúncio em destaque? (0/1)','is_featured',0));\n  const featured_priority = int(get('Prioridade do destaque (número)','featured_priority',0));\n  const author_id = int(get('Autor (ID)','author_id',16));\n  const author_type = esc(get('Tipo do Autor','author_type','Botble\\\\RealEstate\\\\Models\\\\Account'));\n  const expire_date = esc(get('Data de expiração (AAAA-MM-DD)','expire_date',''));\n  const description_text = esc(get('Descrição narrativa (texto livre)','description_text'));\n\n  const contato_nome  = esc(get('Comercial – Nome','contact_name'));\n  const contato_fone  = esc(get('Comercial – Telefone','contact_phone'));\n  const contato_email = esc(get('Comercial – E-mail','contact_email'));\n  const comissao_pj   = esc(get('Comissão PJ (%)','commission_pj_percent'));\n  const comissao_pf   = esc(get('Comissão PF (%)','commission_pf_percent'));\n  const drive_link    = esc(get('Link do Drive (materiais)','drive_link'));\n\n  const estagio   = esc(get('Estágio da Obra','stage'));\n  const estoque   = esc(get('Estoque (unidades)','stock'));\n  const lancamento= esc(get('Data de Lançamento (AAAA-MM-DD)','launch_date'));\n  const unidades_por_andar = esc(get('Unidades por andar','units_per_floor'));\n  const entrega   = esc(get('Previsão de Entrega (AAAA-MM-DD)','delivery_date'));\n  const total_unidades = esc(get('Total de Unidades','total_units'));\n  const numero_andares_info = esc(get('Número de Andares','floors_number'));\n  const area_terreno = esc(get('Área do Terreno','area_terreno'));\n  const area_laje = esc(get('Área da Laje','area_laje'));\n  const ri = esc(get('RI','ri'));\n  const condominio = esc(get('Condomínio','condominio'));\n  const iptu = esc(get('IPTU','iptu'));\n  const atualizado_em = esc(get('Atualizado em (texto)','updated_at_text'));\n\n  const prefixo_tabela = esc(get('Prefixo da Tabela','table_prefix','re_')) || 're_';\n  const id_unico = esc(get('ID Único','unique_id')) || `STY-${new Date().toISOString().slice(0,10).replace(/-/g,'')}-${Math.random().toString(36).substring(2,7).toUpperCase()}`;\n\n  const short_description = (description_text || name).slice(0,380);\n  const html = `\n<p><span style=\"font-family:Calibri, Arial;font-size:12pt;font-style:normal;\">${description_text}</span></p>\n<p><span style=\"font-family:Calibri, Arial;font-size:12pt;font-style:normal;\"><strong>Informações comerciais</strong></span></p>\n<p>\n  <span style=\"font-family:Calibri, Arial;font-size:12pt;font-style:normal;\">${contato_nome}</span><br>\n  <span style=\"font-family:Calibri, Arial;font-size:12pt;font-style:normal;\">${contato_fone}</span><br>\n  <span style=\"font-family:Calibri, Arial;font-size:12pt;font-style:normal;\">${contato_email}</span><br><br>\n  <span style=\"font-family:Calibri, Arial;font-size:12pt;font-style:normal;\"><strong>${comissao_pj}</strong> Comissão PJ</span><br>\n  <span style=\"font-family:Calibri, Arial;font-size:12pt;font-style:normal;\"><strong>${comissao_pf}</strong> Comissão PF</span>\n</p>\n${drive_link ? `<p><a href=\"${drive_link}\"><span style=\"font-family:Calibri, Arial;font-size:12pt;font-style:normal;\">Drive com arquivos</span></a></p>` : ''}\n<p><span style=\"font-family:Calibri, Arial;font-size:12pt;font-style:normal;\"><strong>Outras informações</strong></span></p>\n<p>\n  <span>Estágio: ${estagio}</span><br>\n  <span>Estoque: ${estoque}</span><br>\n  <span>Lançamento: ${lancamento}</span><br>\n  <span>Unidades por andar: ${unidades_por_andar}</span><br>\n  <span>Entrega: ${entrega}</span><br>\n  <span>Total de unidades: ${total_unidades}</span><br>\n  <span>Número de andares: ${numero_andares_info}</span><br>\n  <span>Área do Terreno: ${area_terreno}</span><br>\n  <span>Área da Laje: ${area_laje}</span><br>\n  <span>RI: ${ri}</span><br>\n  <span>Condomínio: ${condominio}</span><br>\n  <span>IPTU: ${iptu}</span><br>\n  <span>Atualizado em: ${atualizado_em}</span>\n</p>\n`.trim();\n\n  return {\n    json: {\n      table_prefix: prefixo_tabela,\n      name,\n      type,\n      description: short_description,\n      content: html,\n      location: address,\n      latitude,\n      longitude,\n      number_bedroom: bedrooms,\n      number_bathroom: bathrooms,\n      number_floor: floors,\n      square,\n      price,\n      currency_id,\n      is_featured,\n      featured_priority,\n      city_id,\n      state_id,\n      country_id,\n      period,\n      status: 'selling',\n      project_id,\n      author_id,\n      author_type,\n      expire_date,\n      never_expired: 1,\n      auto_renew: 0,\n      views: 0,\n      unique_id: id_unico,\n      \"ID Único\": id_unico,\n      \"Execução\": \"\",\n      // >>> manter a referência da linha atual da planilha <<<\n      row_number: r.row_number\n    }\n  };\n});\n"
+      },
+      "id": "3cf71a72-8685-411f-9ab6-b8f8e0534594",
+      "name": "Preparar Payload & HTML (PT-BR)",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO {{$json.table_prefix ? $json.table_prefix : 're_'}}properties\n(\n  name, type, description, content, location, latitude, longitude,\n  number_bedroom, number_bathroom, number_floor, square, price, currency_id,\n  is_featured, featured_priority, city_id, state_id, country_id, period, status,\n  project_id, author_id, author_type, expire_date, never_expired, auto_renew,\n  views, unique_id, created_at, updated_at, moderation_status\n)\nVALUES\n(\n  '{{$json.name ? $json.name.replace(/\\\\/g,'\\\\\\\\').replace(/'/g,\"\\\\'\") : \"\"}}',\n  '{{$json.type || \"sale\"}}',\n  '{{$json.description ? $json.description.replace(/\\\\/g,'\\\\\\\\').replace(/'/g,\"\\\\'\") : \"\"}}',\n  '{{$json.content ? $json.content.replace(/\\\\/g,'\\\\\\\\').replace(/'/g,\"\\\\'\") : \"\"}}',\n  '{{$json.location ? $json.location.replace(/\\\\/g,'\\\\\\\\').replace(/'/g,\"\\\\'\") : \"\"}}',\n  '{{$json.latitude || \"\"}}',\n  '{{$json.longitude || \"\"}}',\n  {{$json.number_bedroom || 0}},\n  {{$json.number_bathroom || 0}},\n  {{$json.number_floor || 0}},\n  {{$json.square || 0}},\n  {{$json.price || 0}},\n  {{$json.currency_id || 4}},\n  {{$json.is_featured || 0}},\n  {{$json.featured_priority || 0}},\n  {{$json.city_id || 0}},\n  {{$json.state_id || 0}},\n  {{$json.country_id || 0}},\n  '{{$json.period || \"day\"}}',\n  'selling',\n  {{$json.project_id || 0}},\n  {{$json.author_id || 16}},\n  '{{$json.author_type ? $json.author_type.replace(/\\\\/g,'\\\\\\\\').replace(/'/g,\"\\\\'\") : \"Botble\\\\\\\\RealEstate\\\\\\\\Models\\\\\\\\Account\"}}',\n  {{ $json.expire_date ? \"'\" + $json.expire_date + \"'\" : \"NULL\" }},\n  1,\n  0,\n  0,\n  '{{$json.unique_id}}',\n  NOW(),\n  NOW(),\n  'approved'\n)\nON DUPLICATE KEY UPDATE\n  name = '{{$json.name ? $json.name.replace(/\\\\/g,'\\\\\\\\').replace(/'/g,\"\\\\'\") : \"\"}}',\n  type = '{{$json.type || \"sale\"}}',\n  description = '{{$json.description ? $json.description.replace(/\\\\/g,'\\\\\\\\').replace(/'/g,\"\\\\'\") : \"\"}}',\n  content = '{{$json.content ? $json.content.replace(/\\\\/g,'\\\\\\\\').replace(/'/g,\"\\\\'\") : \"\"}}',\n  location = '{{$json.location ? $json.location.replace(/\\\\/g,'\\\\\\\\').replace(/'/g,\"\\\\'\") : \"\"}}',\n  latitude = '{{$json.latitude || \"\"}}',\n  longitude = '{{$json.longitude || \"\"}}',\n  number_bedroom = {{$json.number_bedroom || 0}},\n  number_bathroom = {{$json.number_bathroom || 0}},\n  number_floor = {{$json.number_floor || 0}},\n  square = {{$json.square || 0}},\n  price = {{$json.price || 0}},\n  currency_id = {{$json.currency_id || 4}},\n  is_featured = {{$json.is_featured || 0}},\n  featured_priority = {{$json.featured_priority || 0}},\n  city_id = {{$json.city_id || 0}},\n  state_id = {{$json.state_id || 0}},\n  country_id = {{$json.country_id || 0}},\n  period = '{{$json.period || \"day\"}}',\n  status = 'selling',\n  project_id = {{$json.project_id || 0}},\n  author_id = {{$json.author_id || 16}},\n  author_type = '{{$json.author_type ? $json.author_type.replace(/\\\\/g,'\\\\\\\\').replace(/'/g,\"\\\\'\") : \"Botble\\\\\\\\RealEstate\\\\\\\\Models\\\\\\\\Account\"}}',\n  expire_date = {{ $json.expire_date ? \"'\" + $json.expire_date + \"'\" : \"NULL\" }},\n  never_expired = 1,\n  auto_renew = 0,\n  -- mantém o maior número de views entre o atual e o novo\n  views = CASE WHEN {{ $json.views !== undefined ? $json.views : 0 }} > views THEN {{ $json.views !== undefined ? $json.views : 0 }} ELSE views END,\n  updated_at = NOW(),\n  moderation_status = 'approved';\n"
+      },
+      "id": "fbe4bec1-93d2-4ffc-8adb-c811abe9caba",
+      "name": "MySQL – Inserir Propriedade",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 1,
+      "position": [
+        256,
+        720
+      ],
+      "retryOnFail": true,
+      "credentials": {
+        "mySql": {
+          "id": "JrG6Dcauvo7Uz7nE",
+          "name": "MySQL account Stayou"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "const now = new Date();\nconst pad = (n)=> String(n).padStart(2,'0');\nconst ts = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;\nreturn [{\n  row_number: $json.row_number, // vem do passo anterior\n  \"ID Único\": $json[\"ID Único\"] || $json.unique_id,\n  \"Execução\": `Imovel Criado com sucesso em ${ts}`,\n  \"Status\": \"importado\"\n}];\n"
+      },
+      "id": "02f8f3b4-880f-41be-953f-1724ce9ba935",
+      "name": "Marcar Execução (mensagem)",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        784,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('variaveis').item.json[\"Planilha ID\"] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('variaveis').item.json[\"Planilha Aba\"] }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $('Google Sheets – Ler (Propriedades)').item.json.row_number }}",
+            "Execução": "={{ $json[\"Execução\"] }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID Único",
+              "displayName": "ID Único",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Nome do Empreendimento",
+              "displayName": "Nome do Empreendimento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Tipo (Venda/Aluguel)",
+              "displayName": "Tipo (Venda/Aluguel)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Preço (número)",
+              "displayName": "Preço (número)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Área privativa (m²)",
+              "displayName": "Área privativa (m²)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Quartos",
+              "displayName": "Quartos",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Banheiros",
+              "displayName": "Banheiros",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Andares do prédio",
+              "displayName": "Andares do prédio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Endereço (texto livre)",
+              "displayName": "Endereço (texto livre)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Latitude",
+              "displayName": "Latitude",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Longitude",
+              "displayName": "Longitude",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "País (ID)",
+              "displayName": "País (ID)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Estado (ID)",
+              "displayName": "Estado (ID)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Cidade (ID)",
+              "displayName": "Cidade (ID)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Período (dia/mês/ano)",
+              "displayName": "Período (dia/mês/ano)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Moeda (ID)",
+              "displayName": "Moeda (ID)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Anúncio em destaque? (0/1)",
+              "displayName": "Anúncio em destaque? (0/1)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Prioridade do destaque (número)",
+              "displayName": "Prioridade do destaque (número)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Autor (ID)",
+              "displayName": "Autor (ID)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Tipo do Autor",
+              "displayName": "Tipo do Autor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Data de expiração (AAAA-MM-DD)",
+              "displayName": "Data de expiração (AAAA-MM-DD)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Descrição narrativa (texto livre)",
+              "displayName": "Descrição narrativa (texto livre)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Comercial – Nome",
+              "displayName": "Comercial – Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Comercial – Telefone",
+              "displayName": "Comercial – Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Comercial – E-mail",
+              "displayName": "Comercial – E-mail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Comissão PJ (%)",
+              "displayName": "Comissão PJ (%)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Comissão PF (%)",
+              "displayName": "Comissão PF (%)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Link do Drive (materiais)",
+              "displayName": "Link do Drive (materiais)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Estágio da Obra",
+              "displayName": "Estágio da Obra",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Estoque (unidades)",
+              "displayName": "Estoque (unidades)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Data de Lançamento (AAAA-MM-DD)",
+              "displayName": "Data de Lançamento (AAAA-MM-DD)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Unidades por andar",
+              "displayName": "Unidades por andar",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Previsão de Entrega (AAAA-MM-DD)",
+              "displayName": "Previsão de Entrega (AAAA-MM-DD)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Total de Unidades",
+              "displayName": "Total de Unidades",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Número de Andares",
+              "displayName": "Número de Andares",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Área do Terreno",
+              "displayName": "Área do Terreno",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Área da Laje",
+              "displayName": "Área da Laje",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "RI",
+              "displayName": "RI",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Condomínio",
+              "displayName": "Condomínio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "IPTU",
+              "displayName": "IPTU",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Atualizado em (texto)",
+              "displayName": "Atualizado em (texto)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Execução",
+              "displayName": "Execução",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "e21fec05-5fde-4a45-b436-9abfd3e21f6c",
+      "name": "Google Sheets – Atualizar (Execução)",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        1184,
+        176
+      ],
+      "retryOnFail": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pb4yzlmXfMN4YYQj",
+          "name": "Google Sheets account Jefferson"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "227090da-3321-4658-b103-817718de15e8",
+      "name": "Próximo Lote",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1424,
+        176
+      ]
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1152,
+        208
+      ],
+      "id": "1e045aee-5df4-478f-96ce-fa09f5e260e7",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0abbf40e-3ffc-435b-bea2-55b6a1336e84",
+              "name": "Planilha ID",
+              "value": "1h8t6jlAzenACgw5FMgtmG5nfUL8KzYAlCm4Ii5rNzxM",
+              "type": "string"
+            },
+            {
+              "id": "b838f160-f284-46d4-a20b-6f461959fdb9",
+              "name": "Planilha Aba",
+              "value": "213828521",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c67ccc8c-1aa2-4736-9dfc-903502527194",
+      "name": "variaveis",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -848,
+        176
+      ]
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        608,
+        192
+      ],
+      "id": "85cf2921-9157-451c-9f29-c3bea909552b",
+      "name": "Wait",
+      "webhookId": "5739b65e-982b-4436-83cb-0f3abb5daed0"
+    },
+    {
+      "parameters": {},
+      "id": "94385e69-2f88-431e-b6a6-ebe888a0460e",
+      "name": "Ocorreu Erro",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1152,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "Planilha ID",
+              "value": "1h8t6jlAzenACgw5FMgtmG5nfUL8KzYAlCm4Ii5rNzxM"
+            },
+            {
+              "name": "Planilha Aba",
+              "value": "213828521"
+            },
+            {
+              "name": "N8N URL",
+              "value": "https://editn.integrasac.com.br"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1e3bcf5d-c3b2-43c3-8155-20dca9002446",
+      "name": "variaveis_erro",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        -848,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $node['variaveis_erro'].json[\"Planilha ID\"] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $node['variaveis_erro'].json[\"Planilha Aba\"] }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Execução": "=OCORREU UM ERRO, VERIFIQUE COM O SUPORTE",
+            "ID da Execução": "={{ $node['Ocorreu Erro'].json.execution.id }}"
+          },
+          "matchingColumns": [
+            "ID da Execução"
+          ],
+          "schema": [
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Hora",
+              "displayName": "Hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Palavra Chave Foco",
+              "displayName": "Palavra Chave Foco",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Título",
+              "displayName": "Título",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID da Categoria",
+              "displayName": "ID da Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Categoria",
+              "displayName": "Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID das Tags",
+              "displayName": "ID das Tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Imagem",
+              "displayName": "Imagem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Outlines",
+              "displayName": "Outlines",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Link",
+              "displayName": "Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Execução",
+              "displayName": "Execução",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ID da Execução",
+              "displayName": "ID da Execução",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Posição",
+              "displayName": "Posição",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Concorrência",
+              "displayName": "Concorrência",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "be69bf06-a27e-4b1f-8d89-6130c46acc3f",
+      "name": "Google Sheets - Status ERRO",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        -576,
+        400
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "z1VWO1EGILqORxWq",
+          "name": "Google Sheets account Fortune"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## ALTERAÇÕES AQUI",
+        "height": 544,
+        "width": 272,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -944,
+        80
+      ],
+      "typeVersion": 1,
+      "id": "db118e37-49c6-4085-af27-e8fbdba00ab3",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Google Sheets\n",
+        "height": 544,
+        "width": 320,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -672,
+        80
+      ],
+      "typeVersion": 1,
+      "id": "e241b430-f850-43b5-b39d-82ae93d2d7e1",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## PROCESSAMENTO E VALIDAÇÃO\n",
+        "height": 544,
+        "width": 416,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -352,
+        80
+      ],
+      "typeVersion": 1,
+      "id": "0e5f9c67-48ed-4c88-b6fe-2c73d309380f",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## CRIAÇÃO DENTRO DO BANCO DE DADOS\n",
+        "height": 560,
+        "width": 480,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        64,
+        464
+      ],
+      "typeVersion": 1,
+      "id": "b052ff0a-f8f6-4909-b559-fe125c9a591f",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## ESPERA & MENSAGEM DE SUCESSO\n",
+        "height": 416,
+        "width": 432,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        528,
+        48
+      ],
+      "typeVersion": 1,
+      "id": "199f88d8-53d0-4264-b878-02d23f7c88f4",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## SUCESSO E ENVIO PARA O PROXIMO IMOVEL\n",
+        "height": 432,
+        "width": 480,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1104,
+        32
+      ],
+      "typeVersion": 1,
+      "id": "a85c376a-e90e-436a-b0ca-90aaa7a9ea89",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "triggerTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "value": 5,
+              "unit": "minutes"
+            }
+          ]
+        }
+      },
+      "id": "732dfa83-f06f-4088-a130-c22e6a7eee9e",
+      "name": "Agendador ( 5 Minutos )",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [
+        -1152,
+        48
+      ]
+    }
+  ],
+  "connections": {
+    "Google Sheets – Ler (Propriedades)": {
+      "main": [
+        [
+          {
+            "node": "Processar em Lotes (1 por vez)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Processar em Lotes (1 por vez)": {
+      "main": [
+        [
+          {
+            "node": "Se Status = novo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Se Status = novo": {
+      "main": [
+        [
+          {
+            "node": "Preparar Payload & HTML (PT-BR)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Próximo Lote",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Payload & HTML (PT-BR)": {
+      "main": [
+        [
+          {
+            "node": "MySQL – Inserir Propriedade",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL – Inserir Propriedade": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Marcar Execução (mensagem)": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets – Atualizar (Execução)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets – Atualizar (Execução)": {
+      "main": [
+        [
+          {
+            "node": "Próximo Lote",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "variaveis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "variaveis": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets – Ler (Propriedades)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Marcar Execução (mensagem)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ocorreu Erro": {
+      "main": [
+        [
+          {
+            "node": "variaveis_erro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "variaveis_erro": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Status ERRO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agendador ( 5 Minutos )": {
+      "main": [
+        [
+          {
+            "node": "variaveis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "DK91PBliohuBqcdO",
+    "timeSavedPerExecution": 5
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "64ce0c03-8ac4-4b3e-a19c-1f7c0c71d6f3",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-08-28T18:53:20.802Z",
+      "updatedAt": "2025-08-28T18:53:20.802Z",
+      "role": "workflow:owner",
+      "workflowId": "DK91PBliohuBqcdO",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
