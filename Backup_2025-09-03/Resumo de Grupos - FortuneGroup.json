@@ -1,0 +1,671 @@
+{
+  "createdAt": "2024-12-15T22:17:13.783Z",
+  "updatedAt": "2024-12-15T22:18:18.842Z",
+  "id": "XjmDys4DQ99LFX6v",
+  "name": "Resumo de Grupos - FortuneGroup",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "// Obtenha os dados da variável diretamente\nconst data = $('Pegando mensagens do grupo').item.json.messages.records || [];\n\n// Obtenha a data de hoje em formato UTC (sem horário)\nconst today = new Date();\ntoday.setHours(0, 0, 0, 0);\n\n// Filtrar mensagens cuja data seja igual à de hoje\nconst filteredMessages = data.filter(record => {\n    const messageDate = new Date(record.messageTimestamp * 1000); // Convertendo timestamp para milissegundos\n    messageDate.setHours(0, 0, 0, 0); // Removendo a hora para comparar só o dia\n\n    return messageDate.getTime() === today.getTime();\n});\n\n// Contabilizar as mensagens por participante\nconst participantCount = {};\n\n// Contagem das mensagens por participante\nfilteredMessages.forEach(record => {\n    let participant = record.key?.participant; // Verifique se a chave existe\n    const pushName = record.pushName || \"Nome não identificado\"; // Captura o pushName\n\n    if (participant) {\n        // Remove o sufixo @s.whatsapp.net\n        participant = participant.replace('@s.whatsapp.net', '');\n\n        if (!participantCount[participant]) {\n            participantCount[participant] = {\n                count: 0,\n                pushName: pushName // Armazena o pushName\n            };\n        }\n        participantCount[participant].count++;\n    }\n});\n\n// Ordenar participantes pela quantidade de mensagens (do maior para o menor)\nconst sortedParticipants = Object.entries(participantCount)\n    .sort((a, b) => b[1].count - a[1].count) // Ordena pela quantidade de mensagens\n    .slice(0, 3); // Pega os 3 primeiros\n\n// Gerar a mensagem única com os três melhores participantes\nconst message = sortedParticipants.map((participant, index) => {\n    const medal = [\"🥇\", \"🥈\", \"🥉\"][index]; // Seleciona o emoji da medalha com base no índice\n    const pushName = `*${participant[1].pushName}*`; // Adiciona asteriscos ao pushName\n    const count = participant[1].count; // Pega a contagem de mensagens\n    return `${medal} ${pushName}\\n> Com ${count} mensagens`;\n}).join('\\n\\n'); // Junta as mensagens com quebras de linha\n\n// Retornar a mensagem única como resultado\nreturn [\n    {\n        json: {\n            mensagem: message\n        }\n    }\n];"
+      },
+      "id": "7af8d737-fc00-4691-86f9-50b465084f02",
+      "name": "Top 3 membros",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1760,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Obtenha os dados do nó anterior\nconst data = $('Pegando mensagens do grupo').item.json.messages.records || [];\n\n// Obtenha a data de hoje em formato UTC (sem horário)\nconst today = new Date();\ntoday.setHours(0, 0, 0, 0);\n\n// Filtrar mensagens cuja data seja igual à de hoje, cujo tipo seja \"conversation\" \n// e que não estejam marcadas como DELETED\nconst filteredMessages = data.filter(record => {\n    const messageDate = new Date(record.messageTimestamp * 1000); // Convertendo timestamp para milissegundos\n    messageDate.setHours(0, 0, 0, 0); // Removendo a hora para comparar só o dia\n\n    // Verificar se a mensagem foi deletada\n    const isDeleted = record.MessageUpdate && record.MessageUpdate.some(update => update.status === \"DELETED\");\n\n    // Adicionar logs para depuração\n    console.log(`Mensagem: ${record.message ? record.message.conversation : 'N/A'}`);\n    console.log(`Data da Mensagem: ${messageDate}`);\n    console.log(`É Deletada: ${isDeleted}`);\n    \n    return (\n        messageDate.getTime() === today.getTime() &&\n        record.messageType === \"conversation\" &&\n        !isDeleted // Ignorar mensagens deletadas\n    );\n});\n\n// Ordenar as mensagens pela data de forma crescente (mais antiga para mais nova)\nfilteredMessages.sort((a, b) => a.messageTimestamp - b.messageTimestamp);\n\n// Retornar apenas os campos necessários, ajustando o formato conforme solicitado\nconst result = filteredMessages.map(record => {\n    const telefoneMembro = record.key.participant ? record.key.participant.replace('@s.whatsapp.net', '') : 'Número não disponível';\n    const response = {\n        json: {\n            \"Membro\": record.pushName || \"Nome não identificado\", // Utilizar o pushName\n            \"Telefone do Membro\": telefoneMembro, // Telefone sem o sufixo\n            \"Mensagem\": record.message.conversation || null, // Mensagem de conversa\n        }\n    };\n\n    // Se existir contextInfo, adicionar o participant do contextInfo também\n    if (record.contextInfo && record.contextInfo.participant) {\n        response.json['Resposta para'] = record.contextInfo.participant;\n    }\n\n    return response;\n});\n\n// Retorne o resultado\nconsole.log(\"Mensagens Filtradas:\", result);\nreturn result;"
+      },
+      "id": "12cce539-e552-4edb-bec3-c614a61e1a8f",
+      "name": "Separa as mensagens de hoje",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1360,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Credenciais').item.json.baseUrl }}/chat/findMessages/{{ $('Credenciais').item.json.instance }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Credenciais').item.json.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"where\": {\n        \"key\": {\n            \"remoteJid\": \"{{ $('Grupos').item.json.groupJids }}\"\n        }\n    },\n    \"page\": 1,\n    \"offset\": {{ $('Credenciais').item.json.offset }}\n}",
+        "options": {}
+      },
+      "id": "d0ad00af-a22c-42d2-b4a8-eb45ef7a5876",
+      "name": "Pegando mensagens do grupo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1160,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "=Mensagens do grupo",
+        "options": {}
+      },
+      "id": "b0300ce1-fe82-485f-b95f-b77ffde4bbc7",
+      "name": "Juntando Mensagens",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Obtenha os dados da variável diretamente\nconst data = $('Pegando mensagens do grupo').item.json.messages.records || [];\n\n// Obtenha a data de hoje em formato UTC (sem horário)\nconst today = new Date();\ntoday.setHours(0, 0, 0, 0);\n\n// Filtrar mensagens cuja data seja igual à de hoje\nconst filteredMessages = data.filter(record => {\n    const messageDate = new Date(record.messageTimestamp * 1000); // Convertendo timestamp para milissegundos\n    messageDate.setHours(0, 0, 0, 0); // Removendo a hora para comparar só o dia\n\n    return messageDate.getTime() === today.getTime();\n});\n\n// Calcular o total de mensagens de hoje\nconst totalMessages = filteredMessages.length;\n\n// Retornar o total de mensagens\nreturn [\n    {\n        json: {\n            totalMensagens: totalMessages\n        }\n    }\n];\n"
+      },
+      "id": "631b99f2-6045-46aa-bcbe-11527742b36e",
+      "name": "Total de mensagens",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1960,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Criação do array de mensagens\nconst messages = [\n  `Hoje, o dia foi agitado com *${items[0].json['totalMensagens']} mensagens* enviadas! 💬`,\n  `Uau! Já trocamos *${items[0].json['totalMensagens']} mensagens* hoje! 🔥`,\n  `Que dia cheio! *${items[0].json['totalMensagens']} mensagens* passaram por aqui! 🚀`,\n  `Hoje tivemos *${items[0].json['totalMensagens']} mensagens* trocadas, o que não é pouca coisa! 🎉`,\n  `O dia de hoje foi super produtivo com *${items[0].json['totalMensagens']} mensagens* enviadas! 💥`,\n  `Com *${items[0].json['totalMensagens']} mensagens* trocadas, o dia foi um sucesso! 🙌`,\n  `Hoje conseguimos trocar *${items[0].json['totalMensagens']} mensagens* – que movimentação! ⚡`,\n  `Um dia agitado com *${items[0].json['totalMensagens']} mensagens* enviadas! 💌`,\n  `Que energia! Já foram *${items[0].json['totalMensagens']} mensagens* enviadas hoje! 🔝`,\n  `O dia foi movimentado com *${items[0].json['totalMensagens']} mensagens* trocadas! Vamos para o próximo! 💪`,\n  `Eita que hoje tivemos *${items[0].json['totalMensagens']} mensagens* no nosso grupo`\n];\n\n// Sorteio aleatório\nconst randomMessage = messages[Math.floor(Math.random() * messages.length)];\n\n// Retornar o resultado para o n8n\nreturn [{ json: { randomMessage } }];\n"
+      },
+      "id": "87aac3c8-7e77-48c8-9a1d-93b8f945ad12",
+      "name": "Mensagem de Total de mensagens",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2160,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Credenciais').item.json.baseUrl }}/message/sendText/{{ $('Credenciais').item.json.instance }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Credenciais').item.json.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Tratando dados do loop').item.json['remoteJid (grupo)'] }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $('Gera resumo').item.json.message.content.replace(/\\*\\*/g, '*') }}\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "69087d9f-a557-47dc-988f-3d86ae7f0bea",
+      "name": "Enviando mensagem 2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1720,
+        580
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "1080c012-7b25-4b18-82fc-1b9465f402f0",
+      "name": "Loop Over Items",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        760,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1ed68fd6-9020-4eeb-8e17-78417291cf4c",
+              "name": "remoteJid (grupo)",
+              "value": "={{ $json.groupJids || $json.id}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "cce56e03-865e-4e37-80e6-eb1d3c2b12c4",
+      "name": "Tratando dados do loop",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        960,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Credenciais').item.json.baseUrl }}/message/sendText/{{ $('Credenciais').item.json.instance }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Credenciais').item.json.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Tratando dados do loop').item.json['remoteJid (grupo)'] }}"
+            },
+            {
+              "name": "text",
+              "value": "=💬 *Resumo do dia no Grupo*\n{{ $('Mensagem de Total de mensagens').item.json.randomMessage }}\n\n🏆 *Top 3 membros mais ativos hoje*:\n\n{{ $('Top 3 membros').item.json.mensagem }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b220547c-df44-4907-ba3e-de8baecac79e",
+      "name": "Enviando mensagem 1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1320,
+        580
+      ],
+      "retryOnFail": true,
+      "waitBetweenTries": 2500
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 22
+            }
+          ]
+        }
+      },
+      "id": "6f1e05b1-320d-4c17-9b64-5a05fedc20d1",
+      "name": "Iniciar todas 22h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        160,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "361f2ed1-b2c8-44fd-926c-5a8d9d7387d4",
+              "name": "baseUrl",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "9df17754-2e22-411f-adfc-6d9d5fd2adb2",
+              "name": "instance",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "d8298933-545f-4fd7-a56c-a70fafa1c315",
+              "name": "apikey",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "3aceebf0-a0f3-4bd3-be1a-80ec53707e2f",
+              "name": "offset",
+              "value": "1000",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6059719a-3337-4ebb-bcac-f68759040485",
+      "name": "Credenciais",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        360,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "id": "b37559eb-2568-48e2-a4e5-dc9b81c6c420",
+      "name": "Espera 2 segundos",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1520,
+        580
+      ],
+      "webhookId": "d0caec58-6812-43d7-9b68-72e044d6019c"
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "id": "91e98cf6-a9d3-4e4f-94a6-b4ca6b813fe7",
+      "name": "Espera 30 segundos",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1920,
+        580
+      ],
+      "webhookId": "fae6def0-cf6c-4eed-a8fe-3a500ae13398"
+    },
+    {
+      "parameters": {},
+      "id": "00f82f38-3f5a-448b-9956-aaa65e7adcdb",
+      "name": "FIM",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        960,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const groupJids = [\n    \"120363206229319843@g.us\",\n    \"120363283884738970@g.us\"\n];\n\n// Gerando a lista com o formato desejado\nconst result = groupJids.map(id => `${id}`);\n\n// Criando a estrutura de saída no formato correto para o n8n\nreturn result.map(item => {\n    return {\n        json: {\n            groupJids: item\n        }\n    };\n});\n"
+      },
+      "id": "4b0d82bc-f494-4f7a-924b-e16231b4d039",
+      "name": "Grupos",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Altere aqui",
+        "height": 251.9159908779343,
+        "width": 626.8911593937048,
+        "color": 3
+      },
+      "id": "87d9da5f-e616-4612-bec7-57de1cac4cc9",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        100,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Altere aqui",
+        "height": 251.9159908779343,
+        "width": 221.87572010857625,
+        "color": 3
+      },
+      "id": "300048aa-527f-4af7-9277-50c2dccc3e56",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2100,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Resumo de grupos automatico",
+        "height": 858.267172494289,
+        "width": 2410.2669752931133,
+        "color": 7
+      },
+      "id": "326d2315-09b0-412b-b3c7-e27dd8c886be",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Pegar id dos grupos",
+        "height": 270.7476350884495,
+        "width": 382.28317486454284,
+        "color": 7
+      },
+      "id": "d7fe2f93-ec4e-41ab-803e-50c7348b7739",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        100,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Credenciais').item.json.baseUrl }}/group/fetchAllGroups/{{ $('Credenciais').item.json.instance }}?getParticipants=false",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Credenciais').item.json.apikey }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "aa114a66-173d-4e57-998a-2bcc0e65acb2",
+      "name": "Puxar Grupos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        580
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Altere aqui",
+        "height": 204.36151752511353,
+        "width": 361.4032763562648,
+        "color": 3
+      },
+      "id": "98481cf7-b973-4d28-bea6-065276be6ab9",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        900,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Histórico de mensagens:\n{{ JSON.stringify($('Juntando Mensagens').item.json['Mensagens do grupo']) }}"
+            },
+            {
+              "content": "Você será responsável por criar resumos dinâmicos das conversas do grupo, repassando as informações de forma clara e bem estruturada.\n\nSua missão é gerar uma mensagem concisa, com um toque de humor leve e profissional (nada de exageros ou tecnicismos). Sempre que possível, mencione o nome de quem fez a pergunta ou deu a resposta (caso não encontre o nome, use o número de telefone). Jamais invente informações, baseie-se exclusivamente nos dados disponíveis. Organize a mensagem com tópicos, destacando os pontos mais relevantes e importantes do dia. Use emojis, mas com moderação.\n\nAbaixo estão alguns elementos básicos que você pode usar como referência para estruturar sua mensagem, mas lembre-se de criar algo único e adaptado à conversa.\n\n📝 Principais Tópicos de hoje:\n\n📌 Título do Tópico X:\n\nDescrição do que aconteceu aqui\nDescrição do que rolou lá\nAlgo interessante que foi discutido\nResumo de uma solução ou ideia apresentada\n(Adapte quantos tópicos achar necessário, sempre focando no que foi mais importante e interessante!)\n\n✨ Clima do Grupo: O clima hoje foi focado e produtivo, com um toque de descontração que deixou tudo mais leve. Vamos nessa, equipe! 🚀\n\n🤝 Continue Participando: Tem alguma dúvida ou sugestão? Fique à vontade para compartilhar, a galera sempre está disposta a ajudar!\n\nLembre-se de manter um tom amigável e direto, sem perder o foco nas informações essenciais. Nada de humor forçado, apenas o necessário para deixar a mensagem leve e agradável.",
+              "role": "assistant"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3bc37f34-c545-4274-aad7-de9f248ac678",
+      "name": "Gera resumo",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.6,
+      "position": [
+        960,
+        580
+      ]
+    }
+  ],
+  "connections": {
+    "Top 3 membros": {
+      "main": [
+        [
+          {
+            "node": "Total de mensagens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Separa as mensagens de hoje": {
+      "main": [
+        [
+          {
+            "node": "Juntando Mensagens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pegando mensagens do grupo": {
+      "main": [
+        [
+          {
+            "node": "Separa as mensagens de hoje",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Juntando Mensagens": {
+      "main": [
+        [
+          {
+            "node": "Top 3 membros",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Total de mensagens": {
+      "main": [
+        [
+          {
+            "node": "Mensagem de Total de mensagens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensagem de Total de mensagens": {
+      "main": [
+        [
+          {
+            "node": "Gera resumo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviando mensagem 2": {
+      "main": [
+        [
+          {
+            "node": "Espera 30 segundos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "FIM",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tratando dados do loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tratando dados do loop": {
+      "main": [
+        [
+          {
+            "node": "Pegando mensagens do grupo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviando mensagem 1": {
+      "main": [
+        [
+          {
+            "node": "Espera 2 segundos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Iniciar todas 22h": {
+      "main": [
+        [
+          {
+            "node": "Credenciais",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Credenciais": {
+      "main": [
+        [
+          {
+            "node": "Grupos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Espera 2 segundos": {
+      "main": [
+        [
+          {
+            "node": "Enviando mensagem 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Espera 30 segundos": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Grupos": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gera resumo": {
+      "main": [
+        [
+          {
+            "node": "Enviando mensagem 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "598c5c61-c690-4e22-9d40-eb8418371bde",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2024-12-15T22:17:13.783Z",
+      "updatedAt": "2024-12-15T22:17:13.783Z",
+      "role": "workflow:owner",
+      "workflowId": "XjmDys4DQ99LFX6v",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": [
+    {
+      "createdAt": "2024-12-15T22:18:14.158Z",
+      "updatedAt": "2024-12-15T22:18:14.158Z",
+      "id": "gdxddtefrDZkp2GZ",
+      "name": "IntegraSac"
+    }
+  ]
+}
