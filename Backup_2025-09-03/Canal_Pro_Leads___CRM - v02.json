@@ -1,0 +1,44 @@
+{
+  "createdAt": "2024-11-25T12:40:36.010Z",
+  "updatedAt": "2024-11-25T12:42:56.437Z",
+  "id": "t2nKORbPjI3SeaCr",
+  "name": "Canal_Pro_Leads___CRM - v02",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "path": "1308e58e-c5a9-47e0-a454-53d56ae1fbab",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "b02952c3-07a2-4590-98eb-dfdb198c5ba4",
+      "name": "Webhook",
+      "webhookId": "1308e58e-c5a9-47e0-a454-53d56ae1fbab"
+    }
+  ],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "cfb2fff1-7129-4550-9518-aa1334885c83",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2024-11-25T12:40:36.010Z",
+      "updatedAt": "2024-11-25T12:40:36.010Z",
+      "role": "workflow:owner",
+      "workflowId": "t2nKORbPjI3SeaCr",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
