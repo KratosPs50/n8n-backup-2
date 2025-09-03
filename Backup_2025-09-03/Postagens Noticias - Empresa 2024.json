@@ -1,0 +1,2046 @@
+{
+  "createdAt": "2024-12-12T15:06:29.654Z",
+  "updatedAt": "2024-12-12T23:29:29.204Z",
+  "id": "zfq7GXAmMNNYn8Pb",
+  "name": "Postagens Noticias - Empresa 2024",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "Planilha ID",
+              "value": "1GT1Ff91MDVtqgojtospT5nOohSneqmql45U21IOzJUQ"
+            },
+            {
+              "name": "Planilha Aba",
+              "value": "347027391"
+            },
+            {
+              "name": "URL do Site",
+              "value": "=https://news.integrasac.com.br"
+            },
+            {
+              "name": "Banco de dados Prefixo das tabelas",
+              "value": "=wp_"
+            },
+            {
+              "name": "Logo marca dagua",
+              "value": "https://news.integrasac.com.br/wp-content/uploads/2024/12/logotransparente.png"
+            },
+            {
+              "name": "Marca dagua Overlay",
+              "value": "https://news.integrasac.com.br/wp-content/uploads/2024/12/logotransparente.png"
+            },
+            {
+              "name": "Custom Post Type"
+            },
+            {
+              "name": "Custom Taxonomia"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "52d11c26-6233-41b0-9f8f-fdb02a838031",
+      "name": "variaveis",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        260,
+        380
+      ],
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $node['variaveis'].json[\"URL do Site\"] }}/wp-json/wp/v2/media/",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wordpressApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "cache-control",
+              "value": "no-cache"
+            },
+            {
+              "name": "content-disposition",
+              "value": "=attachment; filename={{ $node['Post'].json[\"Palavra Chave\"].replaceAll(\" \",\"-\").toLowerCase().normalize('NFD').replace(/\\p{Mn}/gu, \"\").replaceAll(\".\",\"\").replaceAll(\",\",\"\").slice(0, 100) }}.{{ $binary.data.fileExtension }};"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "6805fc50-eaf8-40ed-a761-eb69581e48ff",
+      "name": "Salvar imagem em mídia",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        4440,
+        460
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "wordpressApi": {
+          "id": "WpmUPc56IE4VL24s",
+          "name": "Wordpress account NEWSINTEGRA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Gerar Imagem",
+        "height": 461.8950657545102,
+        "width": 833.2073571043829
+      },
+      "id": "09b9f09f-6c2e-48b9-b750-443294257cab",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3460,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $node['variaveis'].json[\"URL do Site\"] }}/wp-json/wp/v2/media/{{ $('Salvar imagem em mídia').item.json[\"id\"] }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wordpressApi",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "alt_text",
+              "value": "={{ $node['Post'].json[\"Palavra Chave\"] }}"
+            },
+            {
+              "name": "title",
+              "value": "={{ $node['Post'].json[\"Palavra Chave\"] }}"
+            },
+            {
+              "name": "description",
+              "value": "={{ $node['Post'].json[\"Palavra Chave\"] }}"
+            },
+            {
+              "name": "caption",
+              "value": "={{ $node['Post'].json[\"Palavra Chave\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "68c47548-56c6-4c75-8c25-244bf374618a",
+      "name": "Atualizar Atributos da imagem",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        4580,
+        460
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "wordpressApi": {
+          "id": "WpmUPc56IE4VL24s",
+          "name": "Wordpress account NEWSINTEGRA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "information"
+      },
+      "id": "7ef6f876-4e79-4a6f-828f-0abd6003a067",
+      "name": "Pega informações imagem destaque",
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1,
+      "position": [
+        3800,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "resize",
+        "width": "={{ $json[\"size\"][\"width\"] > 1200 ? 1200 : $json[\"size\"][\"width\"] }}",
+        "height": "={{ $json[\"size\"][\"height\"] > 630 ? 630 : $json[\"size\"][\"height\"] }}",
+        "resizeOption": "onlyIfLarger",
+        "options": {
+          "format": "webp"
+        }
+      },
+      "id": "5aa2ef12-2dfe-4310-8395-7a26553b264c",
+      "name": "redimensionar imagem destaque",
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1,
+      "position": [
+        3980,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "information"
+      },
+      "id": "0f905a0b-f1dc-4b7e-a3aa-de8a3ee29103",
+      "name": "Pega informações redimensionada destaque",
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1,
+      "position": [
+        4140,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $node['variaveis'].json[\"Logo marca dagua\"] ? $node['variaveis'].json[\"Logo marca dagua\"] : 'https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png'}}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "logo"
+            }
+          }
+        }
+      },
+      "id": "954a69ea-d8ce-4f40-a1a6-a54460da68ef",
+      "name": "logo marcadagua",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        3520,
+        540
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "url": "={{ $node['variaveis'].json[\"Marca dagua Overlay\"] ? $node['variaveis'].json[\"Marca dagua Overlay\"] : 'https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png'}}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "frente"
+            }
+          }
+        }
+      },
+      "id": "db7e71bb-80f4-492e-b751-57c00d68725f",
+      "name": "Overlay  imagem em destaque",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        3900,
+        540
+      ],
+      "executeOnce": false,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "operation": "multiStep",
+        "operations": {
+          "operations": [
+            {
+              "operation": "composite",
+              "dataPropertyNameComposite": "frente"
+            },
+            {
+              "operation": "composite",
+              "dataPropertyNameComposite": "logo",
+              "positionX": "={{ ($('Pega informações redimensionada destaque').item.json[\"size\"][\"width\"] - 10) - $('Informações logo destaque').item.json[\"size\"][\"width\"] }}",
+              "positionY": "={{ ($('Pega informações redimensionada destaque').item.json[\"size\"][\"height\"] - 20) - $('Informações logo destaque').item.json[\"size\"][\"height\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "format": "jpeg"
+        }
+      },
+      "id": "edb44d07-81fa-4010-aabf-c54bb1cbcea7",
+      "name": "Aplicar marca dagua imagem destaque",
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1,
+      "position": [
+        4100,
+        540
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $node['variaveis'].json[\"URL do Site\"] }}/wp-json/wp/v2/{{ $node['variaveis'].json['Custom Post Type'] == '' ? \"posts\" : $node['variaveis'].json['Custom Post Type'] }}/",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wordpressApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "excerpt",
+              "value": "={{ $node['Post'].json[\"Descrição\"] }}"
+            },
+            {
+              "name": "title",
+              "value": "={{ $node['Post'].json[\"Título\"] }}"
+            },
+            {
+              "name": "content",
+              "value": "={{ $node['Post'].json[\"Conteúdo\"] }}"
+            },
+            {
+              "name": "slug",
+              "value": "={{ $node['Post'].json[\"Palavra Chave\"].replaceAll(\" \",\"-\").toLowerCase().normalize('NFD').replace(/\\p{Mn}/gu, \"\") }}"
+            },
+            {
+              "name": "={{ $node['variaveis'].json[\"Custom Taxonomia\"] == '' ? 'categories' : $node['variaveis'].json[\"Custom Taxonomia\"]}}",
+              "value": "={{ $node['Google Sheets - Ler Palavras Chaves'].json[\"ID da Categoria\"] }}"
+            },
+            {
+              "name": "type",
+              "value": "={{ $node['variaveis'].json['Custom Post Type'] == '' ? \"posts\" : $node['variaveis'].json['Custom Post Type'] }}"
+            },
+            {
+              "name": "status",
+              "value": "={{ $node['Google Sheets - Ler Palavras Chaves'].json[\"Status\"] == 'Rascunho' ? 'draft' : $node['Google Sheets - Ler Palavras Chaves'].json[\"Status\"] == 'Publicado' ? 'publish' : $node['Google Sheets - Ler Palavras Chaves'].json[\"Status\"] == 'Agendado' ? 'future' : $node['Google Sheets - Ler Palavras Chaves'].json[\"Status\"] == 'Revisão pendente' ? 'pending' : $node['Google Sheets - Ler Palavras Chaves'].json[\"Status\"] == 'Privado' ? 'private' : 'future' }}"
+            },
+            {
+              "name": "date",
+              "value": "={{$node['Google Sheets - Ler Palavras Chaves'].json[\"Data\"].split('/').reverse().join('-') + \"T\" + ((parseInt($node['Google Sheets - Ler Palavras Chaves'].json[\"Hora\"].split(\":\")[0], 10) + 3) % 24).toString().padStart(2, '0') + \":\" + ($node['Google Sheets - Ler Palavras Chaves'].json[\"Hora\"].split(\":\")[1]).toString().padStart(2, '0') + \":00.000Z\"}}"
+            },
+            {
+              "name": "featured_media",
+              "value": "={{ $('Salvar imagem em mídia').item.json.id }}"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "5489a90e-a283-47d8-a34a-fd1b8ea88d77",
+      "name": "Wordpress - Publicar Post",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        4760,
+        460
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "wordpressApi": {
+          "id": "WpmUPc56IE4VL24s",
+          "name": "Wordpress account NEWSINTEGRA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "information",
+        "dataPropertyName": "logo"
+      },
+      "id": "211ff081-d61e-434c-afee-3a00f5caa28c",
+      "name": "Informações logo destaque",
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1,
+      "position": [
+        3720,
+        540
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "model": "gpt-4-turbo-preview",
+        "prompt": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "=Como um engenheiro especialista em prompts especializado em imagens geradas por IA, crie um prompt em inglês para a API DALL-E. O prompt deve sugerir uma imagem que represente visualmente uma postagem de blog, incorporando o tema '{{ $node['Post'].json[\"Título\"] }}'. Concentre-se em elementos visuais que unam todos esses aspectos, sem introduções ou conclusões adicionais. Siga as políticas da OpenAI para evitar a solicitação de palavras banidas pela API. Garantir que a representação seja respeitosa e esteja alinhada com as políticas de conteúdo da OpenAI."
+            },
+            {
+              "content": "=Com base no tema '{{ $node['Post'].json[\"Título\"] }}', no contexto '{{ $node['Post'].json[\"Descrição\"] }}', crie um prompt em inglês para a API do DALL-E que reflita visualmente esses elementos em uma imagem para um post."
+            }
+          ]
+        },
+        "options": {},
+        "requestOptions": {}
+      },
+      "id": "8bbd1e8b-afc8-4397-97dc-1dae4ff3cee2",
+      "name": "Gerar prompt da imagem",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        3480,
+        340
+      ],
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "executeOnce": true,
+      "maxTries": 5,
+      "credentials": {
+        "openAiApi": {
+          "id": "AK2JwQJlNiAowLd0",
+          "name": "OpenAi account FORTUNE HOG"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "prompt": "={{ $json.message.content.replaceAll('\"','') }}",
+        "model": "dall-e-3",
+        "options": {
+          "n": 1,
+          "quality": "standard",
+          "size": "1792x1024"
+        },
+        "requestOptions": {}
+      },
+      "id": "799254c0-ac13-42a7-a0ac-7bc89a927cb7",
+      "name": "Gerar imagem",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        3640,
+        340
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "openAiApi": {
+          "id": "AK2JwQJlNiAowLd0",
+          "name": "OpenAi account FORTUNE HOG"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $node['variaveis'].json[\"Planilha ID\"] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $node['variaveis'].json[\"Planilha Aba\"] }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Link": "={{ $node['Wordpress - Publicar Post'].json[\"link\"] }}",
+            "Título": "={{ $node['Post'].json[\"Título\"] }}",
+            "Palavra Chave Foco": "={{ $node['Post'].json[\"Palavra Chave\"] }}",
+            "Execução": "CONCLUÍDO",
+            "Url de Raspagem": "={{ $node['Google Sheets - Ler Palavras Chaves'].json[\"Url de Raspagem\"] }}"
+          },
+          "matchingColumns": [
+            "Url de Raspagem"
+          ],
+          "schema": [
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Palavra Chave Foco",
+              "displayName": "Palavra Chave Foco",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Título",
+              "displayName": "Título",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Título da Raspagem",
+              "displayName": "Título da Raspagem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Url de Raspagem",
+              "displayName": "Url de Raspagem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Link",
+              "displayName": "Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Execução",
+              "displayName": "Execução",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ID da Execução",
+              "displayName": "ID da Execução",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Indexação",
+              "displayName": "Indexação",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "41398730-8c38-46e5-aabc-73db2173f822",
+      "name": "Google Sheets - Atualizar Status",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.2,
+      "position": [
+        5100,
+        460
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "TX4UGDocUxQQXphG",
+          "name": "Google Sheets account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $node['variaveis_erro'].json[\"Planilha ID\"] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $node['variaveis_erro'].json[\"Planilha Aba\"] }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Execução": "=ERRO",
+            "Link": "={{'=HYPERLINK(\"' + $node['variaveis_erro'].json['N8N URL'] + '/workflow/' +$node['Ocorreu Erro'].json.workflow.id + '/executions/' + $node['Ocorreu Erro'].json.execution.id + '\"' + '; \"' + 'VERIFICAR ERRO' +'\")' }}",
+            "ID da Execução": "={{ $node['Ocorreu Erro'].json.execution.id }}"
+          },
+          "matchingColumns": [
+            "ID da Execução"
+          ],
+          "schema": [
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Hora",
+              "displayName": "Hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Palavra Chave Foco",
+              "displayName": "Palavra Chave Foco",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Título",
+              "displayName": "Título",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID da Categoria",
+              "displayName": "ID da Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Categoria",
+              "displayName": "Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID das Tags",
+              "displayName": "ID das Tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Imagem",
+              "displayName": "Imagem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Outlines",
+              "displayName": "Outlines",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Link",
+              "displayName": "Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Execução",
+              "displayName": "Execução",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ID da Execução",
+              "displayName": "ID da Execução",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Posição",
+              "displayName": "Posição",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Concorrência",
+              "displayName": "Concorrência",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ]
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "2937be52-d445-4e84-a947-600ad11344c1",
+      "name": "Google Sheets - Status ERRO",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        480,
+        580
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "QoOkWaTYmCHsMVUl",
+          "name": "Google Sheets account V"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "6cbe35b4-9851-4498-b56f-67d480e57d52",
+      "name": "Ocorreu Erro",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        20,
+        580
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "Planilha ID",
+              "value": "1GT1Ff91MDVtqgojtospT5nOohSneqmql45U21IOzJUQ"
+            },
+            {
+              "name": "Planilha Aba",
+              "value": "347027391"
+            },
+            {
+              "name": "N8N URL",
+              "value": "https://editn.integrasac.com.br"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e7b66469-0618-4661-9dec-1ab31ec298cd",
+      "name": "variaveis_erro",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        260,
+        580
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Alterar Dados",
+        "height": 462.6698074196447,
+        "width": 209.70978547297074
+      },
+      "id": "73e2c91e-e4cb-417e-9781-650837878b5b",
+      "name": "Sticky Note9",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        200,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Wordpress",
+        "height": 278.83396225940334,
+        "width": 837.393879191791
+      },
+      "id": "afec460d-8fc6-4493-a37e-16cfbee6fa95",
+      "name": "Sticky Note10",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4420,
+        380
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "fb6b7aa1-cf79-4077-ac90-4f53bd5cd09d",
+      "name": "Executar",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        20,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 10
+            }
+          ]
+        }
+      },
+      "id": "6ec02f59-8178-4fa3-b175-f663cff88cfd",
+      "name": "A cada 10 min",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        20,
+        180
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $node['variaveis'].json[\"Planilha ID\"] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $node['variaveis'].json[\"Planilha Aba\"] }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Execução": "=PENDENTE",
+            "row_number": "={{ $node['Google Sheets - Ler Palavras Chaves'].json[\"row_number\"] }}",
+            "ID da Execução": "={{ $execution.id }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Hora",
+              "displayName": "Hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Palavra Chave Foco",
+              "displayName": "Palavra Chave Foco",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Título",
+              "displayName": "Título",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID da Categoria",
+              "displayName": "ID da Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Categoria",
+              "displayName": "Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID das Tags",
+              "displayName": "ID das Tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Imagem",
+              "displayName": "Imagem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Outlines",
+              "displayName": "Outlines",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Link",
+              "displayName": "Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Execução",
+              "displayName": "Execução",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ID da Execução",
+              "displayName": "ID da Execução",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Posição",
+              "displayName": "Posição",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Concorrência",
+              "displayName": "Concorrência",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "708b92d9-6d9d-4c25-bc27-e691b18710ee",
+      "name": "Google Sheets - Status Executando",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        660,
+        380
+      ],
+      "retryOnFail": true,
+      "maxTries": null,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "TX4UGDocUxQQXphG",
+          "name": "Google Sheets account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $json['Planilha ID'] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $json['Planilha Aba'] }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "id": "5aeb6ad8-488f-4925-9275-b9935c9c65b4",
+      "name": "Google Sheets - Ler Palavras Chaves",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        480,
+        380
+      ],
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "TX4UGDocUxQQXphG",
+          "name": "Google Sheets account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Google Sheets - Ler Palavras Chaves').item.json['Url de Raspagem (LINK DA NOTICIA)'] }}",
+        "options": {}
+      },
+      "id": "56e1e38a-88ef-4bba-b81a-05aa5ee80f28",
+      "name": "Acessar a página",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        860,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "titulo",
+              "cssSelector": "title"
+            },
+            {
+              "key": "descricao",
+              "cssSelector": "meta[name=\"description\"]",
+              "returnValue": "attribute",
+              "attribute": "content"
+            },
+            {
+              "key": "imagem",
+              "cssSelector": "meta[property=\"og:image\"]",
+              "returnValue": "attribute",
+              "attribute": "content"
+            },
+            {
+              "key": "subtitulos",
+              "cssSelector": "h2",
+              "returnArray": true
+            },
+            {
+              "key": "conteudo",
+              "cssSelector": "={{ $node['Google Sheets - Ler Palavras Chaves'].json[\"Seletor do conteúdo\"] ? $node['Google Sheets - Ler Palavras Chaves'].json[\"Seletor do conteúdo\"] : 'body' }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3387529c-3cba-4e16-9936-5b6aa703d7ca",
+      "name": "Extrair conteúdo do HTML",
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.1,
+      "position": [
+        1040,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "4e7daa5b-0cf7-4b09-9352-6440649c2c2f",
+              "leftValue": "={{ $node['Google Sheets - Ler Palavras Chaves'].json[\"Palavra Chave Foco\"] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "e35fd376-20da-463c-bd8a-43970165ad67",
+      "name": "Definiu o palavra-chave?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1220,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## ChatGPT Palavra Chave",
+        "height": 239.10943146240413,
+        "width": 377.42955337116086
+      },
+      "id": "391085b9-1423-4d2a-9af0-1f5a64d2d883",
+      "name": "Sticky Note8",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1380,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "chatModel": "gpt-4-turbo-preview",
+        "prompt": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Pesquisador, redator e especialista em SEO"
+            },
+            {
+              "content": "=Defina a palavra chave com base no artigo que vou te passar, o conteúdo é em HTML de um artigo, siga algumas diretrizes:\n1 - Não mencione o nome do concorrente ou algo similar;\n2 - O Título do artigo é '{{ $node['Extrair conteúdo do HTML'].json[\"titulo\"] }}';\n3 - Retorne apenas a palavra chave;\n4 - Me retorne em português;\n\nO conteúdo de referência é: '{{ $node['Extrair conteúdo do HTML'].json[\"conteudo\"] }}'"
+            }
+          ]
+        },
+        "options": {},
+        "requestOptions": {}
+      },
+      "id": "fe062ccb-921e-45f8-a049-5ab5a17e3881",
+      "name": "ChatGPT - Palavra Chave",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1.1,
+      "position": [
+        1420,
+        440
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "openAiApi": {
+          "id": "AK2JwQJlNiAowLd0",
+          "name": "OpenAi account FORTUNE HOG"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "4e7daa5b-0cf7-4b09-9352-6440649c2c2f",
+              "leftValue": "={{ $node['Google Sheets - Ler Palavras Chaves'].json[\"Título\"] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "44a29901-8fa8-4cae-8a1a-2992939779b9",
+      "name": "Definiu o Título?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1820,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 4,
+        "unit": "seconds"
+      },
+      "id": "e563fe89-c286-41cf-8a01-744376c57fb3",
+      "name": "ChatGPT Intervalo Palavra chave",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        1620,
+        440
+      ],
+      "webhookId": "202615fc-41e0-4f6c-9d1f-016d5f9fee49"
+    },
+    {
+      "parameters": {
+        "content": "## ChatGPT Título",
+        "height": 234.45170915756398,
+        "width": 377.42955337116086
+      },
+      "id": "ed880919-6cd8-4414-8ed6-07fd5e9c6b8a",
+      "name": "Sticky Note11",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1980,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "chatModel": "gpt-4-turbo-preview",
+        "prompt": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "=Pesquisador, redator e especialista em SEO, capaz de criar títulos com no máximo 63 caracteres:\nCom a palavra chave que vou fornecer seja capaz de criar title para um post, respeitando as seguites diretrizes\n1 - Me retorne apenas o título, assegure-se de que o título esteja livre de aspas e de qualquer marcação desnecessária;\n2 - Respeite um limite de 40 a 70 caracteres, sem ultrapassar 70 caracteres em hipótese alguma;\n3 - Tente utilizar a palavra-chave \"{{ $node['Google Sheets - Ler Palavras Chaves'].json[\"Palavra Chave Foco\"] ? $node['Google Sheets - Ler Palavras Chaves'].json[\"Palavra Chave Foco\"] : $node['ChatGPT - Palavra Chave'].json[\"message\"][\"content\"] }}\" de forma proeminente no título;\n4 - Evite plágio com o conteúdo de referência;"
+            },
+            {
+              "content": "=Gerar um título para um post para a palavra chave '{{ $node['Google Sheets - Ler Palavras Chaves'].json[\"Palavra Chave Foco\"] ? $node['Google Sheets - Ler Palavras Chaves'].json[\"Palavra Chave Foco\"] : $node['ChatGPT - Palavra Chave'].json[\"message\"][\"content\"] }}' levando em consideração o conteúdo de referência é: '{{ $node['Extrair conteúdo do HTML'].json[\"titulo\"] }} - {{ $node['Extrair conteúdo do HTML'].json[\"descricao\"] }}'"
+            }
+          ]
+        },
+        "options": {},
+        "requestOptions": {}
+      },
+      "id": "161799d7-41c7-4b87-baf5-f92d932f0a0c",
+      "name": "ChatGPT - Título",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1.1,
+      "position": [
+        2020,
+        440
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "openAiApi": {
+          "id": "AK2JwQJlNiAowLd0",
+          "name": "OpenAi account FORTUNE HOG"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 4,
+        "unit": "seconds"
+      },
+      "id": "602261b4-b61c-46d4-a930-0a48c42201dd",
+      "name": "ChatGPT Intervalo Título",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        2200,
+        440
+      ],
+      "webhookId": "d2395f57-9386-4344-82e6-111c13e63125"
+    },
+    {
+      "parameters": {
+        "content": "## ChatGPT Descrição",
+        "height": 234.45170915756398,
+        "width": 377.42955337116086
+      },
+      "id": "c0f803ae-721f-4f36-a760-dfb85fc311ec",
+      "name": "Sticky Note12",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2400,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "chatModel": "gpt-4-turbo-preview",
+        "prompt": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "=Sou um especialista em SEO, com a palavra chave que vou receber sou capaz de criar meta description para um post, respeitando as seguites diretrizes:\n1 - Me retorne apenas a descrição, assegure-se de que a descrição esteja livre de aspas e de qualquer marcação desnecessária;\n2 - Máximo de 20 palavras na descrição;\n3 - Utilize a palavra-chave \"{{ $node['Google Sheets - Ler Palavras Chaves'].json[\"Palavra Chave Foco\"] ? $node['Google Sheets - Ler Palavras Chaves'].json[\"Palavra Chave Foco\"] : $node['ChatGPT - Palavra Chave'].json[\"message\"][\"content\"] }}\" de forma proeminente no início da descrição;\n4 - Retorne a descrição em português;"
+            },
+            {
+              "content": "=Gerar uma descrição para um post para a palavra chave '{{ $node['Google Sheets - Ler Palavras Chaves'].json[\"Palavra Chave Foco\"] ? $node['Google Sheets - Ler Palavras Chaves'].json[\"Palavra Chave Foco\"] : $node['ChatGPT - Palavra Chave'].json[\"message\"][\"content\"] }}' com o título '{{ $node['Google Sheets - Ler Palavras Chaves'].json[\"Título\"] ? $node['Google Sheets - Ler Palavras Chaves'].json[\"Título\"] : $node['ChatGPT - Título'].json[\"message\"][\"content\"] }}' levando em consideração o conteúdo de referência é: '{{ $node['Extrair conteúdo do HTML'].json[\"descricao\"] }}'"
+            }
+          ]
+        },
+        "options": {},
+        "requestOptions": {}
+      },
+      "id": "347f3467-f232-40c1-9a39-f3f8edf604f6",
+      "name": "ChatGPT - Descrição",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1.1,
+      "position": [
+        2440,
+        440
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "openAiApi": {
+          "id": "AK2JwQJlNiAowLd0",
+          "name": "OpenAi account FORTUNE HOG"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## ChatGPT Conteúdo",
+        "height": 234.45170915756398,
+        "width": 377.42955337116086
+      },
+      "id": "836c777b-1b17-4414-8ee7-07f2036d7df4",
+      "name": "Sticky Note13",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2820,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 4,
+        "unit": "seconds"
+      },
+      "id": "6eba4068-24ea-40b7-8581-5e15d5b3e20e",
+      "name": "ChatGPT Intervalo Conteúdo",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        3040,
+        420
+      ],
+      "webhookId": "d7b12bf1-95be-4c4e-bdc4-f9016d7740c8"
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "model": "gpt-4-turbo-preview",
+        "prompt": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "=Como um Especialista em SEO, crie conteúdo detalhado para um Post de blog, respeitando a estrutura de introdução, desenvolvimento com subtítulos, e conclusão. Siga estas diretrizes:\n\n1. Inicie com uma introdução que apresente o tema do post, gerando curiosidade.\n2. Formate o conteúdo com tags HTML, incluindo <p>, <strong>, <em>, <ul>, <li> e subtítulos <h2>.\n3. Desenvolva o conteúdo principal dividido em seções com subtítulos <h2>, expandindo os conceitos e informações do material de referência.\n4. Mantenha a readability entre 70 – 80 e o nível de compreensão em 7th grade, utilizando sentenças curtas, com no máximo 50 palavras cada sem excluir informações importantes do material de referência.\n5. Crie uma conclusão breve no final, que reflita sobre os principais pontos discutidos.\n6. Evite plágio, assegurando originalidade enquanto aborda os elementos-chave do material de referência.\n7. Não inclua um título <h1> no conteúdo.\n8. Utilize paragrafo curtos para facilitar a leitura com média de 200 caracteres.\n9. Não faça um conteúdo raso, tente utilizar aproximadamente a mesma quantidade de palavra do conteúdo de referência.\n10. Utilize um tom mais pessoal utilizando a primeira pessoa quando possível."
+            },
+            {
+              "content": "=Crie conteúdo para um blog post baseando-se na palavra-chave: '{{ $node['Google Sheets - Ler Palavras Chaves'].json[\"Palavra Chave Foco\"] ? $node['Google Sheets - Ler Palavras Chaves'].json[\"Palavra Chave Foco\"] : $node['ChatGPT - Palavra Chave'].json[\"message\"][\"content\"] }}', com o título: '{{ $node['Google Sheets - Ler Palavras Chaves'].json[\"Título\"] ? $node['Google Sheets - Ler Palavras Chaves'].json[\"Título\"] : $node['ChatGPT - Título'].json[\"message\"][\"content\"] }}' e com base no material de referência: '{{ $node['Extrair conteúdo do HTML'].json[\"conteudo\"] }}'. "
+            }
+          ]
+        },
+        "simplifyOutput": false,
+        "options": {
+          "maxTokens": 4096,
+          "temperature": 0.1
+        },
+        "requestOptions": {}
+      },
+      "id": "d957d457-0e21-4b74-a322-5605087ee92c",
+      "name": "ChatGPT - Conteúdo",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        2860,
+        420
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "openAiApi": {
+          "id": "AK2JwQJlNiAowLd0",
+          "name": "OpenAi account FORTUNE HOG"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 4,
+        "unit": "seconds"
+      },
+      "id": "f2919f93-4c8c-43c7-97d1-c7038b1489b2",
+      "name": "ChatGPT Intervalo Descrição",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        2620,
+        440
+      ],
+      "webhookId": "9abc62ca-ad28-4803-8012-9ad3dd5cc918"
+    },
+    {
+      "parameters": {
+        "content": "## n8n - Web Scraper",
+        "height": 248.39988381318796,
+        "width": 360.3970573947236
+      },
+      "id": "3f393927-c35f-4a0b-b6ed-c0533ebbb7a2",
+      "name": "Sticky Note14",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        820,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "Palavra Chave",
+              "stringValue": "={{ $node['Google Sheets - Ler Palavras Chaves'].json[\"Palavra Chave Foco\"] ? $node['Google Sheets - Ler Palavras Chaves'].json[\"Palavra Chave Foco\"] : $node['ChatGPT - Palavra Chave'].json[\"message\"][\"content\"].replaceAll('\"','') }}"
+            },
+            {
+              "name": "Título",
+              "stringValue": "={{ $node['Google Sheets - Ler Palavras Chaves'].json[\"Título\"] ? $node['Google Sheets - Ler Palavras Chaves'].json[\"Título\"] : $node['ChatGPT - Título'].json[\"message\"][\"content\"].replaceAll('\"','') }}"
+            },
+            {
+              "name": "Descrição",
+              "stringValue": "={{ $node['ChatGPT - Descrição'].json[\"message\"][\"content\"].replaceAll('\"','') }}"
+            },
+            {
+              "name": "Conteúdo",
+              "stringValue": "={{ $node['ChatGPT - Conteúdo'].json[\"choices\"][0][\"message\"][\"content\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "072bc56f-fb06-4702-910b-ad3d345e8f8b",
+      "name": "Post",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        3240,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## [Planilha integrasac Web Scraper](https://docs.google.com/spreadsheets/d/1UdsWwpOn-j6Y4Vs-rAkQ4KVAOegZnGPlQSPe4xCFEM4/edit#gid=347027391)\nFaça uma cópia para sua conta, acessando a barra de menu em: \n**Arquivo** - **Fazer uma cópia**\n\nUse com moderação, evite utilizar imagens e conteúdo de site que não permitam\n\n",
+        "height": 242.1521650490806,
+        "width": 449.21441098676434,
+        "color": 4
+      },
+      "id": "bf5fe8bf-6a1a-44e8-8797-c34bbdc3c777",
+      "name": "Sticky Note7",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        -60
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $node['variaveis'].json[\"URL do Site\"] }}/wp-json/robo-seo-api-rest/v1/update-meta",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wordpressApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "post_id",
+              "value": "={{ $node['Wordpress - Publicar Post'].json[\"id\"] }}"
+            },
+            {
+              "name": "keyword",
+              "value": "={{ $node['Post'].json[\"Palavra Chave\"] }}"
+            },
+            {
+              "name": "title",
+              "value": "={{ $node['Post'].json[\"Título\"] }}"
+            },
+            {
+              "name": "description",
+              "value": "={{ $node['Post'].json[\"Descrição\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {}
+        }
+      },
+      "id": "2301f480-7b0e-46ed-9305-f9d1aba576e1",
+      "name": "Plugins de SEO",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        4940,
+        460
+      ],
+      "credentials": {
+        "wordpressApi": {
+          "id": "WpmUPc56IE4VL24s",
+          "name": "Wordpress account NEWSINTEGRA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "fazerdisparo",
+        "options": {}
+      },
+      "id": "ee9f1ed7-0a0f-4ddd-b1a6-6c882a2a9a7b",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        20,
+        380
+      ],
+      "webhookId": "f46f146f-3a7f-4f2d-9c02-21c170ad9dee"
+    }
+  ],
+  "connections": {
+    "variaveis": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Ler Palavras Chaves",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salvar imagem em mídia": {
+      "main": [
+        [
+          {
+            "node": "Atualizar Atributos da imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pega informações imagem destaque": {
+      "main": [
+        [
+          {
+            "node": "redimensionar imagem destaque",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "redimensionar imagem destaque": {
+      "main": [
+        [
+          {
+            "node": "Pega informações redimensionada destaque",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pega informações redimensionada destaque": {
+      "main": [
+        [
+          {
+            "node": "logo marcadagua",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "logo marcadagua": {
+      "main": [
+        [
+          {
+            "node": "Informações logo destaque",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Overlay  imagem em destaque": {
+      "main": [
+        [
+          {
+            "node": "Aplicar marca dagua imagem destaque",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aplicar marca dagua imagem destaque": {
+      "main": [
+        [
+          {
+            "node": "Salvar imagem em mídia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wordpress - Publicar Post": {
+      "main": [
+        [
+          {
+            "node": "Plugins de SEO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Informações logo destaque": {
+      "main": [
+        [
+          {
+            "node": "Overlay  imagem em destaque",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar prompt da imagem": {
+      "main": [
+        [
+          {
+            "node": "Gerar imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar imagem": {
+      "main": [
+        [
+          {
+            "node": "Pega informações imagem destaque",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ocorreu Erro": {
+      "main": [
+        [
+          {
+            "node": "variaveis_erro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "variaveis_erro": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Status ERRO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets - Ler Palavras Chaves": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Status Executando",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets - Status Executando": {
+      "main": [
+        [
+          {
+            "node": "Acessar a página",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Acessar a página": {
+      "main": [
+        [
+          {
+            "node": "Extrair conteúdo do HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extrair conteúdo do HTML": {
+      "main": [
+        [
+          {
+            "node": "Definiu o palavra-chave?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Definiu o palavra-chave?": {
+      "main": [
+        [
+          {
+            "node": "Definiu o Título?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "ChatGPT - Palavra Chave",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ChatGPT - Palavra Chave": {
+      "main": [
+        [
+          {
+            "node": "ChatGPT Intervalo Palavra chave",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ChatGPT Intervalo Palavra chave": {
+      "main": [
+        [
+          {
+            "node": "Definiu o Título?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Definiu o Título?": {
+      "main": [
+        [
+          {
+            "node": "ChatGPT - Descrição",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "ChatGPT - Título",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ChatGPT - Título": {
+      "main": [
+        [
+          {
+            "node": "ChatGPT Intervalo Título",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ChatGPT Intervalo Título": {
+      "main": [
+        [
+          {
+            "node": "ChatGPT - Descrição",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ChatGPT - Descrição": {
+      "main": [
+        [
+          {
+            "node": "ChatGPT Intervalo Descrição",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ChatGPT - Conteúdo": {
+      "main": [
+        [
+          {
+            "node": "ChatGPT Intervalo Conteúdo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ChatGPT Intervalo Descrição": {
+      "main": [
+        [
+          {
+            "node": "ChatGPT - Conteúdo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ChatGPT Intervalo Conteúdo": {
+      "main": [
+        [
+          {
+            "node": "Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Atualizar Atributos da imagem": {
+      "main": [
+        [
+          {
+            "node": "Wordpress - Publicar Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post": {
+      "main": [
+        [
+          {
+            "node": "Gerar prompt da imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Plugins de SEO": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Atualizar Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "variaveis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:A cada 10 min": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "aa670248-fa89-4c7a-87a6-d2985f504d84",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2024-12-12T15:06:29.654Z",
+      "updatedAt": "2024-12-12T15:06:29.654Z",
+      "role": "workflow:owner",
+      "workflowId": "zfq7GXAmMNNYn8Pb",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
