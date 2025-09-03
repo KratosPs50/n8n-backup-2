@@ -1,0 +1,28 @@
+{
+  "createdAt": "2025-07-11T19:03:35.450Z",
+  "updatedAt": "2025-07-11T19:03:35.450Z",
+  "id": "aZVgeXKaDJenxkOq",
+  "name": "Testes Tom",
+  "active": false,
+  "isArchived": false,
+  "nodes": [],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "183f0f81-cd18-41af-87a7-36ebe3964027",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-07-11T19:03:35.450Z",
+      "updatedAt": "2025-07-11T19:03:35.450Z",
+      "role": "workflow:owner",
+      "workflowId": "aZVgeXKaDJenxkOq",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
