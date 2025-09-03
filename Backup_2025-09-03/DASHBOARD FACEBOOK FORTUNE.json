@@ -1,0 +1,1682 @@
+{
+  "createdAt": "2025-01-27T16:21:25.517Z",
+  "updatedAt": "2025-01-27T16:47:53.138Z",
+  "id": "9rkkIZIgsHbTNYRL",
+  "name": "DASHBOARD FACEBOOK FORTUNE",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$node[\"Challenge\"].json[\"query\"][\"hub.verify_token\"]}}",
+              "value2": "asl"
+            }
+          ]
+        }
+      },
+      "id": "8257f0cf-3d29-4377-bfb1-2a849527e51d",
+      "name": "Verificar token",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        1600,
+        300
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{$node[\"Challenge\"].json[\"query\"][\"hub.challenge\"]}}",
+        "options": {}
+      },
+      "id": "0deff065-b2f7-49f2-8336-6b99bfea46f5",
+      "name": "Resposta do token",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        1800,
+        200
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Para validar o Webhook do Facebook",
+        "height": 443.203125,
+        "width": 647.71484375
+      },
+      "id": "709ce81a-82fc-4ad5-af4d-b7f0acb02c65",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1340,
+        140
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Recebe Lead cadastrado no Formulário",
+        "height": 282.72950819672144,
+        "width": 1070.5792389989806
+      },
+      "id": "2cbe2d93-48d3-4796-85d8-41db6063d0e6",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1340,
+        760
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "graphApiVersion": "=v16.0",
+        "node": "={{ $node[\"Facebook Trigger\"].json[\"changes\"][0][\"value\"][\"leadgen_id\"] }}",
+        "options": {
+          "fields": {
+            "field": [
+              {
+                "name": "field_data"
+              },
+              {
+                "name": "ad_id"
+              },
+              {
+                "name": "ad_name"
+              },
+              {
+                "name": "adset_name"
+              },
+              {
+                "name": "campaign_name"
+              },
+              {
+                "name": "platform"
+              }
+            ]
+          }
+        }
+      },
+      "id": "a00b9d4f-529e-42a8-a56d-b74dfd5efef0",
+      "name": "Dados do Lead",
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "position": [
+        1720,
+        860
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "graphApiVersion": "=v16.0",
+        "node": "={{$node[\"Dados do Lead\"].json[\"ad_id\"]}}",
+        "options": {
+          "fields": {
+            "field": [
+              {
+                "name": "creative"
+              },
+              {
+                "name": "insights"
+              },
+              {
+                "name": "targeting"
+              }
+            ]
+          }
+        }
+      },
+      "id": "89b6dd13-2c69-447d-9e52-72a060e3b087",
+      "name": "Anúncio",
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "position": [
+        1900,
+        860
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "graphApiVersion": "=v16.0",
+        "node": "={{ $node[\"Anúncio\"].json[\"creative\"][\"id\"] }}",
+        "options": {
+          "fields": {
+            "field": [
+              {
+                "name": "title"
+              },
+              {
+                "name": "instagram_permalink_url"
+              }
+            ]
+          }
+        }
+      },
+      "id": "9099a783-af8e-470f-bc2f-041d70127771",
+      "name": "Criativo",
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "position": [
+        2080,
+        860
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "appId": "1674708336712163",
+        "object": "page",
+        "fields": [
+          "leadgen"
+        ],
+        "options": {}
+      },
+      "id": "60ef4873-a8ce-4a3f-ba96-786d36f7877b",
+      "name": "Facebook Trigger",
+      "type": "n8n-nodes-base.facebookTrigger",
+      "position": [
+        1380,
+        860
+      ],
+      "webhookId": "7e1201ff-2314-4249-8d94-820380383a2d",
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1RSIqEfFiL0BEq-QxlLsgJRD-VXr9ZKm7CKqgh5bS1j0",
+          "mode": "list",
+          "cachedResultName": "Planilha Dashboard - ADB",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1RSIqEfFiL0BEq-QxlLsgJRD-VXr9ZKm7CKqgh5bS1j0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 872369783,
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16aLuGSozTVDTp_2rk2I4BCVo5E6ASo6nNGyVTXDhRDM/edit#gid=872369783"
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Data",
+              "fieldValue": "={{ $node[\"Formata data\"].json[\"Data e Hora\"] }}"
+            },
+            {
+              "fieldId": "Nome",
+              "fieldValue": "={{ $node[\"Dados do Lead\"].json[\"field_data\"][2][\"values\"][0] }}"
+            },
+            {
+              "fieldId": "E-mail",
+              "fieldValue": "={{ $node[\"Dados do Lead\"].json[\"field_data\"][0][\"values\"][0] }}"
+            },
+            {
+              "fieldId": "Telefone",
+              "fieldValue": "={{ $node[\"Dados do Lead\"].json[\"field_data\"][1][\"values\"][0].replace(\"+\",\"\") }}"
+            },
+            {
+              "fieldId": "Plataforma",
+              "fieldValue": "={{$node[\"Dados do Lead\"].json[\"platform\"] == \"fb\" ? \"Facebook\" : \"Instagram\"}}"
+            },
+            {
+              "fieldId": "Campanha",
+              "fieldValue": "={{ $node[\"Dados do Lead\"].json[\"campaign_name\"] }}"
+            },
+            {
+              "fieldId": "Conjunto de Anúncio",
+              "fieldValue": "={{ $node[\"Dados do Lead\"].json[\"adset_name\"] }}"
+            },
+            {
+              "fieldId": "Anúncio",
+              "fieldValue": "={{ $node[\"Dados do Lead\"].json[\"ad_name\"] }}"
+            },
+            {
+              "fieldId": "Título do Anúncio",
+              "fieldValue": "={{ $node[\"Criativo\"].json[\"title\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "c5d214fa-1dc6-4e25-a44a-f1a169198fdb",
+      "name": "Planilha de Formulário",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        2300,
+        860
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "graphApiVersion": "={{ $node[\"Configurações\"].json[\"Versao do APP\"] }}",
+        "node": "=act_{{ $node[\"Configurações\"].json[\"Conta de Anúncio ID\"] }}/insights",
+        "options": {
+          "fields": {
+            "field": [
+              {
+                "name": "impressions"
+              },
+              {
+                "name": "clicks"
+              },
+              {
+                "name": "cpc"
+              },
+              {
+                "name": "cpm"
+              },
+              {
+                "name": "ctr"
+              },
+              {
+                "name": "ad_name"
+              },
+              {
+                "name": "adset_name"
+              },
+              {
+                "name": "campaign_name"
+              },
+              {
+                "name": "frequency"
+              },
+              {
+                "name": "reach"
+              },
+              {
+                "name": "objective"
+              },
+              {
+                "name": "inline_link_clicks"
+              },
+              {
+                "name": "cost_per_unique_inline_link_click"
+              },
+              {
+                "name": "spend"
+              },
+              {
+                "name": "inline_link_click_ctr"
+              },
+              {
+                "name": "inline_post_engagement"
+              }
+            ]
+          },
+          "queryParameters": {
+            "parameter": [
+              {
+                "name": "level",
+                "value": "ad"
+              },
+              {
+                "name": "date_preset",
+                "value": "={{ $node[\"Configurações\"].json[\"Intervalo das Métricas\"] }}"
+              },
+              {
+                "name": "sort",
+                "value": "date_start_ascending"
+              },
+              {
+                "name": "time_increment",
+                "value": "1"
+              },
+              {
+                "name": "limit",
+                "value": "1000"
+              }
+            ]
+          }
+        }
+      },
+      "id": "36fe765a-43b7-4acd-b5e3-c2fa176df1b1",
+      "name": "Insight",
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "position": [
+        1420,
+        1220
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "amount": 5,
+        "unit": "seconds"
+      },
+      "id": "de27fcd6-e57a-4798-9953-0914ec8f3e80",
+      "name": "Intervalo",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        2260,
+        1220
+      ],
+      "webhookId": "e25a244c-076c-4b54-96b7-c8d24993d29a",
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "batchSize": "=1",
+        "options": {
+          "reset": false
+        }
+      },
+      "id": "733a6349-1e39-4200-a322-1537846d8791",
+      "name": "Repetir",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [
+        1840,
+        1220
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field\n// called 'myNewField' to the JSON of each one\nvar novo = [];\nfor (const item of $input.all()) {\n  novo = item.json.data;\n}\n\nreturn novo;"
+      },
+      "id": "296af083-5dde-4071-9c3f-90350ca41e04",
+      "name": "Desmembrar",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        1620,
+        1220
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "graphApiVersion": "={{ $node[\"Configurações\"].json[\"Versao do APP\"] }}",
+        "node": "=act_{{ $node[\"Configurações\"].json[\"Conta de Anúncio ID\"] }}/insights",
+        "options": {
+          "fields": {
+            "field": [
+              {
+                "name": "video_p100_watched_actions"
+              },
+              {
+                "name": "video_p75_watched_actions"
+              },
+              {
+                "name": "video_p50_watched_actions"
+              },
+              {
+                "name": "video_p25_watched_actions"
+              },
+              {
+                "name": "video_play_actions"
+              }
+            ]
+          },
+          "queryParameters": {
+            "parameter": [
+              {
+                "name": "level",
+                "value": "account"
+              },
+              {
+                "name": "date_preset",
+                "value": "={{ $node[\"Configurações\"].json[\"Intervalo das Métricas\"] }}"
+              },
+              {
+                "name": "sort",
+                "value": "date_start_ascending"
+              },
+              {
+                "name": "time_increment",
+                "value": "1"
+              },
+              {
+                "name": "filtering",
+                "value": "[{\"field\":\"video_p25_watched_actions\",\"operator\":\"GREATER_THAN\",\"value\":\"0\"}]"
+              }
+            ]
+          }
+        }
+      },
+      "id": "fe292049-46ce-4ebe-a4e5-393229eacc5f",
+      "name": "VideoView",
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "position": [
+        1380,
+        1580
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field\n// called 'myNewField' to the JSON of each one\nvar novo = [];\nfor (const item of $input.all()) {\n  novo = item.json.data;\n  console.log(novo)\n}\n\nreturn novo;"
+      },
+      "id": "01ba5a36-467c-4367-ac96-7b7087e9d8df",
+      "name": "Desmembrar video View",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        1580,
+        1580
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "batchSize": "=1",
+        "options": {
+          "reset": false
+        }
+      },
+      "id": "3c5ce1c4-8193-40e3-8a24-d98dd2cfd1ae",
+      "name": "Repetir video view",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [
+        1820,
+        1580
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $node[\"Configurações\"].json[\"Planilha Google Sheets ID\"] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": 1385515912,
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16aLuGSozTVDTp_2rk2I4BCVo5E6ASo6nNGyVTXDhRDM/edit#gid=1385515912",
+          "cachedResultName": "Video View"
+        },
+        "columnToMatchOn": "=Data",
+        "valueToMatchOn": "={{ $json[\"date_start\"] }}",
+        "fieldsUi": {
+          "values": [
+            {
+              "column": "=Reproduções de vídeo",
+              "fieldValue": "={{ $json[\"video_play_actions\"][0][\"value\"] }}"
+            },
+            {
+              "column": "=Reproduções de 100%",
+              "fieldValue": "={{ $json[\"video_p100_watched_actions\"][0][\"value\"] }}"
+            },
+            {
+              "column": "=Reproduções de 75%",
+              "fieldValue": "={{ $json[\"video_p75_watched_actions\"][0][\"value\"] }}"
+            },
+            {
+              "column": "=Reproduções de 50%",
+              "fieldValue": "={{ $json[\"video_p50_watched_actions\"][0][\"value\"] }}"
+            },
+            {
+              "column": "=Reproduções de 25%",
+              "fieldValue": "={{ $json[\"video_p25_watched_actions\"][0][\"value\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "b4a73fc6-e851-402d-a33d-842ea5f2fc16",
+      "name": "Planilha de VideoView",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        2040,
+        1580
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "amount": 5,
+        "unit": "seconds"
+      },
+      "id": "43223fa4-3220-4989-8c33-febceb25e21c",
+      "name": "Intervalo VideoView",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        2240,
+        1580
+      ],
+      "webhookId": "e0c73de9-9571-4725-819c-8de92de33401",
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "graphApiVersion": "={{ $node[\"Configurações\"].json[\"Versao do APP\"] }}",
+        "node": "=act_{{ $node[\"Configurações\"].json[\"Conta de Anúncio ID\"] }}/insights",
+        "options": {
+          "fields": {
+            "field": [
+              {
+                "name": "conversions"
+              },
+              {
+                "name": "cost_per_conversion"
+              }
+            ]
+          },
+          "queryParameters": {
+            "parameter": [
+              {
+                "name": "level",
+                "value": "account"
+              },
+              {
+                "name": "date_preset",
+                "value": "={{ $node[\"Configurações\"].json[\"Intervalo das Métricas\"] }}"
+              },
+              {
+                "name": "sort",
+                "value": "date_start_ascending"
+              },
+              {
+                "name": "time_increment",
+                "value": "1"
+              },
+              {
+                "name": "filtering",
+                "value": "[{\"field\":\"conversions\",\"operator\":\"GREATER_THAN\",\"value\":\"0\"}]"
+              }
+            ]
+          }
+        }
+      },
+      "id": "f81eab96-d7fe-49d9-918b-963402bb229a",
+      "name": "Conversões",
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "position": [
+        1400,
+        1940
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field\n// called 'myNewField' to the JSON of each one\nvar novo = [];\nfor (const item of $input.all()) {\n  novo = item.json.data;\n}\n\nreturn novo;"
+      },
+      "id": "41bc0895-b0a0-473d-97c2-c1937b550edc",
+      "name": "Desmembrar Conversões",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        1600,
+        1940
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "batchSize": "=1",
+        "options": {
+          "reset": false
+        }
+      },
+      "id": "5fef4828-9bda-4a6b-a56f-012e9edc0645",
+      "name": "Repetir Conversões",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [
+        1820,
+        1940
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $node[\"Configurações\"].json[\"Planilha Google Sheets ID\"] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": 1114548035,
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16aLuGSozTVDTp_2rk2I4BCVo5E6ASo6nNGyVTXDhRDM/edit#gid=1114548035",
+          "cachedResultName": "Conversões"
+        },
+        "columnToMatchOn": "=ID",
+        "valueToMatchOn": "={{ $json[\"date_start\"] }} {{$json[\"conversions\"][0][\"action_type\"].replace('offsite_conversion.fb_pixel_custom.','')}}",
+        "fieldsUi": {
+          "values": [
+            {
+              "column": "=Nome da Conversão",
+              "fieldValue": "={{$json[\"conversions\"][0][\"action_type\"].replace('offsite_conversion.fb_pixel_custom.','')}}"
+            },
+            {
+              "column": "=Quantidade de conversão",
+              "fieldValue": "={{ $json[\"conversions\"][0][\"value\"] }}"
+            },
+            {
+              "column": "=Custo por conversão",
+              "fieldValue": "={{     $json[\"cost_per_conversion\"][0][\"value\"].replace('.', ',')     }}"
+            },
+            {
+              "column": "=Data",
+              "fieldValue": "={{ $json[\"date_start\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "8c1ab61a-fa49-44ec-885e-ae789f546a30",
+      "name": "Planilha de conversão",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        2020,
+        1940
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "amount": 5,
+        "unit": "seconds"
+      },
+      "id": "08b69251-dee0-44d5-9885-33d07019df0c",
+      "name": "Intervalo Conversão",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        2240,
+        1940
+      ],
+      "webhookId": "07a57856-eefe-4a82-9d47-a0bd15fd3c86",
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 4
+            }
+          ]
+        }
+      },
+      "id": "8e2f6fa9-77fd-41d8-8aa0-13b13ac236de",
+      "name": "Rodar a cada X",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        900,
+        1220
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "value": "={{ $node[\"Facebook Trigger\"].json[\"changes\"][0][\"value\"][\"created_time\"] }}",
+        "dataPropertyName": "Data e Hora",
+        "custom": true,
+        "toFormat": "DD/MM/YYYY",
+        "options": {
+          "fromFormat": "X",
+          "toTimezone": "America/Sao_Paulo"
+        }
+      },
+      "id": "c44a14b6-3aea-4ffd-89be-f3d2f5681f0d",
+      "name": "Formata data",
+      "type": "n8n-nodes-base.dateTime",
+      "position": [
+        1540,
+        860
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Métricas do gerenciador de anúncio\n",
+        "height": 267.0466919717564,
+        "width": 1070.2196319930695
+      },
+      "id": "b607f170-5f6c-47af-bf00-20e81a3af266",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1340,
+        1140
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Video View",
+        "height": 270.6658034082868,
+        "width": 1066.6005205565384
+      },
+      "id": "c3cf2617-421a-4f26-a6c7-146a1bc6ced4",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1340,
+        1500
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Conversões",
+        "height": 277.6654699153803,
+        "width": 1069.0132615142268
+      },
+      "id": "2207713b-f927-49b3-8d34-0334cc4cbd1d",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1340,
+        1860
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "Versao do APP",
+              "value": "=v21.0"
+            },
+            {
+              "name": "Conta de Anúncio ID",
+              "value": "102172769935298"
+            },
+            {
+              "name": "Planilha Google Sheets ID",
+              "value": "1RSIqEfFiL0BEq-QxlLsgJRD-VXr9ZKm7CKqgh5bS1j0"
+            },
+            {
+              "name": "Intervalo das Métricas",
+              "value": "last_7d"
+            },
+            {
+              "name": "Página ID",
+              "value": "397085090159484"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "0dd0bd0a-0cf5-4300-ac0a-92feaf8d7ea5",
+      "name": "Configurações",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        1140,
+        1220
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Página Insights",
+        "height": 294.5546566191885,
+        "width": 1061.7750386411656
+      },
+      "id": "3b5d3d23-1826-4b1b-9c44-e3a62279dd05",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1340,
+        2220
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "graphApiVersion": "={{ $node[\"Configurações\"].json[\"Versao do APP\"] }}",
+        "node": "={{ $node[\"Configurações\"].json[\"Página ID\"] }}/insights",
+        "options": {
+          "queryParameters": {
+            "parameter": [
+              {
+                "name": "metric",
+                "value": "page_fans_gender_age"
+              },
+              {
+                "name": "period",
+                "value": "total_over_range"
+              }
+            ]
+          }
+        }
+      },
+      "id": "eb611015-9503-4923-9dfa-005e0761c39c",
+      "name": "Faixa etária e gênero",
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "position": [
+        1580,
+        2320
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $node[\"Configurações\"].json[\"Planilha Google Sheets ID\"] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 262304402,
+          "mode": "list",
+          "cachedResultName": "Fan Page",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16aLuGSozTVDTp_2rk2I4BCVo5E6ASo6nNGyVTXDhRDM/edit#gid=262304402"
+        },
+        "columnToMatchOn": "Seguidores",
+        "valueToMatchOn": "={{ $node[\"Fan page\"].json[\"followers_count\"] }}",
+        "fieldsUi": {
+          "values": [
+            {
+              "column": "Curtidas",
+              "fieldValue": "={{ $node[\"Fan page\"].json[\"fan_count\"] }}"
+            },
+            {
+              "column": "Check-ins",
+              "fieldValue": "={{ $node[\"Fan page\"].json[\"checkins\"] }}"
+            },
+            {
+              "column": "M-13-17",
+              "fieldValue": "={{ $node[\"Desmembrar Faixa etária e gênero\"].json[\"values\"][0][\"value\"][\"M.13-17\"] }}"
+            },
+            {
+              "column": "M-18-24",
+              "fieldValue": "={{ $node[\"Desmembrar Faixa etária e gênero\"].json[\"values\"][0][\"value\"][\"M.18-24\"] }}"
+            },
+            {
+              "column": "M-25-34",
+              "fieldValue": "={{ $node[\"Desmembrar Faixa etária e gênero\"].json[\"values\"][0][\"value\"][\"M.25-34\"] }}"
+            },
+            {
+              "column": "M-35-44",
+              "fieldValue": "={{ $node[\"Desmembrar Faixa etária e gênero\"].json[\"values\"][0][\"value\"][\"M.35-44\"] }}"
+            },
+            {
+              "column": "M-45-54",
+              "fieldValue": "={{ $node[\"Desmembrar Faixa etária e gênero\"].json[\"values\"][0][\"value\"][\"M.45-54\"] }}"
+            },
+            {
+              "column": "M-55-64",
+              "fieldValue": "={{ $node[\"Desmembrar Faixa etária e gênero\"].json[\"values\"][0][\"value\"][\"M.55-64\"] }}"
+            },
+            {
+              "column": "M-65+",
+              "fieldValue": "={{ $node[\"Desmembrar Faixa etária e gênero\"].json[\"values\"][0][\"value\"][\"M.65+\"] }}"
+            },
+            {
+              "column": "F-13-17",
+              "fieldValue": "={{ $node[\"Desmembrar Faixa etária e gênero\"].json[\"values\"][0][\"value\"][\"F.13-17\"] }}"
+            },
+            {
+              "column": "F-18-24",
+              "fieldValue": "={{ $node[\"Desmembrar Faixa etária e gênero\"].json[\"values\"][0][\"value\"][\"F.18-24\"] }}"
+            },
+            {
+              "column": "F-25-34",
+              "fieldValue": "={{ $node[\"Desmembrar Faixa etária e gênero\"].json[\"values\"][0][\"value\"][\"F.25-34\"] }}"
+            },
+            {
+              "column": "F-35-44",
+              "fieldValue": "={{ $node[\"Desmembrar Faixa etária e gênero\"].json[\"values\"][0][\"value\"][\"F.35-44\"] }}"
+            },
+            {
+              "column": "F-45-54",
+              "fieldValue": "={{ $node[\"Desmembrar Faixa etária e gênero\"].json[\"values\"][0][\"value\"][\"F.45-54\"] }}"
+            },
+            {
+              "column": "F-55-64",
+              "fieldValue": "={{ $node[\"Desmembrar Faixa etária e gênero\"].json[\"values\"][0][\"value\"][\"F.55-64\"] }}"
+            },
+            {
+              "column": "F-65+",
+              "fieldValue": "={{ $node[\"Desmembrar Faixa etária e gênero\"].json[\"values\"][0][\"value\"][\"F.65+\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "2f34043e-2c86-48a9-aeb5-beb18434ad92",
+      "name": "Planilha da Fan Page",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        1980,
+        2320
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "graphApiVersion": "={{ $node[\"Configurações\"].json[\"Versao do APP\"] }}",
+        "node": "={{ $node[\"Configurações\"].json[\"Página ID\"] }}",
+        "options": {
+          "fields": {
+            "field": [
+              {
+                "name": "followers_count"
+              },
+              {
+                "name": "fan_count"
+              },
+              {
+                "name": "checkins"
+              }
+            ]
+          }
+        }
+      },
+      "id": "62e3c3f2-8b74-4ad6-9e9d-5f976a12ea9b",
+      "name": "Fan page",
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "position": [
+        1400,
+        2320
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field\n// called 'myNewField' to the JSON of each one\nvar novo = [];\nfor (const item of $input.all()) {\n  novo = item.json.data;\n}\n\nreturn novo;"
+      },
+      "id": "165ac6be-fa75-4df3-aad7-f3520f6d42fd",
+      "name": "Desmembrar Faixa etária e gênero",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        1780,
+        2320
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "8fa0af15-b298-4ac9-9419-b02bf472a028",
+      "name": "Executa quando ocorre um erro",
+      "type": "n8n-nodes-base.errorTrigger",
+      "position": [
+        540,
+        2220
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "workflowId": "121",
+        "options": {}
+      },
+      "id": "768a2383-e85c-4208-8cac-b03d37125221",
+      "name": "Execute o Workflow Notificação de erros",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "position": [
+        740,
+        2220
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $node[\"Configurações\"].json[\"Planilha Google Sheets ID\"] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2051813464,
+          "mode": "list",
+          "cachedResultName": "Anúncios",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16aLuGSozTVDTp_2rk2I4BCVo5E6ASo6nNGyVTXDhRDM/edit#gid=2051813464"
+        },
+        "columnToMatchOn": "=ID",
+        "valueToMatchOn": "={{ $json[\"date_start\"] }} - {{ $json[\"ad_name\"] }}",
+        "fieldsUi": {
+          "values": [
+            {
+              "column": "=Data",
+              "fieldValue": "={{ $json[\"date_start\"] }}"
+            },
+            {
+              "column": "=Anúncio",
+              "fieldValue": "={{ $json[\"ad_name\"] }}"
+            },
+            {
+              "column": "=Conjunto de anúncio",
+              "fieldValue": "={{ $json[\"adset_name\"] }}"
+            },
+            {
+              "column": "=Campanha",
+              "fieldValue": "={{ $json[\"campaign_name\"] }}"
+            },
+            {
+              "column": "=Impressão",
+              "fieldValue": "={{ $json[\"impressions\"] }}"
+            },
+            {
+              "column": "=Alcance",
+              "fieldValue": "={{ $json[\"reach\"] }}"
+            },
+            {
+              "column": "=Frequência",
+              "fieldValue": "={{ ($json[\"frequency\"] / 100).toString().replace(\".\", \",\") }}"
+            },
+            {
+              "column": "=Engajamento",
+              "fieldValue": "={{ $json[\"inline_post_engagement\"] }}"
+            },
+            {
+              "column": "=CPM",
+              "fieldValue": "={{ $json[\"cpm\"].replace('.',',') }}"
+            },
+            {
+              "column": "=Cliques (Todos)",
+              "fieldValue": "={{ $json[\"clicks\"] }}"
+            },
+            {
+              "column": "=CPC (Todos)",
+              "fieldValue": "={{ $json[\"cpc\"].replace('.',',') }}"
+            },
+            {
+              "column": "=CTR (Todos)",
+              "fieldValue": "={{ ($json[\"ctr\"] / 100).toString().replace(\".\", \",\") }}"
+            },
+            {
+              "column": "=Cliques no Link",
+              "fieldValue": "={{ $json[\"inline_link_clicks\"] }}"
+            },
+            {
+              "column": "=CPC (Link)",
+              "fieldValue": "={{ ($json[\"cost_per_unique_inline_link_click\"] / 100).toString().replace(\".\", \",\") }}"
+            },
+            {
+              "column": "=CTR (Link)",
+              "fieldValue": "={{ ($json[\"inline_link_click_ctr\"] / 100).toString().replace(\".\", \",\") }}"
+            },
+            {
+              "column": "=Objetivo",
+              "fieldValue": "={{ $json[\"objective\"] }}"
+            },
+            {
+              "column": "=Investimento",
+              "fieldValue": "={{$json[\"spend\"].replace('.',',')}}"
+            }
+          ]
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "efd977fa-aca2-4e33-9fe9-9a8dd29e056f",
+      "name": "Planilha de anúncio",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        2060,
+        1220
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {},
+      "id": "c3783078-f780-41e3-b5b9-faf4327c505e",
+      "name": "Faz nada",
+      "type": "n8n-nodes-base.noOp",
+      "position": [
+        1800,
+        400
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": true,
+              "value2": "={{ $node[\"Repetir\"].context[\"noItemsLeft\"] }}"
+            }
+          ]
+        }
+      },
+      "id": "819a63af-d8d4-42dc-9c17-e6d8d806f49a",
+      "name": "Terminou anúncios?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        2460,
+        1220
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": true,
+              "value2": "={{ $node[\"Repetir video view\"].context[\"noItemsLeft\"] }}"
+            }
+          ]
+        }
+      },
+      "id": "2fc4619d-fbab-4e19-bec8-48d206ca29d7",
+      "name": "Terminou vídeos?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        2460,
+        1580
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": true,
+              "value2": "={{ $node[\"Repetir Conversões\"].context[\"noItemsLeft\"] }}"
+            }
+          ]
+        }
+      },
+      "id": "107bec57-6d15-4658-aedd-0c009d2cb415",
+      "name": "Terminou conversões?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        2460,
+        1940
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Vá muito além disso \n**Veja mais opções**. [Parametros](https://developers.facebook.com/docs/marketing-api/insights/parameters/)",
+        "height": 95.11115686575062,
+        "width": 349.91375469678974
+      },
+      "id": "8e7daa0a-cd9a-4fa6-a3f3-991b850176e8",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        500,
+        2440
+      ]
+    },
+    {
+      "parameters": {
+        "path": "d375f0ee-07ea-4bfb-a927-0d572348033c",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "f7a98900-b11f-41b5-9e2c-b0a29560efaa",
+      "name": "Challenge",
+      "type": "n8n-nodes-base.webhook",
+      "position": [
+        1380,
+        300
+      ],
+      "webhookId": "d375f0ee-07ea-4bfb-a927-0d572348033c",
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "146c5fe6-acea-4155-8850-af81a6321158",
+        "options": {}
+      },
+      "id": "93b55490-4667-41b7-8c58-2f7acfc3e103",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        940,
+        300
+      ],
+      "webhookId": "146c5fe6-acea-4155-8850-af81a6321158"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Variaveis').item.json[\"URL API\"] }}/message/sendText/{{ $json[\"Nome da instancia\"] }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $json['Token de instancia'] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $json['Telefone de destino'] }}"
+            },
+            {
+              "name": "text",
+              "value": "=Chegou um novo Lead no Meta Ads\n\nNome: {{ $('Dados do Lead').item.json.field_data[1].values[0] }}\nE-mail: {{ $('Dados do Lead').item.json.field_data[0].values[0] }}\nTelefone: {{ $('Dados do Lead').item.json.field_data[2].values[0] }}\n\nCampanha:\nConjunto: \nAds:\n\nChame o cliente agora https://wa.me/{{ $('Dados do Lead').item.json.field_data[2].values[0] }}\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c5c7bf34-6894-48af-96a3-45159351b9d3",
+      "name": "Mensagem do WHATSAPP",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1000,
+        820
+      ],
+      "typeVersion": 4.1
+    }
+  ],
+  "connections": {
+    "Insight": {
+      "main": [
+        [
+          {
+            "node": "Desmembrar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Repetir": {
+      "main": [
+        [
+          {
+            "node": "Planilha de anúncio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anúncio": {
+      "main": [
+        [
+          {
+            "node": "Criativo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criativo": {
+      "main": [
+        [
+          {
+            "node": "Planilha de Formulário",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Intervalo": {
+      "main": [
+        [
+          {
+            "node": "Terminou anúncios?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "VideoView": {
+      "main": [
+        [
+          {
+            "node": "Desmembrar video View",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Desmembrar": {
+      "main": [
+        [
+          {
+            "node": "Repetir",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Conversões": {
+      "main": [
+        [
+          {
+            "node": "Desmembrar Conversões",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formata data": {
+      "main": [
+        [
+          {
+            "node": "Dados do Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dados do Lead": {
+      "main": [
+        [
+          {
+            "node": "Anúncio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar token": {
+      "main": [
+        [
+          {
+            "node": "Resposta do token",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Faz nada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Facebook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Formata data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Repetir video view": {
+      "main": [
+        [
+          {
+            "node": "Planilha de VideoView",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Intervalo VideoView": {
+      "main": [
+        [
+          {
+            "node": "Terminou vídeos?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Repetir Conversões": {
+      "main": [
+        [
+          {
+            "node": "Planilha de conversão",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Intervalo Conversão": {
+      "main": [
+        [
+          {
+            "node": "Terminou conversões?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Desmembrar video View": {
+      "main": [
+        [
+          {
+            "node": "Repetir video view",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Planilha de VideoView": {
+      "main": [
+        [
+          {
+            "node": "Intervalo VideoView",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Desmembrar Conversões": {
+      "main": [
+        [
+          {
+            "node": "Repetir Conversões",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Planilha de conversão": {
+      "main": [
+        [
+          {
+            "node": "Intervalo Conversão",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Configurações": {
+      "main": [
+        [
+          {
+            "node": "Insight",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Faixa etária e gênero": {
+      "main": [
+        [
+          {
+            "node": "Desmembrar Faixa etária e gênero",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fan page": {
+      "main": [
+        [
+          {
+            "node": "Faixa etária e gênero",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Desmembrar Faixa etária e gênero": {
+      "main": [
+        [
+          {
+            "node": "Planilha da Fan Page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Executa quando ocorre um erro": {
+      "main": [
+        [
+          {
+            "node": "Execute o Workflow Notificação de erros",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Planilha de anúncio": {
+      "main": [
+        [
+          {
+            "node": "Intervalo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Terminou anúncios?": {
+      "main": [
+        [
+          {
+            "node": "Repetir",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "VideoView",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Terminou vídeos?": {
+      "main": [
+        [
+          {
+            "node": "Conversões",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Repetir video view",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Terminou conversões?": {
+      "main": [
+        [
+          {
+            "node": "Fan page",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Repetir Conversões",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rodar a cada X": {
+      "main": [
+        [
+          {
+            "node": "Configurações",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Challenge": {
+      "main": [
+        [
+          {
+            "node": "Verificar token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Facebook Trigger": {
+      "verifyToken": "60c39cc2-9637-4324-824a-876d5d9068f5"
+    },
+    "node:Rodar a cada X": {
+      "recurrenceRules": [
+        12
+      ]
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "c9c49642-d12b-4e3c-8036-b5bb48e1f237",
+  "triggerCount": 5,
+  "shared": [
+    {
+      "createdAt": "2025-01-27T16:21:25.517Z",
+      "updatedAt": "2025-01-27T16:21:25.517Z",
+      "role": "workflow:owner",
+      "workflowId": "9rkkIZIgsHbTNYRL",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
