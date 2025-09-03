@@ -1,0 +1,208 @@
+{
+  "createdAt": "2024-10-24T20:02:54.219Z",
+  "updatedAt": "2024-10-30T22:51:23.783Z",
+  "id": "3z9pSpD45YE1YR5W",
+  "name": "ENVIE BOTÕES COM IMAGEM NO WHATSAPP",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "849de701-3d8b-4707-a072-9eee4ede76af",
+      "name": "When clicking ‘Test workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        360,
+        820
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.url }}/message/sendList/{{ $json.instancia }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $json.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"number\": \"{{ $json.numero }}\",\n    \"title\": \"Se torne um Gestor de Automações\",\n    \"description\": \"Descubra o Poder do n8n com a Nexxus Academy e seja um Gestor Bem Pago!\",\n    \"buttonText\": \"Clique Aqui!\",\n    \"footerText\": \"Acesse:\\nhttps://nexxusacademy.com.br/\",\n    \"sections\": [\n        {\n            \"title\": \"Formação\",\n            \"rows\": [\n                {\n                    \"title\": \"1 Formação Nexxus Academy\",\n                    \"description\": \"Você já sentiu que seu trabalho poderia ser muito mais eficiente se as tarefas repetitivas fossem automatizadas? Imagine agora a possibilidade de automatizar processos complexos e simplificar seu dia a dia, independentemente de ser um iniciante ou especialista. O curso de automação da Nexxus Academy, liderado por Ruan Santana, está aqui para transformar sua maneira de trabalhar.\",\n                    \"rowId\": \"rowId 001\"\n                },\n                {\n                    \"title\": \"2 Formação Nexxus Academy\",\n                    \"description\": \"Você já sentiu que seu trabalho poderia ser muito mais eficiente se as tarefas repetitivas fossem automatizadas? Imagine agora a possibilidade de automatizar processos complexos e simplificar seu dia a dia, independentemente de ser um iniciante ou especialista. O curso de automação da Nexxus Academy, liderado por Ruan Santana, está aqui para transformar sua maneira de trabalhar.\",\n                    \"rowId\": \"rowId 001\"\n                }\n            ]\n        },\n        {\n            \"title\": \"Curso\",\n            \"rows\": [\n                {\n                    \"title\": \"1 Agência Automatizada\",\n                    \"description\": \"Agências e gestores de tráfego, chega de processos manuais! Com nosso método, você vai lucrar mais e aumentar a percepção que os cliente tem da sua empresa, dobrando seu LTV.\",\n                    \"rowId\": \"rowId 001\"\n                },\n                {\n                    \"title\": \"2 Agência Automatizada\",\n                    \"description\": \"Agências e gestores de tráfego, chega de processos manuais! Com nosso método, você vai lucrar mais e aumentar a percepção que os cliente tem da sua empresa, dobrando seu LTV.\",\n                    \"rowId\": \"rowId 001\"\n                }\n            ]\n        }\n    ],\n    \"delay\": 1200\n} ",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "7a4b7bce-5de4-4887-85ac-36549ac03304",
+      "name": "ENVIAR LISTA",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        580
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.url }}/message/sendButtons/{{ $json.instancia }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $json.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"number\": \"{{ $json.numero }}\",\n    \"title\": \"Se torne um Gestor de Automações\",\n    \"description\": \"Descubra o Poder do n8n com a Nexxus Academy e seja um Gestor Bem Pago!\",\n    \"thumbnailUrl\": \"https://i.ibb.co/ZzPgvKs/logo.jpg\",\n    \"footer\": \"Acesse:\\nnexxusacademy.com.br/\",\n    \"buttons\": [\n        {\n            \"type\": \"reply\",\n            \"displayText\": \"Quero Formamação Nexxus\",\n            \"id\": \"nexxus\"\n        },\n        {\n            \"type\": \"copy\",\n            \"displayText\": \"Copia Link\",\n            \"copyCode\": \"https://nexxusacademy.com.br/\"\n        },\n        {\n            \"type\": \"url\",\n            \"displayText\": \"Comprar Agora\",\n            \"url\": \"https://nexxusacademy.com.br/\"\n        },\n        {\n            \"type\": \"call\",\n            \"displayText\": \"Me ligue e tire suas dúvidas\",\n            \"phoneNumber\": \"5575981787697\"\n        }\n    ],\n    \"delay\": 1200\n}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "289478f9-9ec6-46b0-a08b-d1a29849d1eb",
+      "name": "ENVIAR BOTOES",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        820
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.url }}/call/offer/{{ $json.instancia }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $json.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"number\": \"{{ $json.numero }}\",\n    \"isVideo\": true,\n    \"callDuration\": 3\n} ",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "0f1ccea0-d9ab-44db-b7c7-9749a28225c2",
+      "name": "FAKE CALL",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        1080
+      ]
+    },
+    {
+      "parameters": {
+        "content": "\n\"thumbnailUrl\": \".jpg\",",
+        "height": 80,
+        "width": 525.5263157894736
+      },
+      "id": "5c6acab9-a09c-4494-b188-f1ebf943d041",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1160,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e91c8adc-07d5-47dd-90d4-2e6b9bc40480",
+              "name": "instancia",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "910acfca-c0b4-44f4-ad3c-2470594e754f",
+              "name": "apikey",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "62e2b3f0-389d-454a-92d7-4f4a54791a73",
+              "name": "url",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "534068ad-d3f7-46b6-baf3-e80240329745",
+              "name": "numero",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "61f10e7d-f058-40eb-acce-03f32dc857cc",
+      "name": "DADOS - EVO",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        620,
+        820
+      ]
+    }
+  ],
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "DADOS - EVO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DADOS - EVO": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "30ce5c35-16dd-4545-ae12-d23dd234421b",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2024-10-24T20:02:54.219Z",
+      "updatedAt": "2024-10-24T20:02:54.219Z",
+      "role": "workflow:owner",
+      "workflowId": "3z9pSpD45YE1YR5W",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
