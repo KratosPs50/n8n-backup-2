@@ -1,0 +1,229 @@
+{
+  "createdAt": "2025-06-22T19:47:55.588Z",
+  "updatedAt": "2025-06-22T19:47:55.588Z",
+  "id": "0na2CJWCypXl1VZy",
+  "name": "Verificar_Contato_no_Banco_de_Dados___MYSQL",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "value": "leads",
+          "mode": "list",
+          "cachedResultName": "leads"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "numero",
+              "value": "={{ $json.body.Numero }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "93eae5c8-06ac-4331-9f87-28b8715c1a0b",
+      "name": "MySQL",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.4,
+      "position": [
+        -540,
+        80
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "5ed19e27-673f-47c4-8f8f-41360426e931",
+              "leftValue": "={{ $json }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "3d150f22-5bc4-4f05-8ac0-1fbce6a58170",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -300,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "table": {
+          "__rl": true,
+          "value": "leads",
+          "mode": "list",
+          "cachedResultName": "leads"
+        },
+        "dataMode": "defineBelow",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "nome",
+              "value": "={{ $('Webhook').item.json.body.Nome }}"
+            },
+            {
+              "column": "numero",
+              "value": "={{ $('Webhook').item.json.body.Numero }}"
+            }
+          ]
+        },
+        "options": {
+          "detailedOutput": true
+        }
+      },
+      "id": "6fa78410-9054-4a60-ac1b-1ec0c65984bd",
+      "name": "MySQL1",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.4,
+      "position": [
+        -20,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "Contato cadastrado no banco de dados",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "cdf33a7c-afa3-4bd4-9ea6-4ef09324ff23",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "Contato ja esta no banco de dados",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "37e81e63-a726-4036-b3f1-3e7b2543a994",
+      "name": "Respond to Webhook1",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -20,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "92144645-360a-49b2-b970-8688053484b0",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "469d0bf7-fc14-403f-926b-b94715094bbd",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -840,
+        160
+      ],
+      "webhookId": "92144645-360a-49b2-b970-8688053484b0"
+    }
+  ],
+  "connections": {
+    "MySQL": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "MySQL1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "MySQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "7c1ae204-e6b8-42ed-a555-ddcef0922afb",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-06-22T19:47:55.588Z",
+      "updatedAt": "2025-06-22T19:47:55.588Z",
+      "role": "workflow:owner",
+      "workflowId": "0na2CJWCypXl1VZy",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
