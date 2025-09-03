@@ -1,0 +1,145 @@
+{
+  "createdAt": "2025-06-26T22:34:54.218Z",
+  "updatedAt": "2025-08-01T20:31:38.502Z",
+  "id": "QFjQ9iNKLFCLfsqS",
+  "name": "Nariko",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "woocommerce-pedidos",
+        "options": {}
+      },
+      "id": "23e54d02-ccf7-4992-b7d0-6753132b7531",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        288,
+        -224
+      ],
+      "webhookId": "25946f4b-4b11-45e8-a75c-4dfa2a560869"
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of $input.all()) {\n  const meta = item.json.body.meta_data || [];\n  const sessionEntry = meta.find(m => m.key === \"_wc_order_attribution_session_entry\")?.value || \"\";\n\n  const regex = /\\/ref\\/(\\d+)/; // << CORRIGIDO AQUI\n  const match = regex.exec(sessionEntry);\n  const affiliate_id = match ? parseInt(match[1]) : null;\n\n  return [{\n    json: {\n      affiliate_id,\n      order_id: item.json.body.id,\n      total: item.json.body.total\n    }\n  }];\n}\n"
+      },
+      "id": "506bbc5d-c6e7-4b25-8b15-8c175821f0c2",
+      "name": "Extrair ID do Afiliado",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        544,
+        -224
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "basicAuth",
+        "requestMethod": "POST",
+        "url": "https://nhsproducoes.com.br/wp-json/affwp/v1/referrals/",
+        "options": {},
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "affiliate_id",
+              "value": "={{$json.affiliate_id}}"
+            },
+            {
+              "name": "amount",
+              "value": "={{$json.total}}"
+            },
+            {
+              "name": "\"reference\"",
+              "value": "=\"{{ $json.order_id }}\""
+            },
+            {
+              "name": "description",
+              "value": "Ingresso Beauty & Barber"
+            },
+            {
+              "name": "context",
+              "value": "woocommerce"
+            },
+            {
+              "name": "status",
+              "value": "paid"
+            }
+          ]
+        },
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "key",
+              "value": "934ed80e3f296ab149607ba40e242742"
+            },
+            {
+              "name": "token",
+              "value": "618d0517dd94074a08ac0f84238e2e2d"
+            }
+          ]
+        }
+      },
+      "id": "9d4c5f19-b267-4c96-a40d-5650f9b4ab6d",
+      "name": "Criar Comissão",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        832,
+        -224
+      ],
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "2w6sij310irb28a6",
+          "name": "Wordpress Nariko"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Extrair ID do Afiliado": {
+      "main": [
+        [
+          {
+            "node": "Criar Comissão",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extrair ID do Afiliado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "29146d23-ad7e-442b-bdee-cd8b5eeaf4c1",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-06-26T22:34:54.218Z",
+      "updatedAt": "2025-06-26T22:34:54.218Z",
+      "role": "workflow:owner",
+      "workflowId": "QFjQ9iNKLFCLfsqS",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
