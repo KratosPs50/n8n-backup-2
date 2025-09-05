@@ -1,0 +1,1979 @@
+{
+  "createdAt": "2025-06-03T15:27:16.777Z",
+  "updatedAt": "2025-06-14T15:07:12.881Z",
+  "id": "ZLD1XAVM1jsXkoME",
+  "name": "Bling e N8N",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        660,
+        -380
+      ],
+      "id": "fb3286f4-a333-4c06-bbc5-b11185ac12d8",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "get"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        880,
+        -380
+      ],
+      "id": "302d017c-edfb-484c-8616-e45ea55b9e34",
+      "name": "Supabase",
+      "credentials": {
+        "supabaseApi": {
+          "id": "iEGs4pivgnZuzEir",
+          "name": "Supabase account Fortune"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1100,
+        -380
+      ],
+      "id": "07396f6b-72d8-4e77-b0d9-7eba97438288",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "update"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1320,
+        -380
+      ],
+      "id": "6a0df227-d4f2-4a5b-b83a-94b440f29702",
+      "name": "Supabase1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "iEGs4pivgnZuzEir",
+          "name": "Supabase account Fortune"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "c10d5289-9253-45b5-89f1-d903b565f020",
+      "name": "Execute Workflow Trigger",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [
+        280,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "clientes",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "integradora_id",
+              "keyValue": "={{ $json.cliente_id }}"
+            }
+          ]
+        }
+      },
+      "id": "c87b65e2-b613-4d49-b48e-8a1d0718c118",
+      "name": "consulta_cliente",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        540,
+        200
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "iEGs4pivgnZuzEir",
+          "name": "Supabase account Fortune"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "263b4617-844b-4605-8e78-2229ed0996e3",
+              "leftValue": "={{ $('consulta_cliente').item.json }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "bb256f12-53c5-4a93-a0b3-daa90eeacbb8",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        760,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "integracoes",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "integracao",
+              "keyValue": "=bling"
+            }
+          ]
+        }
+      },
+      "id": "5f203c7a-08a1-4454-8c99-7de21d32b047",
+      "name": "integracao",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pega o objeto data do primeiro item\nconst data = items[0].json.data;\n\n// Identifica o celular\nlet celular = \"\";\nif (data.celular && data.celular.trim() !== \"\") {\n  celular = data.celular;\n} else if (data.telefone && data.telefone.trim() !== \"\") {\n  celular = data.telefone;\n}\n\n// Extrai o primeiro nome\nconst nomeCompleto = data.nome || \"\";\nconst partesNome = nomeCompleto.split(\" \");\nconst nomeSocial = partesNome.length > 0 ? partesNome[0] : nomeCompleto;\n\n// Trata data de nascimento\nlet dataNascimento = (data.dadosAdicionais && data.dadosAdicionais.dataNascimento) ? data.dadosAdicionais.dataNascimento : \"\";\nif (dataNascimento === \"0000-00-00\") {\n  dataNascimento = \"\";\n}\n\n// Altera o campo 'tipo' para \"Cliente\" se for igual a \"F\"\nlet tipo = data.tipo !== undefined ? data.tipo : \"\";\nif (tipo === \"F\") {\n  tipo = \"Cliente\";\n}\n\nconst output = {\n  id: data.id !== undefined ? data.id : null,\n  nome_social: nomeSocial,\n  nome_completo: nomeCompleto,\n  documento: data.numeroDocumento !== undefined ? data.numeroDocumento : \"\",\n  email: data.email !== undefined ? data.email : \"\",\n  endereco: (data.endereco && data.endereco.geral && data.endereco.geral.endereco) ? data.endereco.geral.endereco : \"\",\n  numero: (data.endereco && data.endereco.geral && data.endereco.geral.numero) ? data.endereco.geral.numero : \"\",\n  complemento: (data.endereco && data.endereco.geral && data.endereco.geral.complemento) ? data.endereco.geral.complemento : \"\",\n  bairro: (data.endereco && data.endereco.geral && data.endereco.geral.bairro) ? data.endereco.geral.bairro : \"\",\n  cidade: (data.endereco && data.endereco.geral && data.endereco.geral.municipio) ? data.endereco.geral.municipio : \"\",\n  estado: (data.endereco && data.endereco.geral && data.endereco.geral.uf) ? data.endereco.geral.uf : \"\",\n  cep: (data.endereco && data.endereco.geral && data.endereco.geral.cep) ? data.endereco.geral.cep : \"\",\n  celular: celular,\n  data_nascimento: dataNascimento,\n  tipo: tipo\n};\n\nreturn [{ json: output }];"
+      },
+      "id": "fefff9ec-3ef3-4271-9d56-842778d65cea",
+      "name": "parsear_cliente",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1460,
+        180
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "82f6ffb9-478c-4bca-b69e-1a40fd7b7b90",
+      "name": "Merge",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        2420,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Função para normalizar os números de telefone\nfunction normalizePhoneNumber(phone) {\n    if (!phone) return null; // Retorna null se o telefone estiver vazio\n\n    // Remove todos os caracteres que não sejam números\n    phone = phone.replace(/\\D/g, '');\n\n    // Adiciona o DDI do Brasil (55) caso não esteja presente\n    if (!phone.startsWith('55')) {\n        phone = '55' + phone;\n    }\n\n    // Retorna o telefone normalizado\n    return phone;\n}\n\n// Processando os dados do fluxo\nconst results = [];\n\nfor (const item of items) {\n    const phone = item.json.celular; // Ajuste a chave conforme o nome da coluna no fluxo\n    const normalizedPhone = normalizePhoneNumber(phone);\n    \n    // Adiciona apenas o telefone normalizado ao resultado\n    results.push({\n        json: {\n            telefone_normalizado: normalizedPhone // Retorna apenas o telefone normalizado\n        }\n    });\n}\n\n// Retorna os itens para o próximo nó do fluxo\nreturn results;\n"
+      },
+      "id": "ad53640e-265b-43ad-8947-89e30065c60a",
+      "name": "telefone_normalizado",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1680,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://www.bling.com.br/Api/v3/contatos/{{ $('Execute Workflow Trigger').item.json.cliente_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('integracao').item.json.token }}"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "86d01117-f646-4933-8e76-9b3d17b57bb7",
+      "name": "consultar-contato",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1240,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "clientes",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "integradora_id",
+              "fieldValue": "={{ $('parsear_cliente').item.json.id }}"
+            },
+            {
+              "fieldId": "nome_social",
+              "fieldValue": "={{ $('parsear_cliente').item.json.nome_social }}"
+            },
+            {
+              "fieldId": "nome_completo",
+              "fieldValue": "={{ $('parsear_cliente').item.json.nome_completo }}"
+            },
+            {
+              "fieldId": "documento",
+              "fieldValue": "={{ $('parsear_cliente').item.json.documento }}"
+            },
+            {
+              "fieldId": "telefone",
+              "fieldValue": "={{ $('telefone_normalizado').item.json.telefone_normalizado }}"
+            },
+            {
+              "fieldId": "email",
+              "fieldValue": "={{ $('parsear_cliente').item.json.email }}"
+            },
+            {
+              "fieldId": "endereco",
+              "fieldValue": "={{ $('parsear_cliente').item.json.endereco }}"
+            },
+            {
+              "fieldId": "numero",
+              "fieldValue": "={{ $('parsear_cliente').item.json.numero }}"
+            },
+            {
+              "fieldId": "complemento",
+              "fieldValue": "={{ $('parsear_cliente').item.json.complemento }}"
+            },
+            {
+              "fieldId": "bairro",
+              "fieldValue": "={{ $('parsear_cliente').item.json.bairro }}"
+            },
+            {
+              "fieldId": "cidade",
+              "fieldValue": "={{ $('parsear_cliente').item.json.cidade }}"
+            },
+            {
+              "fieldId": "estado",
+              "fieldValue": "={{ $('parsear_cliente').item.json.estado }}"
+            },
+            {
+              "fieldId": "data_nascimento",
+              "fieldValue": "={{ $('parsear_cliente').item.json.data_nascimento }}"
+            },
+            {
+              "fieldId": "tipo_usuario",
+              "fieldValue": "={{ $('parsear_cliente').item.json.tipo }}"
+            },
+            {
+              "fieldId": "cep",
+              "fieldValue": "={{ $('parsear_cliente').item.json.cep }}"
+            },
+            {
+              "fieldId": "origem",
+              "fieldValue": "Bling"
+            }
+          ]
+        }
+      },
+      "id": "5632d081-7d85-4e8d-be42-85a8a255f30e",
+      "name": "Supabase2",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2040,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## importar-cliente ##",
+        "height": 500,
+        "width": 2600,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        80,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "421b06bf-f435-48aa-beac-caaf55608000",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "pedidos",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id_pedido_bling",
+              "keyValue": "={{ $('parsear_pedido').item.json.bling_id }}"
+            },
+            {
+              "keyName": "pedido_bling",
+              "keyValue": "={{ $('parsear_pedido').item.json.bling_numero }}"
+            }
+          ]
+        }
+      },
+      "id": "c17add50-fcea-4a04-ba0e-0d74de5e8270",
+      "name": "consulta_pedido",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        900,
+        1080
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Recupera o objeto \"data\" do primeiro item do node \"consulta_pedido_bling\"\nconst data = $node[\"consulta_pedido_bling\"].json.data;\n\n// Verifica se existem itens\nif (!data || !data.itens) {\n  return [{ json: {} }];\n}\n\n// Mapeia cada item do array \"itens\" para o formato solicitado\nconst outputData = data.itens.map(it => {\n  return {\n    integradora_item: it.id !== undefined ? it.id : null,\n    produto_codigo: it.codigo !== undefined ? it.codigo : null,\n    produto_unidade: it.unidade !== undefined ? it.unidade : null,\n    produto_nome: it.descricao !== undefined ? it.descricao : null,\n    produto_id: (it.produto && it.produto.id !== undefined) ? it.produto.id : null,\n    quantidade: it.quantidade !== undefined ? it.quantidade : null,\n    desconto: it.desconto !== undefined ? it.desconto : null,\n    valor: it.valor !== undefined ? it.valor : null\n  };\n});\n\n// Retorna os dados formatados respeitando o nome do node\nreturn outputData.map(o => ({ json: o }));\n"
+      },
+      "id": "163f1663-10ef-4f3f-b422-e1d9ad54b630",
+      "name": "parsear_itens",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2240,
+        1100
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://www.bling.com.br/Api/v3/pedidos/vendas/{{ $('Edit Fields').first().json.bling_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Execute Workflow Trigger').first().json.token }}"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "a87116f1-35c3-4a1e-8c7f-57ffa51fcc4f",
+      "name": "consulta_pedido_bling",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1780,
+        1100
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.bling.com.br/Api/v3/pedidos/vendas",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "pagina",
+              "value": "1"
+            },
+            {
+              "name": "limite",
+              "value": "10"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Execute Workflow Trigger').item.json.token }}"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "7ca9374e-67fa-4c37-bf7a-a91641ac1f0b",
+      "name": "consulta_pedidos_bling",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        180,
+        1060
+      ]
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "id": "6bb4c72b-d138-466b-818b-a02a56214166",
+      "name": "loop_pedidos",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        680,
+        1060
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "32195e68-7955-4741-94dc-32cf477deeb8",
+              "name": "bling_id",
+              "value": "={{ $('loop_pedidos').item.json.bling_id }}",
+              "type": "number"
+            },
+            {
+              "id": "08ace227-6194-4819-91bb-243d7fe3d383",
+              "name": "cliente_id",
+              "value": "={{ $('loop_pedidos').item.json.cliente_id }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4df3b498-88bd-4983-83cd-0af35fdad497",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1320,
+        1100
+      ]
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "id": "f17172b5-f8e3-4b8c-85a5-49003a80789d",
+      "name": "Aggregate",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        2720,
+        1100
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "pedidos",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "cliente",
+              "fieldValue": "={{ $('consulta_cliente1').first().json.id }}"
+            },
+            {
+              "fieldId": "id_pedido_bling",
+              "fieldValue": "={{ $('loop_pedidos').first().json.bling_id }}"
+            },
+            {
+              "fieldId": "pedido_bling",
+              "fieldValue": "={{ $('loop_pedidos').first().json.bling_numero }}"
+            },
+            {
+              "fieldId": "loja_pedido",
+              "fieldValue": "={{ $('loop_pedidos').first().json.loja_pedido }}"
+            },
+            {
+              "fieldId": "loja_id",
+              "fieldValue": "={{ $('loop_pedidos').first().json.loja_id }}"
+            },
+            {
+              "fieldId": "data_pedido",
+              "fieldValue": "={{ $('loop_pedidos').first().json.data_pedido }}"
+            },
+            {
+              "fieldId": "data_prevista",
+              "fieldValue": "={{ $('loop_pedidos').first().json.data_prevista }}"
+            },
+            {
+              "fieldId": "data_envio",
+              "fieldValue": "={{ $('loop_pedidos').first().json.data_pedido }}"
+            },
+            {
+              "fieldId": "total_produtos",
+              "fieldValue": "={{ $('loop_pedidos').first().json.total_produtos }}"
+            },
+            {
+              "fieldId": "valor_total",
+              "fieldValue": "={{ $('loop_pedidos').first().json.total_pedido }}"
+            },
+            {
+              "fieldId": "situacao_id_bling",
+              "fieldValue": "={{ $('loop_pedidos').first().json.situacao_id }}"
+            },
+            {
+              "fieldId": "itens",
+              "fieldValue": "={{ $('Aggregate').item.json.data }}"
+            },
+            {
+              "fieldId": "telefone",
+              "fieldValue": "={{ $('consulta_cliente1').first().json.telefone }}"
+            },
+            {
+              "fieldId": "pedido_bubble",
+              "fieldValue": "={{ $('bubble_pedido').first().json.id }}"
+            },
+            {
+              "fieldId": "marketplace",
+              "fieldValue": "={{ $('loop_pedidos').first().json.marketplace }}"
+            }
+          ]
+        }
+      },
+      "id": "1a7d720f-f37d-4d90-aed5-0103b01a12f7",
+      "name": "criar-pedido",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        3020,
+        1100
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "mensagens",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "cliente",
+              "fieldValue": "={{ $('criar-pedido').first().json.cliente }}"
+            },
+            {
+              "fieldId": "pedido",
+              "fieldValue": "={{ $('criar-pedido').first().json.id }}"
+            },
+            {
+              "fieldId": "situacao",
+              "fieldValue": "={{ $('loop_pedidos').first().json.situacao_id }}"
+            },
+            {
+              "fieldId": "telefone",
+              "fieldValue": "={{ $('consulta_cliente1').first().json.telefone }}"
+            }
+          ]
+        }
+      },
+      "id": "c536ff40-a79f-40a2-9326-6e2bb9f3af31",
+      "name": "mensagem",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        3500,
+        1120
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "81d62386-c049-42b5-9e4b-8b5b0b89bb98",
+              "leftValue": "={{ $json.telefone }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3280,
+        1100
+      ],
+      "id": "028435f8-d191-4494-a85a-f541aad9cacd",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputData = items[0].json.data;\n\nconst seenIds = new Set();\nconst seenNumbers = new Set();\n\nconst marketplaceMap = {\n  203575766: \"Mercado Livre\",\n  205250314: \"YG - Mercado Livre\",\n  204330390: \"Shopee\",\n  0: \"BR 3D\",\n  203575789: \"Olist\",\n  203956023: \"BR 3D\",\n  203630109: \"Madeira Madeira\"\n};\n\nconst statusMap = {\n  6: \"Em aberto\",\n  9: \"Atendido\",\n  12: \"Cancelado\"\n};\n\nconst outputData = inputData\n  .filter(item => {\n    // Filtra itens repetidos com base no 'id' e 'numero'\n    const isDuplicate = seenIds.has(item.id) || seenNumbers.has(item.numero);\n\n    if (!isDuplicate) {\n      seenIds.add(item.id);\n      seenNumbers.add(item.numero);\n      return true;\n    }\n    return false;\n  })\n  .map(item => {\n    // Trata as datas, se forem \"0000-00-00\" atribui null\n    const dataPedido = (item.data === \"0000-00-00\") ? null : item.data || null;\n    const dataSaida = (item.dataSaida === \"0000-00-00\") ? null : item.dataSaida || null;\n    const dataPrevista = (item.dataPrevista === \"0000-00-00\") ? null : item.dataPrevista || null;\n\n    const lojaId = (item.loja && item.loja.id !== undefined) ? item.loja.id : null;\n    const situacaoId = (item.situacao && item.situacao.id !== undefined) ? item.situacao.id : null;\n\n    const marketplace = marketplaceMap[lojaId] || lojaId;\n    const statusPedido = statusMap[situacaoId] || situacaoId;\n\n    return {\n      json: {\n        bling_id: item.id !== undefined ? item.id : null,\n        bling_numero: item.numero !== undefined ? item.numero : null,\n        loja_pedido: item.numeroLoja !== undefined ? item.numeroLoja : null,\n        loja_id: lojaId,\n        marketplace: marketplace,  // Adiciona o campo marketplace\n        data_pedido: dataPedido,\n        data_saida: dataSaida,\n        data_prevista: dataPrevista,\n        total_produtos: item.totalProdutos !== undefined ? item.totalProdutos : null,\n        total_pedido: item.total !== undefined ? item.total : null,\n        cliente_id: (item.contato && item.contato.id !== undefined) ? item.contato.id : null,\n        cliente_nome: (item.contato && item.contato.nome !== undefined) ? item.contato.nome : null,\n        cliente_tipo: (item.contato && item.contato.tipoPessoa !== undefined) ? item.contato.tipoPessoa : null,\n        cliente_documento: (item.contato && item.contato.numeroDocumento !== undefined) ? item.contato.numeroDocumento : null,\n        situacao_id: situacaoId,\n        status_pedido: statusPedido  // Adiciona o campo status_pedido\n      }\n    };\n  });\n\nreturn outputData;\n"
+      },
+      "id": "6e033c26-bd9f-4519-b85b-a3b8ce386b8b",
+      "name": "parsear_pedido",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        420,
+        1060
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.br3dsolucoes.com.br/api/1.1/obj/pedidos",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer c43dbb731909910c7fc835948696870b"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "numero-bling",
+              "value": "={{ $('loop_pedidos').first().json.bling_numero }}"
+            },
+            {
+              "name": "data-pedido",
+              "value": "={{ $('loop_pedidos').first().json.data_pedido }}"
+            },
+            {
+              "name": "data-prevista",
+              "value": "={{ $('loop_pedidos').first().json.data_prevista }}"
+            },
+            {
+              "name": "cliente",
+              "value": "={{ $('loop_pedidos').first().json.cliente_nome }}"
+            },
+            {
+              "name": "marketplace",
+              "value": "={{ $('loop_pedidos').first().json.marketplace }}"
+            },
+            {
+              "name": "valor-total",
+              "value": "={{ $('loop_pedidos').first().json.total_pedido }}"
+            },
+            {
+              "name": "status",
+              "value": "={{ $('loop_pedidos').first().json.status_pedido }}"
+            },
+            {
+              "name": "status-bling",
+              "value": "={{ $('loop_pedidos').first().json.situacao_id }}"
+            },
+            {
+              "name": "observacao",
+              "value": "={{ $('consulta_pedido_bling').item.json.data.observacoes }}"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2040,
+        1100
+      ],
+      "id": "56c7f8f4-2088-49a1-9206-6622b1144881",
+      "name": "bubble_pedido"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.br3dsolucoes.com.br/api/1.1/obj/pedido-itens",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer c43dbb731909910c7fc835948696870b"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "pedido",
+              "value": "={{ $('bubble_pedido').first().json.id }}"
+            },
+            {
+              "name": "sku",
+              "value": "={{ $json.id }}"
+            },
+            {
+              "name": "produto",
+              "value": "={{ $json.produto }}"
+            },
+            {
+              "name": "id_produto_bling",
+              "value": "={{ $json.id_produto_bling }}"
+            },
+            {
+              "name": "foto_principal",
+              "value": "={{ $json.foto_principal }}"
+            },
+            {
+              "name": "quantidade",
+              "value": "={{ $json.quantidade }}"
+            },
+            {
+              "name": "valor",
+              "value": "={{ $json.valor }}"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2700,
+        900
+      ],
+      "id": "419f185c-4009-4822-a5ad-d79e88c71dbd",
+      "name": "bubble_pedido_itens"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v21.0/113954748322972/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer EAAPN8oXJefkBO9gwu1NUbJZBGEu4zLMpe296w6cZAIY0U1ydGGAoRZAPIvRJDuBZBMzqEDxeH03tvWSXtCKfZAw2LZCQcPtjsgZCFYa4YQ19Gl4kIla9IsClzw3gVJwD3dq0sISGhHvsZAJKgvcLyGS95clGZAfAHXc53QptTdALL2nyZB7H6XaKqZBxx9OGUQyFy7QXQZDZD"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"recipient_type\": \"individual\",\n  \"to\": \"5511956963380\",\n  \"type\": \"template\",\n  \"template\": {\n    \"name\": \"novo_pedido_bling\",\n    \"language\": {\n      \"code\": \"pt_BR\",\n      \"policy\": \"deterministic\"\n    },\n    \"components\": [\n      {\n        \"type\": \"header\",\n        \"parameters\": [\n          {\n            \"type\": \"image\",\n            \"image\": {\n              \"link\": \"{{ $('criar-pedido').item.json.itens.first().foto_principal }}\"\n            }\n          }\n        ]\n      },\n      {\n        \"type\": \"body\",\n        \"parameters\": [\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('criar-pedido').item.json.itens.length }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('criar-pedido').item.json.valor_total }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('criar-pedido').item.json.marketplace }}\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3180,
+        880
+      ],
+      "id": "5782e884-0792-4246-b5e9-679090b50fab",
+      "name": "mensagem-will"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v21.0/113954748322972/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer EAAPN8oXJefkBO9gwu1NUbJZBGEu4zLMpe296w6cZAIY0U1ydGGAoRZAPIvRJDuBZBMzqEDxeH03tvWSXtCKfZAw2LZCQcPtjsgZCFYa4YQ19Gl4kIla9IsClzw3gVJwD3dq0sISGhHvsZAJKgvcLyGS95clGZAfAHXc53QptTdALL2nyZB7H6XaKqZBxx9OGUQyFy7QXQZDZD"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"recipient_type\": \"individual\",\n  \"to\": \"5511967585573\",\n  \"type\": \"template\",\n  \"template\": {\n    \"name\": \"novo_pedido_bling\",\n    \"language\": {\n      \"code\": \"pt_BR\",\n      \"policy\": \"deterministic\"\n    },\n    \"components\": [\n      {\n        \"type\": \"header\",\n        \"parameters\": [\n          {\n            \"type\": \"image\",\n            \"image\": {\n              \"link\": \"{{ $('criar-pedido').item.json.itens.first().foto_principal }}\"\n            }\n          }\n        ]\n      },\n      {\n        \"type\": \"body\",\n        \"parameters\": [\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('criar-pedido').item.json.itens.length }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('criar-pedido').item.json.valor_total }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('criar-pedido').item.json.marketplace }}\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3400,
+        880
+      ],
+      "id": "e0eca4bf-8ee0-4eea-b5cf-ecd4b0525cda",
+      "name": "mensagem-yure"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v21.0/113954748322972/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer EAAPN8oXJefkBO9gwu1NUbJZBGEu4zLMpe296w6cZAIY0U1ydGGAoRZAPIvRJDuBZBMzqEDxeH03tvWSXtCKfZAw2LZCQcPtjsgZCFYa4YQ19Gl4kIla9IsClzw3gVJwD3dq0sISGhHvsZAJKgvcLyGS95clGZAfAHXc53QptTdALL2nyZB7H6XaKqZBxx9OGUQyFy7QXQZDZD"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"recipient_type\": \"individual\",\n  \"to\": \"5511960799798\",\n  \"type\": \"template\",\n  \"template\": {\n    \"name\": \"novo_pedido_bling\",\n    \"language\": {\n      \"code\": \"pt_BR\",\n      \"policy\": \"deterministic\"\n    },\n    \"components\": [\n      {\n        \"type\": \"header\",\n        \"parameters\": [\n          {\n            \"type\": \"image\",\n            \"image\": {\n              \"link\": \"{{ $('criar-pedido').item.json.itens.first().foto_principal }}\"\n            }\n          }\n        ]\n      },\n      {\n        \"type\": \"body\",\n        \"parameters\": [\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('criar-pedido').item.json.itens.length }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('criar-pedido').item.json.valor_total }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('criar-pedido').item.json.marketplace }}\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3620,
+        880
+      ],
+      "id": "46aa374f-d148-4259-8d79-ec37b70f1d97",
+      "name": "mensagem-juvenal"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "1vuHGst3rgJOF41f",
+          "mode": "list",
+          "cachedResultName": "Itens Produto"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.1,
+      "position": [
+        2480,
+        1100
+      ],
+      "id": "17d68633-7b0d-4f76-92a9-51dcdea2d2ae",
+      "name": "itens_produto"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d13f82a5-0949-463e-94b5-f62ee1e4fa38",
+              "leftValue": "={{ $('consulta_pedido').item.json }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "1733b02c-ee34-413b-b8cc-8a19f53022b2",
+      "name": "If2",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1080,
+        1080
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "fWPVDegNrEsT6Sbv",
+          "mode": "list",
+          "cachedResultName": "Importar Cliente"
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "id": "40885b5b-1f14-4fd6-a784-4714e77f4b47",
+      "name": "consulta_cliente1",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.1,
+      "position": [
+        1560,
+        1100
+      ],
+      "alwaysOutputData": true,
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "content": "## importar-pedidos ##\n",
+        "height": 820,
+        "width": 3840,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        80,
+        620
+      ],
+      "typeVersion": 1,
+      "id": "6ada49b0-d7db-4476-9c2b-af6532d94866",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "44ca2c9d-d645-4ead-ae96-582bd9291c97",
+      "name": "Loop Over Items",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        800,
+        1800
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "pedidos",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "situacao_id_bling",
+              "condition": "eq",
+              "keyValue": "6"
+            }
+          ]
+        }
+      },
+      "id": "c04bcc8b-e268-43a2-9bf1-fe8befcbde47",
+      "name": "pedidos",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        580,
+        1800
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "integracoes",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "integracao",
+              "keyValue": "bling"
+            }
+          ]
+        }
+      },
+      "id": "2dae958b-9d62-454c-90bb-8debf5339426",
+      "name": "integracoes",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        1900
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "clientes",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "integradora_id",
+              "keyValue": "={{ $('HTTP Request1').item.json.data.contato.id }}"
+            }
+          ]
+        }
+      },
+      "id": "901abbe1-6937-4d7c-89b5-23f21032ff0a",
+      "name": "cliente",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1700,
+        1740
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "pedidos",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('Loop Over Items').first().json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "situacao_id_bling",
+              "fieldValue": "={{ $('HTTP Request1').item.json.data.situacao.id }}"
+            },
+            {
+              "fieldId": "cliente",
+              "fieldValue": "={{ $('cliente').item.json.id }}"
+            }
+          ]
+        }
+      },
+      "id": "0047f3f9-98b6-4e73-97ca-aed7b36c44b1",
+      "name": "pedido",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2400,
+        1760
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.data.situacao.id }}",
+                    "rightValue": 9,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Atendido"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "9b21e31b-8d55-44c2-9bd2-d733810e8d10",
+                    "leftValue": "={{ $json.data.situacao.id }}",
+                    "rightValue": 12,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Cancelado"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "7e66a779-2cf9-4541-84c5-8ad14baa3e2d",
+                    "leftValue": "={{ $json.data.situacao.id }}",
+                    "rightValue": 6,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Em aberto"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "0680cb93-1c69-4a13-a5cc-cf9c42e09ec9",
+      "name": "Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1380,
+        1900
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 7
+            },
+            {
+              "triggerAtHour": 12
+            },
+            {
+              "triggerAtHour": 17
+            }
+          ]
+        }
+      },
+      "id": "a3e0b4e6-e8ed-4861-9ef1-04f53e3ab08c",
+      "name": "Schedule Trigger1",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        360,
+        1800
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://www.bling.com.br/Api/v3/pedidos/vendas/{{ $('Loop Over Items').item.json.id_pedido_bling }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('integracoes').item.json.token }}"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "01466370-d02e-4daf-b7f4-4e7d8e67e721",
+      "name": "HTTP Request1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1160,
+        1900
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "pedidos",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('Loop Over Items').first().json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "situacao_id_bling",
+              "fieldValue": "={{ $json.data.situacao.id }}"
+            }
+          ]
+        }
+      },
+      "id": "f48285c4-d351-4ea8-b621-2abe46fb3170",
+      "name": "Supabase3",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1700,
+        1900
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "mensagens",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "cliente",
+              "fieldValue": "={{ $('cliente').item.json.id }}"
+            },
+            {
+              "fieldId": "pedido",
+              "fieldValue": "={{ $('Loop Over Items').item.json.id }}"
+            },
+            {
+              "fieldId": "situacao",
+              "fieldValue": "={{ $('Switch').item.json.data.situacao.id }}"
+            },
+            {
+              "fieldId": "telefone",
+              "fieldValue": "={{ $('cliente').first().json.telefone }}"
+            }
+          ]
+        }
+      },
+      "id": "be7f7d17-a13b-4ad4-bb4d-97af15fd8766",
+      "name": "mensagem1",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2160,
+        1620
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "35242f53-ea94-4de9-b5be-c6d14c71b3e2",
+              "leftValue": "={{ $json.telefone }}",
+              "rightValue": "null",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "312487f4-213b-4b19-942c-94b15bc76d36",
+      "name": "If3",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1920,
+        1740
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## itens-produto ##\n",
+        "height": 800,
+        "width": 2800
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        100,
+        1520
+      ],
+      "typeVersion": 1,
+      "id": "8c8f35e4-6362-41c0-ab6c-e44d52217192",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "M8XSJdEHhrMsV1Nt",
+          "mode": "list",
+          "cachedResultName": "Importar Pedidos"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.1,
+      "position": [
+        740,
+        2580
+      ],
+      "id": "22252002-f1c4-4a51-b34f-62493edfd9a3",
+      "name": "Execute Workflow"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours"
+            }
+          ]
+        }
+      },
+      "id": "55d58940-589a-4432-955c-730a29e1e6cb",
+      "name": "Schedule Trigger2",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        320,
+        2580
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "integracoes",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "integracao",
+              "keyValue": "bling"
+            }
+          ]
+        }
+      },
+      "id": "0d499045-9478-40d8-afab-3a22a5b0558e",
+      "name": "integracoes1",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        520,
+        2580
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Pedidos ##\n",
+        "height": 580,
+        "width": 1200
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        120,
+        2420
+      ],
+      "typeVersion": 1,
+      "id": "24c6c519-5c3e-4304-9af3-63e79616e1ad",
+      "name": "Sticky Note3"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Supabase1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Workflow Trigger": {
+      "main": [
+        [
+          {
+            "node": "consulta_cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "consulta_cliente": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "integracao",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "integracao": {
+      "main": [
+        [
+          {
+            "node": "consultar-contato",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parsear_cliente": {
+      "main": [
+        [
+          {
+            "node": "telefone_normalizado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "telefone_normalizado": {
+      "main": [
+        [
+          {
+            "node": "Supabase2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "consultar-contato": {
+      "main": [
+        [
+          {
+            "node": "parsear_cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase2": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "consulta_pedido": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parsear_itens": {
+      "main": [
+        [
+          {
+            "node": "itens_produto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "consulta_pedido_bling": {
+      "main": [
+        [
+          {
+            "node": "bubble_pedido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "consulta_pedidos_bling": {
+      "main": [
+        [
+          {
+            "node": "parsear_pedido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "loop_pedidos": {
+      "main": [
+        [],
+        [
+          {
+            "node": "consulta_pedido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "consulta_cliente1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "criar-pedido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "criar-pedido": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "mensagem-will",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "mensagem": {
+      "main": [
+        [
+          {
+            "node": "loop_pedidos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "loop_pedidos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parsear_pedido": {
+      "main": [
+        [
+          {
+            "node": "loop_pedidos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "bubble_pedido": {
+      "main": [
+        [
+          {
+            "node": "parsear_itens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "mensagem-will": {
+      "main": [
+        [
+          {
+            "node": "mensagem-yure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "mensagem-yure": {
+      "main": [
+        [
+          {
+            "node": "mensagem-juvenal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "itens_produto": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "bubble_pedido_itens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "loop_pedidos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "consulta_cliente1": {
+      "main": [
+        [
+          {
+            "node": "consulta_pedido_bling",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "integracoes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "pedidos": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "integracoes": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "cliente": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "pedido": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "cliente",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Supabase3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "pedidos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase3": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "mensagem1": {
+      "main": [
+        [
+          {
+            "node": "pedido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "mensagem1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "pedido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger2": {
+      "main": [
+        [
+          {
+            "node": "integracoes1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "integracoes1": {
+      "main": [
+        [
+          {
+            "node": "Execute Workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Execute Workflow Trigger": [
+      {
+        "json": {
+          "bling_id": 21778888603,
+          "cliente_id": 16264731357,
+          "empresa": null
+        }
+      }
+    ]
+  },
+  "versionId": "5769f9b7-cace-4bfe-9c78-d057c7510fa1",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-06-03T15:27:16.777Z",
+      "updatedAt": "2025-06-03T15:27:16.777Z",
+      "role": "workflow:owner",
+      "workflowId": "ZLD1XAVM1jsXkoME",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": [
+    {
+      "createdAt": "2025-06-14T14:57:30.510Z",
+      "updatedAt": "2025-06-14T14:57:30.510Z",
+      "id": "Nc4JP1Y2lnid8C6k",
+      "name": "Bling"
+    }
+  ]
+}
