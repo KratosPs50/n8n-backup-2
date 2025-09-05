@@ -1,0 +1,3759 @@
+{
+  "createdAt": "2025-01-10T13:02:05.416Z",
+  "updatedAt": "2025-01-10T15:44:10.201Z",
+  "id": "4ZRwex6YtzCACMVD",
+  "name": "WEB FORTUNE 2.0",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $node['variaveis_erro'].json[\"Planilha ID\"] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $node['variaveis_erro'].json[\"Planilha Aba\"] }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Execução": "=ERRO",
+            "Link": "={{'=HYPERLINK(\"' + $node['variaveis_erro'].json['N8N URL'] + '/workflow/' +$node['Ocorreu Erro'].json.workflow.id + '/executions/' + $node['Ocorreu Erro'].json.execution.id + '\"' + '; \"' + 'VERIFICAR ERRO' +'\")' }}",
+            "ID da Execução": "={{ $node['Ocorreu Erro'].json.execution.id }}"
+          },
+          "matchingColumns": [
+            "ID da Execução"
+          ],
+          "schema": [
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Hora",
+              "displayName": "Hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Palavra Chave Foco",
+              "displayName": "Palavra Chave Foco",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Título",
+              "displayName": "Título",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID da Categoria",
+              "displayName": "ID da Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Categoria",
+              "displayName": "Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID das Tags",
+              "displayName": "ID das Tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Imagem",
+              "displayName": "Imagem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Outlines",
+              "displayName": "Outlines",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Link",
+              "displayName": "Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Execução",
+              "displayName": "Execução",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ID da Execução",
+              "displayName": "ID da Execução",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Posição",
+              "displayName": "Posição",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Concorrência",
+              "displayName": "Concorrência",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ]
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "6a93c7a8-d320-49d7-b61c-b19d9577e147",
+      "name": "Google Sheets - Status ERRO",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        120,
+        880
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "z1VWO1EGILqORxWq",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "7bfd5ee4-b0ca-410f-a973-b4316b373da5",
+      "name": "Ocorreu Erro",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        880
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Alterar Dados",
+        "height": 437.89327359107756,
+        "width": 209.70978547297074,
+        "color": 4
+      },
+      "id": "23ae594c-8fa1-4ab7-8c74-27abbd844d34",
+      "name": "Sticky Note9",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "981d448e-cccf-4098-89db-76a012f27a51",
+              "name": "Planilha ID",
+              "value": "1V5wOjFauZX3Sp5TTiGnVC1N6nrjaLiUlll93oc4Q0Hs",
+              "type": "string"
+            },
+            {
+              "id": "4b9a4bcd-1247-42cd-9acf-499a1365c210",
+              "name": "Planilha Aba",
+              "value": "347027391",
+              "type": "string"
+            },
+            {
+              "id": "eac51f0f-ee11-4c52-aa0f-ff2cb0533956",
+              "name": "URL do Site",
+              "value": "https://news.fortunegroup.com.br/",
+              "type": "string"
+            },
+            {
+              "id": "927f3c28-8028-44b8-a6fa-cbd1c6c588fd",
+              "name": "Logo marca dagua",
+              "value": "https://news.fortunegroup.com.br/wp-content/uploads/2024/12/logotransparente-1.png",
+              "type": "string"
+            },
+            {
+              "id": "f61da4d4-692a-457b-935d-16124a95be1e",
+              "name": "Marca dagua Overlay",
+              "value": "https://news.fortunegroup.com.br/wp-content/uploads/2024/12/logotransparente-1.png",
+              "type": "string"
+            },
+            {
+              "id": "d1dd49e2-05a0-4fa1-8b04-119507ac0c1f",
+              "name": "Custom Post Type",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "b9ab412c-e28d-4037-8472-36155455188d",
+              "name": "Custom Taxonomia",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "563cc169-5463-4b8d-93fe-6e63ab791bf9",
+              "name": "Midjourney API Key",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "534faba0-612b-48b6-bed4-ba26acd6b463",
+              "name": "Assistant Open AI ID",
+              "value": "asst_AmHYKx27Z7gFc1oXp4GXF3ao",
+              "type": "string"
+            },
+            {
+              "id": "8679abcc-5909-473c-9665-247fb937fd32",
+              "name": "Leonardo AI API Key",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "e3156ccb-66c1-45c5-a115-23d39649be38",
+              "name": "scrapeDo_api",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "f43c66cb-22ea-4ab4-8fc1-41ad13338adc",
+              "name": "rank_math_article_type",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "096cb1c6-1200-47e3-974e-30617ce68d85",
+      "name": "variaveis",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -100,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ce77a124-9e02-45bf-bf16-05ab5697078e",
+              "name": "Planilha ID",
+              "value": "1V5wOjFauZX3Sp5TTiGnVC1N6nrjaLiUlll93oc4Q0Hs",
+              "type": "string"
+            },
+            {
+              "id": "be3b7a5f-f4aa-4b4f-83a6-7773dfbdafdb",
+              "name": "Planilha Aba",
+              "value": "347027391",
+              "type": "string"
+            },
+            {
+              "id": "1ee5c98e-afdd-4261-a7b5-d24214c2acfa",
+              "name": "N8N URL",
+              "value": "https://editn.integrasac.com.br/",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2adcaebc-ce14-448c-b6e8-ab293ff0d1b7",
+      "name": "variaveis_erro",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -100,
+        880
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "23b2152d-3f06-427c-9293-d565673abdc3",
+      "name": "Executar",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('variaveis').item.json[\"Planilha ID\"] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('variaveis').item.json[\"Planilha Aba\"] }}",
+          "mode": "id"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "=Execução"
+            }
+          ]
+        },
+        "options": {
+          "returnAllMatches": "returnFirstMatch"
+        }
+      },
+      "id": "54cf8604-e00e-4a93-9f65-dd8ca48fca06",
+      "name": "Ler Planilha",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [
+        120,
+        680
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "z1VWO1EGILqORxWq",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e24ac621-e2d6-46e7-82e6-846d0f5d27f3",
+              "name": "title",
+              "value": "={{ $node[\"dados\"].json.post_title ? $node[\"dados\"].json.post_title : $node['Assistants - SEO'].json[\"output\"].replace(/`/g, '').replaceAll('json','').parseJson().title }}",
+              "type": "string"
+            },
+            {
+              "id": "4502c6f0-9081-4b33-b62f-d5d5ac78b14a",
+              "name": "description",
+              "value": "={{ $node['Assistants - SEO'].json[\"output\"].replace(/`/g, '').replaceAll('json','').parseJson().description }}",
+              "type": "string"
+            },
+            {
+              "id": "89c5ceeb-76c4-4b7b-a3f1-e36a9b6e02df",
+              "name": "outlines",
+              "value": "={{ $node['Assistants - SEO'].json[\"output\"].replace(/`/g, '').replaceAll('json','').parseJson().outlines }}",
+              "type": "array"
+            },
+            {
+              "id": "58d1dd67-0841-4736-86fd-6c874b6c6320",
+              "name": "introduction",
+              "value": "={{ $node['Assistants - SEO'].json[\"output\"].replace(/`/g, '').replaceAll('json','').parseJson().introduction }}",
+              "type": "string"
+            },
+            {
+              "id": "ef01145b-f467-4937-8cfd-3ee3f15c4951",
+              "name": "keyword",
+              "value": "={{ $node[\"dados\"].json.keyword ? $node[\"dados\"].json.keyword : $node['Assistants - SEO'].json[\"output\"].replace(/`/g, '').replaceAll('json','').parseJson().keyword }}",
+              "type": "string"
+            },
+            {
+              "id": "82b9af25-fb8e-426c-92c9-5765760452b1",
+              "name": "category_id",
+              "value": "={{ $node[\"dados\"].json.post_categoria_id ? $node[\"dados\"].json.post_categoria_id : $node['Assistants - SEO'].json[\"output\"].replace(/`/g, '').replaceAll('json','').parseJson().category_id }}",
+              "type": "string"
+            },
+            {
+              "id": "9f4014d6-bf33-4bc2-8f18-c348b67df603",
+              "name": "youtube_id",
+              "value": "={{ $node['Assistants - SEO'].json[\"output\"].replace(/`/g, '').replaceAll('json','').parseJson().youtube_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {
+          "dotNotation": true
+        }
+      },
+      "id": "d30a1cd2-10c0-460d-9c3e-39d468da8d38",
+      "name": "Dados SEO",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        1360,
+        1000
+      ]
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $execution.id}}"
+      },
+      "id": "c8701efd-f4e7-4be4-86bb-a8d7fadbb701",
+      "name": "Memória",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.2,
+      "position": [
+        1540,
+        880
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 3,
+        "unit": "seconds"
+      },
+      "id": "be23e7e1-809c-475e-bfb6-1b13706e317c",
+      "name": "aguarde 10s",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        1940,
+        1020
+      ],
+      "webhookId": "2d248da5-8f1d-4d84-b7ae-18f49b80d075"
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {
+          "reset": false
+        }
+      },
+      "id": "b145d73b-b92e-4c7a-9a14-c548543097a2",
+      "name": "Loop",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 2,
+      "position": [
+        1720,
+        960
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extraindo os dados do node \"Dados SEO\"\nconst outlines = $node[\"Dados SEO\"].json['outlines'];\nconst title = $node[\"Dados SEO\"].json['title'];\noutlines.unshift(title);\n\n// Verificando as condições do node \"dados\"\nconst faq = $node[\"dados\"].json['faq'] === \"true\"; // Verificando se é exatamente \"true\"\nconst conclusion = $node[\"dados\"].json['conclusion'] === \"true\"; // Verificando se é exatamente \"true\"\nconst summarization = $node[\"dados\"].json['summarization'] === true; // Verificando se é exatamente \"true\"\n\n// Criando uma array de objetos com a estrutura esperada pelo n8n\nconst result = outlines.map(outline => ({ json: { outlines: outline } }));\n\n// Adicionando o item de conclusão se a condição for verdadeira\nif (conclusion) {\n    result.push({ json: { conclusion: 'Conclusion' } });\n}\n\n// Adicionando o item de FAQ se a condição for verdadeira\nif (faq) {\n    result.push({ json: { faq: 'FAQ' } });\n}\n\n// Adicionando o item de summarization se a condição for verdadeira\nif (summarization) {\n    result.push({ json: { summarization: 'Summarization' } });\n}\n\nreturn result;\n"
+      },
+      "id": "198dc30e-32b5-4a64-8cd9-0a5f6c179df8",
+      "name": "Separar Dados",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1540,
+        1000
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "information"
+      },
+      "id": "bab3dfc4-b931-4a86-ac25-aedc6da9c640",
+      "name": "Pega informações",
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1,
+      "position": [
+        3760,
+        860
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $node['variaveis'].json[\"Marca dagua Overlay\"] ? $node['variaveis'].json[\"Marca dagua Overlay\"] : \"https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png\"}}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "frente"
+            }
+          }
+        }
+      },
+      "id": "b65f9df6-3536-4ae8-80ff-b4d2233716ab",
+      "name": "Imagem Overlay",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        4140,
+        1040
+      ],
+      "executeOnce": false,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "operation": "resize",
+        "width": "={{ $json[\"size\"][\"width\"] > 1200 ? 1200 : $json[\"size\"][\"width\"] }}",
+        "height": "={{ $json[\"size\"][\"height\"] > 630 ? 630 : $json[\"size\"][\"height\"] }}",
+        "resizeOption": "onlyIfLarger",
+        "options": {
+          "format": "webp"
+        }
+      },
+      "id": "964dc2cb-69d2-4061-9f42-436e3b443bac",
+      "name": "redimensionar",
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1,
+      "position": [
+        3940,
+        860
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "information"
+      },
+      "id": "15a49f2b-39dc-4939-a1ed-29f802ecb345",
+      "name": "Pega informações redimensionada",
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1,
+      "position": [
+        4140,
+        860
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "multiStep",
+        "operations": {
+          "operations": [
+            {
+              "operation": "composite",
+              "dataPropertyNameComposite": "=frente"
+            },
+            {
+              "operation": "composite",
+              "dataPropertyNameComposite": "logo",
+              "positionX": "={{ ($('Pega informações redimensionada').item.json[\"size\"][\"width\"] - 10) - $('Informações logo subtitulo').item.json[\"size\"][\"width\"] }}",
+              "positionY": "={{ ($('Pega informações redimensionada').item.json[\"size\"][\"height\"] - 20) - $('Informações logo subtitulo').item.json[\"size\"][\"height\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "format": "jpeg"
+        }
+      },
+      "id": "ea168a13-a7cb-4184-9a62-6d0b73bb0d1a",
+      "name": "Aplicar marca dagua",
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1,
+      "position": [
+        3760,
+        1240
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "information",
+        "dataPropertyName": "logo"
+      },
+      "id": "274bf0b7-1b4a-472e-9d23-3c4b9e5f1ffe",
+      "name": "Informações logo subtitulo",
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1,
+      "position": [
+        3940,
+        1040
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $node['variaveis'].json[\"Logo marca dagua\"] ? $node['variaveis'].json[\"Logo marca dagua\"] : \"https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png\" }} ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "logo"
+            }
+          }
+        }
+      },
+      "id": "a8eb8005-7a35-44c2-9f34-c1cb3f8c1438",
+      "name": "logo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        3760,
+        1040
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $node['variaveis'].json[\"URL do Site\"] }}/wp-json/wp/v2/media/",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wordpressApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "cache-control",
+              "value": "no-cache"
+            },
+            {
+              "name": "content-disposition",
+              "value": "=attachment; filename={{ $node['Loop'].json[\"outlines\"]\n.replaceAll(\" \",\"-\")\n.toLowerCase()\n.normalize('NFD')\n.replace(/\\p{Mn}/gu, \"\")\n.replaceAll(\".\",\"\")\n.replaceAll(\",\",\"\")\n.replaceAll(\"\\n\",\"\")\n.replaceAll(\"\\r\",\"\")\n.slice(0, 100) }}.{{ $binary.data.fileExtension }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "9cb1288c-8643-4df9-ad23-bb179d53719e",
+      "name": "Wordpress - Salvar imagem em mídia",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        3960,
+        1240
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "wordpressApi": {
+          "id": "cvAHctXR9uK3qJ5p",
+          "name": "Wordpress account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $node['variaveis'].json[\"URL do Site\"] }}/wp-json/wp/v2/media/{{ $node['Wordpress - Salvar imagem em mídia'].json[\"id\"] }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wordpressApi",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "alt_text",
+              "value": "={{ $node['Loop'].json[\"outlines\"] }}"
+            },
+            {
+              "name": "title",
+              "value": "={{ $node['Loop'].json[\"outlines\"] }}"
+            },
+            {
+              "name": "description",
+              "value": "={{ $node['Loop'].json[\"outlines\"] }}"
+            },
+            {
+              "name": "caption",
+              "value": "={{ $node['Loop'].json[\"outlines\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "06b8d0cd-3f5e-4542-882e-45b845420162",
+      "name": "Wordpress - Atualizar Atributos da imagem",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        4140,
+        1240
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "wordpressApi": {
+          "id": "cvAHctXR9uK3qJ5p",
+          "name": "Wordpress account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Otimização + Marca d'agua + Metadados da imagem",
+        "height": 669.990316058851,
+        "width": 641.9019885531598,
+        "color": 2
+      },
+      "id": "51e0074f-474f-4b6e-8117-af2d51e5a98a",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3680,
+        780
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publicação no Wordpress",
+        "height": 259.48107636182147,
+        "width": 782.574703938639,
+        "color": 5
+      },
+      "id": "c57ab20c-1520-4bff-bc0e-3299a9c8bacd",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1760,
+        1440
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $node['variaveis'].json[\"Planilha ID\"] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $node['variaveis'].json[\"Planilha Aba\"] }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Título": "={{ $node['Dados SEO'].json[\"title\"] }}",
+            "Link": "={{ $node['Wordpress - Publicar Post'].json[\"link\"] }}",
+            "Execução": "CONCLUÍDO",
+            "Palavra Chave Foco": "={{ $node['Dados SEO'].json[\"keyword\"] }}",
+            "Url de Raspagem": "={{ $node['Ler Planilha'].json['Url de Raspagem'] }}"
+          },
+          "matchingColumns": [
+            "Url de Raspagem"
+          ],
+          "schema": [
+            {
+              "id": "Web Scraper",
+              "displayName": "Web Scraper",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Palavra Chave Foco",
+              "displayName": "Palavra Chave Foco",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Idioma",
+              "displayName": "Idioma",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Título",
+              "displayName": "Título",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Url de Raspagem",
+              "displayName": "Url de Raspagem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Seletor do conteúdo",
+              "displayName": "Seletor do conteúdo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID da Categoria",
+              "displayName": "ID da Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Categoria",
+              "displayName": "Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID das Tags",
+              "displayName": "ID das Tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Banco de imagem",
+              "displayName": "Banco de imagem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Imagens nos Subtítulos?",
+              "displayName": "Imagens nos Subtítulos?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Hora",
+              "displayName": "Hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Resumo",
+              "displayName": "Resumo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Conclusão",
+              "displayName": "Conclusão",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "FAQ",
+              "displayName": "FAQ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Link Interno?",
+              "displayName": "Link Interno?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Vídeo",
+              "displayName": "Vídeo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Fonte",
+              "displayName": "Fonte",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "CTA",
+              "displayName": "CTA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "CTA Texto",
+              "displayName": "CTA Texto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "CTA Link",
+              "displayName": "CTA Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Autor ID",
+              "displayName": "Autor ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Link",
+              "displayName": "Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Execução",
+              "displayName": "Execução",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ID da Execução",
+              "displayName": "ID da Execução",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ]
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "91805478-cf82-4563-abec-da998c21072e",
+      "name": "Google Sheets - Status Publicado",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.3,
+      "position": [
+        2380,
+        1520
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "z1VWO1EGILqORxWq",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $node['variaveis'].json[\"URL do Site\"] }}/wp-json/robo-seo-api-rest/v1/update-meta",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wordpressApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "post_id",
+              "value": "={{ $node['Wordpress - Publicar Post'].json[\"id\"] }}"
+            },
+            {
+              "name": "keyword",
+              "value": "={{ $node['Dados SEO'].json[\"keyword\"] }}"
+            },
+            {
+              "name": "title",
+              "value": "={{ $node['Dados SEO'].json[\"title\"] }}"
+            },
+            {
+              "name": "description",
+              "value": "={{ $node['Dados SEO'].json[\"description\"] }}"
+            },
+            {
+              "name": "link_internal",
+              "value": "={{ $node['dados'].json[\"post_link_interno\"] == true && $node['Dados SEO'].json[\"keyword\"] }}"
+            },
+            {
+              "name": "faq",
+              "value": "={{ $node['Combinar subtítulos'].json[\"faq_schema\"].join('')}}"
+            },
+            {
+              "name": "blog_posting_data.headline",
+              "value": "={{ $node['Dados SEO'].json[\"title\"] }}"
+            },
+            {
+              "name": "blog_posting_data.description",
+              "value": "={{ $node['Dados SEO'].json[\"description\"] }}"
+            },
+            {
+              "name": "blog_posting_data.keywords",
+              "value": "={{ $node['Dados SEO'].json[\"keyword\"] }}"
+            },
+            {
+              "name": "faq_title",
+              "value": "={{ \n  $node['Combinar subtítulos'].json[\"faq_schema_title\"]\n    .filter(item => item !== \"\") // Filtra os itens vazios\n    .join('') // Concatena em uma string, que será o título desejado\n}}"
+            },
+            {
+              "name": "article_type",
+              "value": "={{ \n$node['variaveis'].json[\"rank_math_article_type\"] ? \n$node['variaveis'].json[\"rank_math_article_type\"] : \n\"BlogPosting\" \n}}"
+            }
+          ]
+        },
+        "options": {
+          "response": {}
+        }
+      },
+      "id": "4c5ac2b5-661e-4278-9438-5acafb9aace5",
+      "name": "Plugins de SEO",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        2200,
+        1520
+      ],
+      "credentials": {
+        "wordpressApi": {
+          "id": "cvAHctXR9uK3qJ5p",
+          "name": "Wordpress account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "outline_content",
+              "renameField": true,
+              "outputFieldName": "content"
+            },
+            {
+              "fieldToAggregate": "id_imagem",
+              "renameField": true,
+              "outputFieldName": "imagem_destaque"
+            },
+            {
+              "fieldToAggregate": "faq_schema",
+              "renameField": true,
+              "outputFieldName": "faq_schema"
+            },
+            {
+              "fieldToAggregate": "faq_schema_title",
+              "renameField": true,
+              "outputFieldName": "faq_schema_title"
+            },
+            {
+              "fieldToAggregate": "summarization"
+            }
+          ]
+        },
+        "options": {
+          "mergeLists": true
+        }
+      },
+      "id": "c5e96144-dfb7-45f5-92a8-23ebb6a04825",
+      "name": "Combinar subtítulos",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1800,
+        1520
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "c4d5f84d-49b9-4881-813c-8d5cfb4c0d28",
+              "leftValue": "={{ $('Loop').context[\"currentRunIndex\"] }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "8b2c0ebf-6613-460b-819a-1bf4a43d8c63",
+      "name": "Imagem em destaque?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        2120,
+        940
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Dados SEO",
+        "height": 216.7417811652258,
+        "width": 308.91933278077715,
+        "color": 5
+      },
+      "id": "abb9b43b-5d6d-43d0-a17c-d1ff11efede7",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1320,
+        608
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Imagem",
+        "height": 1062.8575120367793,
+        "width": 1060.1259617368746,
+        "color": 3
+      },
+      "id": "e1067912-1edd-47fe-a4b3-d31748b44458",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2560,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $node['variaveis'].json[\"URL do Site\"] }}/wp-json/wp/v2/{{ $node['variaveis'].json['Custom Post Type'] == '' ? \"posts\" : $node['variaveis'].json['Custom Post Type'] }}/",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wordpressApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "featured_media",
+              "value": "={{ $node['Combinar subtítulos'].json[\"imagem_destaque\"][0] != '' ? $node['Combinar subtítulos'].json[\"imagem_destaque\"][0] : null }}"
+            },
+            {
+              "name": "excerpt",
+              "value": "={{ $node['Dados SEO'].json[\"description\"] }}"
+            },
+            {
+              "name": "title",
+              "value": "={{ $node['Dados SEO'].json[\"title\"] }}"
+            },
+            {
+              "name": "content",
+              "value": "={{ // Summarization\n$node['dados'].json[\"summarization\"] ?\n  $node['Combinar subtítulos'].json[\"summarization\"]\n    .filter(item => item !== \"\") \n    .join('') \n: ''}}\n{{ // Introduction\n$node['Dados SEO'].json[\"introduction\"] \n}}\n{{ // Vídeo\n$node[\"dados\"].json[\"video_youtube\"] == true && $node[\"Dados SEO\"].json[\"youtube_id\"] ? \n'<br /><iframe width=\"720\" height=\"405\" src=\"https://www.youtube.com/embed/' + $node[\"Dados SEO\"].json[\"youtube_id\"] + '\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>' \n: '' \n}}\n{{ // Conteúdo\n$node['Combinar subtítulos'].json[\"content\"].join(' ').trim() }}\n{{ \n(() => {\n  const reference = $node['dados'].json[\"reference\"];\n  const link = $node['dados'].json['link'];\n  const language = $node['dados'].json.language;\n  \n  if (!reference || !link) {\n    return ''; // Retorna vazio se não houver referência ou link\n  }\n\n  // Define a palavra para \"Fonte\" conforme o idioma\n  let sourceText;\n  switch (language) {\n    case 'Português BR':\n      sourceText = 'Fonte';\n      break;\n    case 'English (US)':\n      sourceText = 'Source';\n      break;\n    case 'Espanhol':\n      sourceText = 'Fuente';\n      break;\n    case 'French':\n      sourceText = 'Source'; // Em francês, também é \"Source\"\n      break;\n    case 'German':\n      sourceText = 'Quelle';\n      break;\n    default:\n      sourceText = 'Fonte'; // Idioma padrão se não corresponder a nenhum dos acima\n  }\n\n  // Gera o HTML de referência\n  return `<p>${sourceText}: <a href='${link}' target='_blank' title='${link.extractDomain()}' rel='nofollow'>${link}</a></p>`;\n})()\n}}\n{{ $node['dados'].json[\"cta\"] == true ?  \"<center><a href='\" + $node['dados'].json[\"cta_link\"] + \"' target='_blank' class='cta-robo-seo' title='\" + $node['dados'].json[\"cta_text\"] + '\">' + $node['dados'].json[\"cta_text\"] + '</a></center>' : \"\"}}"
+            },
+            {
+              "name": "slug",
+              "value": "={{ $node['Dados SEO'].json[\"keyword\"].replaceAll(\" \",\"-\").toLowerCase().normalize('NFD').replace(/\\p{Mn}/gu, \"\") }}"
+            },
+            {
+              "name": "={{ $node['variaveis'].json[\"Custom Taxonomia\"] == '' ? 'categories' : $node['variaveis'].json[\"Custom Taxonomia\"]}}",
+              "value": "={{ $node['Dados SEO'].json[\"category_id\"] }}"
+            },
+            {
+              "name": "status",
+              "value": "={{ $node['dados'].json[\"post_status\"] }}"
+            },
+            {
+              "name": "type",
+              "value": "={{ $node['variaveis'].json['Custom Post Type'] == '' ? \"posts\" : $node['variaveis'].json['Custom Post Type'] }}"
+            },
+            {
+              "name": "tags",
+              "value": "={{ $node['dados'].json[\"post_tag_id\"] }}"
+            },
+            {
+              "name": "date",
+              "value": "={{ $node['dados'].json[\"post_data_hora\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "64f6e253-3218-4e9c-ab59-08656ebd3fcf",
+      "name": "Wordpress - Publicar Post",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        2000,
+        1520
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "wordpressApi": {
+          "id": "cvAHctXR9uK3qJ5p",
+          "name": "Wordpress account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.midjourneyapi.xyz/mj/v2/imagine",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-KEY",
+              "value": "={{ $node['variaveis'].json[\"Midjourney API Key\"] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "prompt",
+              "value": "={{ $json.message.content.replaceAll('\"','') }}"
+            },
+            {
+              "name": "process_mode",
+              "value": "fast"
+            },
+            {
+              "name": "aspect_ratio",
+              "value": "16:9"
+            },
+            {
+              "name": "skip_prompt_check",
+              "value": "={{true}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9c160354-0619-4c9c-93af-6b0f3fd8a364",
+      "name": "Midjourney gerar prompt",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        2800,
+        1280
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.midjourneyapi.xyz/mj/v2/upscale",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-KEY",
+              "value": "={{ $node['variaveis'].json[\"Midjourney API Key\"] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "origin_task_id",
+              "value": "={{ $node['Midjourney gerar prompt'].json.task_id }}"
+            },
+            {
+              "name": "index",
+              "value": "1"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "22a9cd52-ab92-478c-911c-a95fd4e6933c",
+      "name": "midjourney_upscale",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        2720,
+        1480
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "amount": 30,
+        "unit": "seconds"
+      },
+      "id": "4839b047-d3dd-4f2c-a810-a7e5badc9080",
+      "name": "aguarde_geracao",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        2960,
+        1280
+      ],
+      "webhookId": "17354db6-b4db-4c42-8921-197447e4c875"
+    },
+    {
+      "parameters": {
+        "url": "={{ $node['midjourney_resultados'].json.task_result.image_url }}",
+        "options": {}
+      },
+      "id": "498dad5e-e8b4-4244-a536-4bc5cbaff40f",
+      "name": "Midjourney baixar imagem",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        3500,
+        1460
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.midjourneyapi.xyz/mj/v2/fetch",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "task_id",
+              "value": "={{ $node['midjourney_upscale'].json[\"task_id\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d3b6c489-c803-4823-8836-f94c9cc17eb4",
+      "name": "midjourney_resultados",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        3140,
+        1480
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "3cde394d-27b4-4a38-b623-b4263aae35d3",
+              "leftValue": "={{ $('midjourney_resultados').item.json[\"status\"] }}",
+              "rightValue": "finished",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "9dfefe25-efe3-4f12-9465-93fdb95b3f22",
+      "name": "resultado_finalizado?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        3320,
+        1480
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 30,
+        "unit": "seconds"
+      },
+      "id": "38d9fae0-f0d6-4dd3-938c-6a5cb1345b4b",
+      "name": "aguarde_upscale",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        2960,
+        1480
+      ],
+      "webhookId": "30c2f1ee-41b1-4859-a246-13b06f58ff79"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "2178f488-60a5-4aed-9d8a-454227fa2cc7",
+              "leftValue": "={{ $node['Leonardo.AI - Resultados'].json[\"generations_by_pk\"][\"status\"] }}",
+              "rightValue": "COMPLETE",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "bd14967c-6678-48e4-9898-0159e23eeb89",
+      "name": "imagem já foi gerada?1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        3320,
+        1040
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 40,
+        "unit": "seconds"
+      },
+      "id": "c49e6342-03fd-4480-a39a-268aa2a5ae3e",
+      "name": "Aguardar Leonardo.AI",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        3000,
+        1040
+      ],
+      "webhookId": "7c7aed9c-7a19-47b8-98a1-42aaf24d2906"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://cloud.leonardo.ai/api/rest/v1/generations",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "authorization",
+              "value": "=Bearer {{ $node['variaveis'].json[\"Leonardo AI API Key\"] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "height",
+              "value": "={{768}}"
+            },
+            {
+              "name": "prompt",
+              "value": "={{ $json.message.content.replaceAll('\"','') }}"
+            },
+            {
+              "name": "width",
+              "value": "={{1360}}"
+            },
+            {
+              "name": "num_images",
+              "value": "={{1}}"
+            },
+            {
+              "name": "modelId",
+              "value": "aa77f04e-3eec-4034-9c07-d0f619684628"
+            },
+            {
+              "name": "alchemy",
+              "value": "={{ true }}"
+            },
+            {
+              "name": "presetStyle",
+              "value": "CINEMATIC"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1f1782b0-ee49-44b1-8f7a-238f35384af2",
+      "name": "Leonard - Solicitar imagem",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        2800,
+        1040
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.generations_by_pk.generated_images[0].url }}",
+        "options": {}
+      },
+      "id": "c5083f11-27ce-42c7-a320-7b8818b56297",
+      "name": "Leonardo.AI - Baixar imagem",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        3500,
+        1020
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "url": "=https://cloud.leonardo.ai/api/rest/v1/generations/{{ $json.sdGenerationJob.generationId }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "authorization",
+              "value": "=Bearer {{ $node['variaveis'].json[\"Leonardo AI API Key\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3a64efd4-e048-4540-b360-646e0f1e688d",
+      "name": "Leonardo.AI - Resultados",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        3160,
+        1040
+      ],
+      "retryOnFail": true,
+      "maxTries": 4,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "content": "## Conteúdo",
+        "height": 233.8760594775996,
+        "width": 608.7477971493084,
+        "color": 5
+      },
+      "id": "4c8c9d4e-3e58-44f1-a562-90a6cfe34e81",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1680,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ff4e03db-92a3-443e-a470-c802eedf48e5",
+              "name": "outline_title",
+              "value": "={{ $node['Loop'].json.outlines }}",
+              "type": "string"
+            },
+            {
+              "id": "b50f4e51-f4c0-4dfd-99fd-8e40c2abbe88",
+              "name": "outline_content",
+              "value": "={{ \n(() => {\n  const loopKey = $node['Loop'].data.keys()[0];\n  const currentRunIndex = $('Loop').context[\"currentRunIndex\"];\n  const outline = $node['Loop'].json['outlines'];\n\n  const extractContent = () => {\n    const content = $node['Validador'].json.message.content.content;\n    return content ? content : 'Conteúdo não disponível';\n  };\n\n  const addImageAndCTA = () => {\n    const imageOption = $node['dados'].json[\"image_outline\"]\n    const image_bank = $node['dados'].json[\"image_bank\"]\n\n    if (image_bank === \"Sem Imagem\") {\n      return ''; // Não adiciona imagem\n    }\n    // Adiciona a lógica de imagens com base nas configurações\n    if (imageOption === \"NÃO\") {\n      return ''; // Não adiciona imagem\n    } else if (imageOption === \"SIM em Todos\") {\n          const imageSource = $node['Wordpress - Salvar imagem em mídia'].json['source_url'];\n      return `<img src='${imageSource}' alt='${outline}' title='${outline}' />`; \n    } else if (imageOption === \"SIM, mas intercalando\" && (currentRunIndex % 2 === 0)) {\n          const imageSource = $node['Wordpress - Salvar imagem em mídia'].json['source_url'];\n      return `<img src='${imageSource}' alt='${outline}' title='${outline}' />`; \n    } \n    return ''; // Caso nenhuma das condições seja satisfeita, não adiciona imagem\n  };\n\n  if (currentRunIndex === 0) return '';\n\n  // Outlines\n  if (loopKey === \"outlines\") {\n    return `${addImageAndCTA()}<h2>${outline}</h2>${extractContent()}`;\n  }\n\n  // Conclusão\n  if (loopKey === \"conclusion\") {\n    return `${extractContent()}`;\n  }\n\n  return '';\n})()\n}}\n{{ \n  $node['Loop'].data.keys()[0] === 'faq' ?\n  `<h2>${$node['Validador'].json[\"message\"][\"content\"].title_faq}</h2>` + \n  $node['Validador'].json[\"message\"][\"content\"].questions.map((faq) => \n    `<h3>${faq.question}</h3><p>${faq.answer}</p>`\n  ).join('') : ''\n}}",
+              "type": "string"
+            },
+            {
+              "id": "654f0dbc-befd-4651-b392-e6359993c245",
+              "name": "faq_schema",
+              "value": "={{ \n  $node['Loop'].data.keys()[0] === 'faq' ?\n  $node['Validador'].json[\"message\"][\"content\"].questions.map((faq) => \n    ({\n      pergunta: faq.question,\n      resposta: faq.answer\n    })\n  ) : ''\n}}",
+              "type": "string"
+            },
+            {
+              "id": "c263994e-269b-43c6-abf3-0034e3078e8c",
+              "name": "faq_schema_title",
+              "value": "={{ \n  $node['Loop'].data.keys()[0] === 'faq' ?\n  $node['Validador'].json[\"message\"][\"content\"].title_faq\n  : ''\n}}",
+              "type": "string"
+            },
+            {
+              "id": "662448fd-939c-4302-92f8-2ec82f475493",
+              "name": "id_imagem",
+              "value": "={{ $node['dados'].json[\"image_bank\"] == 'Sem Imagem' ? '' :  $('Loop').context[\"currentRunIndex\"] == 0 ? \n$node['Wordpress - Salvar imagem em mídia'].json[\"id\"] : '' }}",
+              "type": "string"
+            },
+            {
+              "id": "c97ed92c-0e7c-4861-a67a-5a74f2da89d4",
+              "name": "summarization",
+              "value": "={{ \n  $node['Loop'].data.keys()[0] === 'summarization' ?\n  $node['Validador'].json[\"message\"][\"content\"].content\n  : ''\n}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "eab6c7bc-6ae9-4c8a-a65d-e261c2bf4a7e",
+      "name": "Content",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2360,
+        1200
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://image.pollinations.ai/prompt/hyperealist%20{{ $json.message.content.replaceAll('\"','').urlEncode() + \"%20-%20Avoid%20texts\" }}?width=1200&height=630&nologo=true",
+        "options": {}
+      },
+      "id": "a4604d42-14e2-42b6-92cc-5eb186f748e6",
+      "name": "Pollinations",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3000,
+        880
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $node['variaveis'].json[\"Planilha ID\"] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $node['variaveis'].json[\"Planilha Aba\"] }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Execução": "PENDENTE",
+            "ID da Execução": "={{ $execution.id}}",
+            "Url de Raspagem": "={{ $node['Ler Planilha'].json['Url de Raspagem'] }}"
+          },
+          "matchingColumns": [
+            "Url de Raspagem"
+          ],
+          "schema": [
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Hora",
+              "displayName": "Hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Palavra Chave Foco",
+              "displayName": "Palavra Chave Foco",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Título",
+              "displayName": "Título",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Url de Raspagem",
+              "displayName": "Url de Raspagem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Seletor do conteúdo",
+              "displayName": "Seletor do conteúdo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ID da Categoria",
+              "displayName": "ID da Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Categoria",
+              "displayName": "Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ID das Tags",
+              "displayName": "ID das Tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Link",
+              "displayName": "Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Execução",
+              "displayName": "Execução",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ID da Execução",
+              "displayName": "ID da Execução",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6ab3d6fa-ee0d-4276-b1c6-6106ba67b03f",
+      "name": "Planilha com Status Executando",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.3,
+      "position": [
+        300,
+        680
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "z1VWO1EGILqORxWq",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "437c9513-e58b-4052-bdad-cd42b9008fc6",
+              "name": "post_data_hora",
+              "value": "={{$node['Ler Planilha'].json[\"Data\"].split('/').reverse().join('-') + \"T\" + ((parseInt($node['Ler Planilha'].json[\"Hora\"].split(\":\")[0], 10) + 3) % 24).toString().padStart(2, '0') + \":\" + ($node['Ler Planilha'].json[\"Hora\"].split(\":\")[1]).toString().padStart(2, '0') + \":00.000Z\"}}",
+              "type": "string"
+            },
+            {
+              "id": "4f7c2d1c-bac2-4e42-81c0-02d29e4007d8",
+              "name": "keyword",
+              "value": "={{ $node['Ler Planilha'].json['Palavra Chave Foco'] }}",
+              "type": "string"
+            },
+            {
+              "id": "56d0c2ea-4997-44ab-9842-e8863fdbc8a2",
+              "name": "post_title",
+              "value": "={{ $node['Ler Planilha'].json['Título'] }}",
+              "type": "string"
+            },
+            {
+              "id": "87b5255a-42a1-4075-a527-2bce12c73e8b",
+              "name": "post_categoria_id",
+              "value": "={{ $node['Ler Planilha'].json['ID da Categoria'].toString().replaceAll('.',',') }}",
+              "type": "string"
+            },
+            {
+              "id": "97a399da-d3e1-4532-99c5-0889f84faf20",
+              "name": "post_tag_id",
+              "value": "={{ $node['Ler Planilha'].json['ID das Tags'].toString().replaceAll('.',',') }}",
+              "type": "string"
+            },
+            {
+              "id": "0fbeaa53-5268-429c-9f73-f72719f1e39a",
+              "name": "post_status",
+              "value": "={{ $node['Ler Planilha'].json['Status'] == 'Rascunho' ? 'draft' :\n\n$node['Ler Planilha'].json['Status'] == 'Publicado' ? 'publish' :\n\n$node['Ler Planilha'].json['Status'] == 'Agendado' ? 'future' :\n\n$node['Ler Planilha'].json['Status'] == 'Revisão pendente' ? 'pending' :\n\n$node['Ler Planilha'].json['Status'] == 'Privado' ? 'private' : \n\n'future'\n\n}}",
+              "type": "string"
+            },
+            {
+              "id": "978ae6d4-6574-46f0-92f4-eed89094cfc0",
+              "name": "post_link_interno",
+              "value": "={{ $node['Ler Planilha'].json['Link Interno?'] }}",
+              "type": "boolean"
+            },
+            {
+              "id": "8d6057c3-3853-4da6-b557-4ea7dcc0ff13",
+              "name": "post_autor_id",
+              "value": "={{ $node['Ler Planilha'].json[\"Autor ID\"] ? $node['Ler Planilha'].json[\"Autor ID\"] : NULL }}",
+              "type": "string"
+            },
+            {
+              "id": "47d913b0-c6b4-4073-b18c-fdb106414e27",
+              "name": "post_video",
+              "value": "={{ $node['Ler Planilha'].json['Vídeo'] }}",
+              "type": "string"
+            },
+            {
+              "id": "04e5a139-5b9d-4007-befd-e64ad096a02d",
+              "name": "faq",
+              "value": "={{ $node['Ler Planilha'].json[\"FAQ\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "5aefa4ae-e55c-48c9-ad98-43480ac28021",
+              "name": "conclusion",
+              "value": "={{ $node['Ler Planilha'].json[\"Conclusão\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "33de81ad-efbc-4da6-b734-0139e0b5798e",
+              "name": "cta",
+              "value": "={{ $node['Ler Planilha'].json[\"CTA\"] }}",
+              "type": "boolean"
+            },
+            {
+              "id": "4226d9ab-1d04-4632-bc8a-18c3b24e0e66",
+              "name": "cta_text",
+              "value": "={{ $node['Ler Planilha'].json[\"CTA Texto\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "bc98d88c-d39c-45e9-a448-1a2b08702dbc",
+              "name": "cta_link",
+              "value": "={{ $node['Ler Planilha'].json[\"CTA Link\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "51265dcf-f23a-42f2-b6ab-e0da5be42b00",
+              "name": "language",
+              "value": "={{ $node['Ler Planilha'].json[\"Idioma\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "c733a144-d479-4b7e-8e43-ffc4c8f1c507",
+              "name": "selector",
+              "value": "={{ $node['Ler Planilha'].json[\"Seletor do conteúdo\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "ac3b116c-2cfc-4586-999b-7612232adf88",
+              "name": "link",
+              "value": "={{ $node['Ler Planilha'].json[\"Url de Raspagem\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "5fa3529e-cd73-4cae-9ea8-fbb067696c0b",
+              "name": "image_bank",
+              "value": "={{ $node['Ler Planilha'].json[\"Banco de imagem\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "d23c5ae3-e7ef-4665-a7c5-b2c3094d9fe1",
+              "name": "scraper",
+              "value": "={{ \n// n8n\n$node['Ler Planilha'].json[\"Web Scraper\"] == \"n8n\" ?\n\"Title:\" + $node['HTML extract'].json[\"title\"] +\n\"Content:\" + $node['HTML extract'].json[\"content\"] :\n\n// Scraper.do\n$node['Ler Planilha'].json[\"Web Scraper\"] == \"Scrape do\" ?\n\"Title:\" + $node['HTML extract'].json[\"title\"] +\n\"Content:\" + $node['HTML extract'].json[\"content\"] :\n\n// Jina.ai\n$node['Ler Planilha'].json[\"Web Scraper\"] == \"Jina AI\" ?\n$node['Scraper Jina.ai'].json[\"data\"].title +\n$node['Scraper Jina.ai'].json[\"data\"].content\n\n: \"Nenhum Web Scraper selecionado\" \n\n}}",
+              "type": "string"
+            },
+            {
+              "id": "2f7b3140-48f7-45ac-b86e-2ba6f2e9281a",
+              "name": "outlines_qtd",
+              "value": "={{ \n$node['Ler Planilha'].json[\"Web Scraper\"] == \"n8n\" ?\n    Math.ceil($node['HTML extract'].json['content_text'].split(' ').filter(word => word.length > 0).length / 350) :\n\n$node['Ler Planilha'].json[\"Web Scraper\"] == \"Scrape do\" ?\n    Math.ceil($node['HTML extract'].json['content_text'].split(' ').filter(word => word.length > 0).length / 350) :\n\n$node['Ler Planilha'].json[\"Web Scraper\"] == \"Jina AI\" ?\n    Math.ceil($node['Scraper Jina.ai'].json[\"data\"].content.split(' ').filter(word => word.length > 0).length / 350) :\n\n\"Nenhum Web Scraper selecionado\" \n}}",
+              "type": "string"
+            },
+            {
+              "id": "46a00c65-c2ef-4ffe-8391-f5396a19925b",
+              "name": "reference",
+              "value": "={{ $node['Ler Planilha'].json[\"Fonte\"] }}",
+              "type": "boolean"
+            },
+            {
+              "id": "8af88b41-1b04-4018-b508-6f9eac715963",
+              "name": "summarization",
+              "value": "={{ $node['Ler Planilha'].json[\"Resumo\"] }}",
+              "type": "boolean"
+            },
+            {
+              "id": "41c6dab5-bc99-4040-85a1-3c2c22afed8a",
+              "name": "image_outline",
+              "value": "={{ $node['Ler Planilha'].json[\"Imagens nos Subtítulos?\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "a450835e-2ca1-4d7f-9a8f-edc13f9f2c17",
+              "name": "video_youtube",
+              "value": "={{ $node['Ler Planilha'].json[\"Vídeo\"] }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "104d749e-39e0-4a1c-8764-523ac92186e3",
+      "name": "dados",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1180,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $node[\"Ler Planilha\"].json['Url de Raspagem'] }}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "31658ce1-0fd1-4037-bd9e-58e93ca5a821",
+      "name": "Scraper HTTP",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        740,
+        500
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "title",
+              "cssSelector": "title"
+            },
+            {
+              "key": "description",
+              "cssSelector": "meta[name=\"description\"]",
+              "returnValue": "attribute",
+              "attribute": "content"
+            },
+            {
+              "key": "image",
+              "cssSelector": "meta[property=\"og:image\"]",
+              "returnValue": "attribute",
+              "attribute": "content"
+            },
+            {
+              "key": "outlines",
+              "cssSelector": "h2",
+              "returnArray": true
+            },
+            {
+              "key": "content",
+              "cssSelector": "={{ $node['Ler Planilha'].json[\"Seletor do conteúdo\"] ? $node['Ler Planilha'].json[\"Seletor do conteúdo\"] : 'body' }}",
+              "returnValue": "html"
+            },
+            {
+              "key": "content_text",
+              "cssSelector": "={{ $node['Ler Planilha'].json[\"Seletor do conteúdo\"] ? $node['Ler Planilha'].json[\"Seletor do conteúdo\"] : 'body' }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "29bf966f-32ee-45bb-8ac6-b49edd61932d",
+      "name": "HTML extract",
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        940,
+        572
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "prompt": "={{ $json.message.content.replaceAll('\"','') }}",
+        "model": "dall-e-3",
+        "options": {
+          "n": 1,
+          "quality": "hd",
+          "size": "1792x1024"
+        },
+        "requestOptions": {}
+      },
+      "id": "327dd0a3-f681-43cb-96ad-d207b5c0506c",
+      "name": "Dall-e",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        3000,
+        720
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "openAiApi": {
+          "id": "fQUsqGYvG7BKn0Op",
+          "name": "OpenAi account FORTUNE POST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "model": "gpt-4o",
+        "prompt": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "=Como um engenheiro de prompt especializado em geração de imagem com IA, crie um prompt conciso em inglês para a API do Leonardo.AI. O prompt deve sugerir uma imagem que represente visualmente uma postagem de blog. Concentre-se em elementos visuais que unam todos esses aspectos, sem introduções ou conclusões adicionais. Priorize os elementos mais importantes no início do prompt e mantenha-o abaixo de 250 caracteres. Garantir que a representação seja respeitosa e esteja alinhada com as políticas de conteúdo da Leonardo.AI."
+            },
+            {
+              "content": "=Com base no tema '{{ $node['Loop'].json[\"outlines\"] }}' e no conteúdo de referência, crie um prompt em inglês geração de imagem que reflita visualmente esses elementos em uma imagem para um post."
+            },
+            {
+              "role": "assistant",
+              "content": "=Conteúdo de referência:\n{{ $node['Loop'].json[\"outlines\"] }} - {{ $node['Dados SEO'].json[\"title\"] }}"
+            }
+          ]
+        },
+        "options": {},
+        "requestOptions": {}
+      },
+      "id": "657fa39d-ddf8-402b-81f5-cca09754a8ea",
+      "name": "Leonardo.AI prompt",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        2640,
+        1040
+      ],
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "executeOnce": true,
+      "credentials": {
+        "openAiApi": {
+          "id": "fQUsqGYvG7BKn0Op",
+          "name": "OpenAi account FORTUNE POST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "model": "gpt-4-0125-preview",
+        "prompt": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "=Como um engenheiro especialista em prompts especializado em imagens geradas por IA, crie um prompt em inglês para o Midjourney. O prompt deve sugerir uma imagem que represente visualmente uma postagem de blog. Concentre-se em elementos visuais que unam todos esses aspectos, sem introduções ou conclusões adicionais. Siga as políticas da OpenAI para evitar a solicitação de palavras banidas pela API. Garantir que a representação seja respeitosa e esteja alinhada com as políticas de conteúdo da OpenAI. seguindo algumas diretrizes:\n1. A escolha das palavras é importante. Sinônimos mais específicos funcionam melhor em muitas circunstâncias. Em vez de grande, tente minúsculo, enorme, gigantesco, enorme ou imenso.\n2. Palavras plurais deixam muito ao acaso. Experimente números específicos. “Três gatos” é mais específico que “gatos”. Substantivos coletivos também funcionam, “bando de pássaros” em vez de “pássaros”.\n3. É melhor descrever o que você quer em vez do que você não quer. \n4. Inclua qualquer elemento que seja importante para você em seu prompt. Menos detalhes significam mais variedade, mas menos controle.\n5. Tente ser claro sobre qualquer contexto ou detalhe que seja importante para você. Pense sobre:\n5.1. Assunto: pessoa, animal, personagem, localização, objeto\n5.2. Meio: foto, pintura, ilustração, escultura, rabisco, tapeçaria\n5.3. Ambiente: dentro de casa, ao ar livre, na lua, debaixo d’água, na cidade\n5.4. Iluminação: suave, ambiente, nublado, néon, luzes de estúdio\n5.5. Cor: vibrante, suave, brilhante, monocromático, colorido, preto e branco, pastel\n5.6. Humor: calmo, calmo, estridente, enérgico\n5.7. Composição: retrato, tiro na cabeça, close-up, vista panorâmica\n6. O Midjourney Bot funciona melhor com frases simples e curtas que descrevem o que você deseja ver. Evite longas listas de solicitações e instruções.\n7. Não solicite no prompt para escrever texto na imagem.\n8. Não utiliza nome de marcas registradas no promtp.\n9. Retorne o prompt em inglês\n10. Não utilize palavras proibidas do midjourney, exemplo 'cutting'.\n11. Não utilize traços '-' nem '--' para separar o prompt, apenas virgula se necessário.\n12. Utilize no máximo 30 palavras para o prompt."
+            },
+            {
+              "content": "=Com base no tema '{{ $node['Loop'].json[\"outlines\"] }}' e no conteúdo de referência, crie um prompt em inglês para Midjourney que reflita visualmente esses elementos em uma imagem para um post."
+            },
+            {
+              "role": "assistant",
+              "content": "=Conteúdo de referência:\n{{ $node['Loop'].json[\"outlines\"] }} - {{ $node['Dados SEO'].json[\"title\"] }}"
+            }
+          ]
+        },
+        "options": {},
+        "requestOptions": {}
+      },
+      "id": "7356806b-5b31-41f9-b516-5009dcbcdbbc",
+      "name": "Midjourney prompt",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        2640,
+        1280
+      ],
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "executeOnce": true,
+      "credentials": {
+        "openAiApi": {
+          "id": "fQUsqGYvG7BKn0Op",
+          "name": "OpenAi account FORTUNE POST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://r.jina.ai/{{ $node[\"Ler Planilha\"].json['Url de Raspagem'] }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Target-Selector",
+              "value": "={{ $node[\"Ler Planilha\"].json['Seletor do conteúdo'] ? $node[\"Ler Planilha\"].json['Seletor do conteúdo'] : \"body\" }}"
+            },
+            {
+              "name": "X-Return-Format",
+              "value": "markdown"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2f81d344-3d8c-459c-b55e-e7956c79610a",
+      "name": "Scraper Jina.ai",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        740,
+        832
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "content": "## Web Scrapping\n",
+        "height": 537.6844242417081,
+        "width": 637.9678262740179
+      },
+      "id": "61e41938-11dc-4727-ada6-1c9c0131b7f7",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        460,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $node[\"Ler Planilha\"].json['Web Scraper'] }}",
+                    "rightValue": "n8n",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "n8n"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "82c1a189-9382-41d5-9a9a-b8d205807edd",
+                    "leftValue": "={{ $node[\"Ler Planilha\"].json['Web Scraper'] }}",
+                    "rightValue": "Scrape do",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Scrape.do"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "a0cb32dd-4c6c-4906-9004-e9d39be4892b",
+                    "leftValue": "={{ $node[\"Ler Planilha\"].json['Web Scraper'] }}",
+                    "rightValue": "Jina AI",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Jina AI"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "29434793-508b-42df-a8d0-40e52f61dfd3",
+      "name": "Qual Scraper?",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        500,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "e22ceb13-bb84-432c-9982-2c1165d3f9c0",
+                    "leftValue": "={{ $node['dados'].json[\"image_bank\"] }}",
+                    "rightValue": "Dall-e",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Dall-e"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "8cc1f861-6105-4caf-a213-da3f51c73035",
+                    "leftValue": "={{ $node['dados'].json[\"image_bank\"] }}",
+                    "rightValue": "Pollinations",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Pollinations"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "9c0816e2-d237-411d-aa4f-8143fa2756aa",
+                    "leftValue": "={{ $node['dados'].json[\"image_bank\"] }}",
+                    "rightValue": "Leonardo",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Leonardo.Ai"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "33245498-baca-4031-b550-6f5293397b96",
+                    "leftValue": "={{ $node['dados'].json[\"image_bank\"] }}",
+                    "rightValue": "Midjourney",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Midjourney"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "75066a2c-6d20-48c5-9d63-867eac449af1",
+                    "leftValue": "={{ $node['dados'].json[\"image_bank\"] }}",
+                    "rightValue": "Sem Imagem",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Sem Imagem"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "none"
+        }
+      },
+      "id": "08c38722-c962-4941-aaaf-3f061183ed6d",
+      "name": "Qual banco de imagem?",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        2360,
+        920
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "f957393b-6523-4fe0-b411-6b797ed631da",
+                    "leftValue": "={{ $node['Loop'].data.keys()[0] }}",
+                    "rightValue": "faq",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "FAQ"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "a2b1a9d7-13ab-48cd-a998-8de3a954614f",
+                    "leftValue": "={{ $node['Loop'].data.keys()[0] }}",
+                    "rightValue": "conclusion",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Conclusion"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $node['dados'].json['image_outline'] }}",
+                    "rightValue": "S",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "SIM"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "5665fae6-3da8-4aa5-ab2c-1c6addd42ed6",
+                    "leftValue": "={{ $node['dados'].json['image_outline'] }}",
+                    "rightValue": "N",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "NÃO"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "none"
+        }
+      },
+      "id": "4e22c166-9864-42fc-933b-e1b782ca3ba4",
+      "name": "Imagem no subtítulo?",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        2360,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": "={{ 3 }}"
+            }
+          ]
+        }
+      },
+      "id": "eca4bd18-62d7-4c4e-82a2-9a254a6da021",
+      "name": "A cada 15 min",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -360,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.midjourneyapi.xyz/mj/v2/seed",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-KEY",
+              "value": "={{ $node['variaveis'].json[\"Midjourney API Key\"] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "task_id",
+              "value": "={{ $node['Midjourney gerar prompt'].json.task_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "db67ba2f-a488-4cbd-a74e-65b178671bb8",
+      "name": "midjourney_seed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        3140,
+        1280
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "3cde394d-27b4-4a38-b623-b4263aae35d3",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "=success",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "23fa4103-1b78-41b7-acfb-d1e6a03d0b93",
+      "name": "imagem_gerada?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        3320,
+        1280
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $node['Ler Planilha'].json['Url de Raspagem']}}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "super",
+              "value": "={{true}}"
+            },
+            {
+              "name": "render",
+              "value": "={{ true }}"
+            },
+            {
+              "name": "playWithBrowser",
+              "value": "=[\n{ \"Action\": \"WaitSelector\", \"WaitSelector\": \"{{ $node[\"Ler Planilha\"].json['Seletor do conteúdo'] ? $node[\"Ler Planilha\"].json['Seletor do conteúdo'] : \"body\" }}\", \"Timeout\": 3500 },\n{ \"Action\": \"ScrollX\", \"Value\": 5000 },\n{ \"Action\": \"Wait\", \"Timeout\": 4000 }\n]"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": true,
+          "proxy": "=http://{{ $node['variaveis'].json[\"scrapeDo_api\"] }}:@proxy.scrape.do:8080"
+        }
+      },
+      "id": "dc77679c-a33d-4aa1-87a3-c1da82b1f24b",
+      "name": "Scrape.do",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        740,
+        672
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "assistant",
+        "assistantId": {
+          "__rl": true,
+          "value": "={{ $node['variaveis'].json[\"Assistant Open AI ID\"] }}",
+          "mode": "id"
+        },
+        "prompt": "define",
+        "text": "=Create the SEO Data in JSON format with the attributes (keyword, title, description, introduction, category_id, youtube_id and {{ $node['dados'].json[\"outlines_qtd\"] }} outlines), in language: {{ $('dados').item.json.language }} based on the reference content:\n\n{{ $node['dados'].json[\"scraper\"] }}",
+        "options": {}
+      },
+      "id": "98607419-98db-4fa7-a351-e6b98991cd25",
+      "name": "Assistants - SEO",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.4,
+      "position": [
+        1340,
+        680
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "fQUsqGYvG7BKn0Op",
+          "name": "OpenAi account FORTUNE POST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Como um engenheiro especialista em prompts especializado em imagens geradas por IA, crie um prompt em inglês para a API DALL-E. O prompt deve sugerir uma imagem que represente visualmente uma postagem de blog, com base no conteúdo de referência. Concentre-se em elementos visuais que unam todos esses aspectos, sem introduções ou conclusões adicionais. Siga as políticas da OpenAI para evitar a solicitação de palavras banidas pela API. Garantir que a representação seja respeitosa e esteja alinhada com as políticas de conteúdo da OpenAI.",
+              "role": "system"
+            },
+            {
+              "content": "=Conteúdo de referência:\n{{ $node['Loop'].json[\"outlines\"] }} - {{ $node['Dados SEO'].json[\"title\"] }}",
+              "role": "assistant"
+            },
+            {
+              "content": "=Com base no tema '{{ $node['Loop'].json[\"outlines\"] }}' e no conteúdo de referência, crie um prompt em inglês para a API do DALL-E que reflita visualmente esses elementos em uma imagem para um post."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "0074a526-e0ca-4ee3-b7bf-fcbdd767f690",
+      "name": "Dall-e prompt",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.3,
+      "position": [
+        2640,
+        720
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "fQUsqGYvG7BKn0Op",
+          "name": "OpenAi account FORTUNE POST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Com base no tema '{{ $node['Loop'].json[\"outlines\"] }}' com o contexto: '{{ $node['Dados SEO'].json[\"introduction\"].removeTags() }}'\nCrie um prompt em inglês para a uma IA de geração de imagem que reflita visualmente esses elementos em uma imagem para um post."
+            },
+            {
+              "content": "=Como um engenheiro especialista em prompts especializado em imagens geradas por IA.\nConcentre-se em elementos visuais que para compor a imagem para o conteúdo, sem introduções ou conclusões adicionais.",
+              "role": "system"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ed3b313e-8f4d-4bf3-89d7-079353f8d4e9",
+      "name": "Pollinations prompt",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.4,
+      "position": [
+        2640,
+        880
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "fQUsqGYvG7BKn0Op",
+          "name": "OpenAi account FORTUNE POST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Output AI: {{ $json.output }}"
+            },
+            {
+              "content": "=You will receive a text generated by another AI. Your task is to make sure the text is formatted correctly and follows the following JSON pattern:\n{{ \n  (() => {\n    const loopKey = $node['Loop'].data.keys()[0];\n    const outlines = $node['Loop'].json['outlines'];\n\n    if (loopKey === \"outlines\") {\n      return `{\"content\": \"<conteúdo aqui>\"}\n\n1 - Remember to use semantic HTML instead of Markdown\n2 - Use paragraphs with <p> and always break the line at the end, closing the </p>;\n3 - Use Bold <strong> to mark important points.\n4 - The use of h3 is only in the middle of the content, never at the beginning;\nIf the text is in another format, adjust it to that format.\nExample output: {'content': '<p>The adoption of Artificial Intelligence (AI) can bring numerous benefits to small businesses, from automating repetitive tasks to personalizing customer service and analyzing data./<p><p>The implementation of AI should be done gradually, identifying areas that can benefit immediately and conducting pilot projects to assess the efficiency of these solutions.</p><p>Success stories in different sectors show how AI can be a powerful tool to boost growth and improve operational efficiency.</p><p>With AI, small businesses can not only compete on equal footing with larger companies but also innovate and create new opportunities in the market.</p><p>Therefore, do not overlook the potential of AI to revolutionize your business.</p>'}`;\n    } else if (loopKey === \"faq\") {\n      return `Output Example: {\"title_faq\":\"Frequently Asked Questions about Artificial Intelligence for Micro Enterprises\",\"questions\":[{\"question\":\"What are the benefits of AI for my micro enterprise?\",\"answer\":\"AI can bring various benefits, such as task automation, process optimization, data analysis for more strategic decision-making, personalization of customer experience, and increased competitiveness.\"},{\"question\":\"Is AI expensive for micro enterprises?\",\"answer\":\"There are accessible and scalable AI solutions for micro enterprises, with options that cater to different budgets and needs.\"},{\"question\":\"How can I start implementing AI in my business?\",\"answer\":\"Start by identifying the areas where AI can have the most impact, such as automating repetitive tasks or analyzing data. Choose tools that suit your needs and begin with a pilot project.\"},{\"question\":\"What AI tools can I use?\",\"answer\":\"There are various tools, such as AI-powered social media management platforms, customer service chatbots, data analysis software, and task automation tools.\"},{\"question\":\"Do I need a specialized team to use AI?\",\"answer\":\"Not necessarily. Many AI tools are intuitive and easy to use. However, investing in training for your team can optimize AI usage and ensure better results.\"}]}`;\n    } else if (loopKey === \"conclusion\") {\n      return `{\"content\": \"<conteúdo aqui>\"}\n\n1 - Remember to use semantic HTML instead of Markdown\n2 - Use paragraphs with <p> and always break the line at the end, closing the </p>;\n3 - Use Bold <strong> to mark important points.\n4 - The use of h3 is only in the middle of the content, never at the beginning;\nIf the text is in another format, adjust it to that format.\nExample output: { 'content': '<h2>Finally what is the best way to implement AI</h2><p>The adoption of Artificial Intelligence (AI) can bring numerous benefits to small businesses, from automating repetitive tasks to personalizing customer service and analyzing data.</p><p>The implementation of AI should be done gradually, identifying areas that can benefit immediately and conducting pilot projects to assess the efficiency of these solutions.</p><p>Success stories in different sectors show how AI can be a powerful tool to boost growth and improve operational efficiency.</p><p>With AI, small businesses can not only compete on equal footing with larger companies but also innovate and create new opportunities in the market.</p><p>Therefore, do not overlook the potential of AI to revolutionize your business.</p>' }`;\n    } else if (loopKey === \"summarization\") {\n      return `{\n        \"summary\": \"<conteúdo resumido aqui>\"\n\n        Generate a summary that directly and accurately answers potential user searches, as Google does when highlighting relevant excerpts in search results. The summary should be highly relevant to the search keywords and provide a clear and concise answer that adds value to the user, following specific guidelines:\nGenerate only the summary in just 1 paragraph using HTML <h3>.\n        Example output: {\"content\":\"<h3>E-E-A-T é a sigla para Experience, Expertise, Authoritativeness e Trust que significam, respectivamente: Experiência, Especialidade, Autoridade e Confiança. Esses conceitos são apresentados pelo Google como fatores de avaliação da qualidade das páginas da Web.</h3>\"}\n\n      }`;\n    } else {\n      return '';\n    }\n  })()\n}}\nin language: {{ $('dados').item.json.language }}",
+              "role": "system"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {
+          "temperature": 0.2
+        }
+      },
+      "id": "4edcb906-c7dc-41d9-9704-448b1b45f2b2",
+      "name": "Validador",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.4,
+      "position": [
+        2000,
+        680
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "fQUsqGYvG7BKn0Op",
+          "name": "OpenAi account FORTUNE POST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "assistant",
+        "assistantId": {
+          "__rl": true,
+          "value": "={{ $node['variaveis'].json[\"Assistant Open AI ID\"] }}",
+          "mode": "id"
+        },
+        "prompt": "define",
+        "text": "={{ \n// Outline\n$node['Loop'].data.keys()[0] == \"outlines\" ? \n  \"Develop the Content in JSON for the subtitle '\" + $node['Loop'].json[\"outlines\"] + \"'\" : \n\n// FAQ\n$node['Loop'].data.keys()[0] == \"faq\" ? \n  \"Develop the FAQ in JSON for the content\" :\n\n// Conclusion\n$node['Loop'].data.keys()[0] == \"conclusion\" ? \n  \"Develop the conclusion in JSON for the content\" :\n\n// Summarization\n$node['Loop'].data.keys()[0] == \"summarization\" ? \n  \"Develop a summarization in JSON for the content based on the previous sections\" :\n\n''\n}}\nin language: {{ $('dados').item.json.language }}",
+        "options": {}
+      },
+      "id": "4cbb9c57-d426-4b65-ac7b-b3640abc3952",
+      "name": "Assistants - Content",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.4,
+      "position": [
+        1700,
+        680
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "fQUsqGYvG7BKn0Op",
+          "name": "OpenAi account FORTUNE POST"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Ocorreu Erro": {
+      "main": [
+        [
+          {
+            "node": "variaveis_erro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "variaveis_erro": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Status ERRO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Executar": {
+      "main": [
+        [
+          {
+            "node": "variaveis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "variaveis": {
+      "main": [
+        [
+          {
+            "node": "Ler Planilha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ler Planilha": {
+      "main": [
+        [
+          {
+            "node": "Planilha com Status Executando",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dados SEO": {
+      "main": [
+        [
+          {
+            "node": "Separar Dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memória": {
+      "ai_memory": [
+        [
+          {
+            "node": "Assistants - SEO",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "Assistants - Content",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "aguarde 10s": {
+      "main": [
+        [
+          {
+            "node": "Assistants - Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop": {
+      "main": [
+        [
+          {
+            "node": "Imagem em destaque?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Combinar subtítulos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Separar Dados": {
+      "main": [
+        [
+          {
+            "node": "Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pega informações": {
+      "main": [
+        [
+          {
+            "node": "redimensionar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Imagem Overlay": {
+      "main": [
+        [
+          {
+            "node": "Aplicar marca dagua",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "redimensionar": {
+      "main": [
+        [
+          {
+            "node": "Pega informações redimensionada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pega informações redimensionada": {
+      "main": [
+        [
+          {
+            "node": "logo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aplicar marca dagua": {
+      "main": [
+        [
+          {
+            "node": "Wordpress - Salvar imagem em mídia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Informações logo subtitulo": {
+      "main": [
+        [
+          {
+            "node": "Imagem Overlay",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "logo": {
+      "main": [
+        [
+          {
+            "node": "Informações logo subtitulo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wordpress - Salvar imagem em mídia": {
+      "main": [
+        [
+          {
+            "node": "Wordpress - Atualizar Atributos da imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wordpress - Atualizar Atributos da imagem": {
+      "main": [
+        [
+          {
+            "node": "Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Plugins de SEO": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Status Publicado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Combinar subtítulos": {
+      "main": [
+        [
+          {
+            "node": "Wordpress - Publicar Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Imagem em destaque?": {
+      "main": [
+        [
+          {
+            "node": "Qual banco de imagem?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "aguarde 10s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wordpress - Publicar Post": {
+      "main": [
+        [
+          {
+            "node": "Plugins de SEO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Midjourney gerar prompt": {
+      "main": [
+        [
+          {
+            "node": "aguarde_geracao",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "midjourney_upscale": {
+      "main": [
+        [
+          {
+            "node": "aguarde_upscale",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "aguarde_geracao": {
+      "main": [
+        [
+          {
+            "node": "midjourney_seed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Midjourney baixar imagem": {
+      "main": [
+        [
+          {
+            "node": "Pega informações",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "midjourney_resultados": {
+      "main": [
+        [
+          {
+            "node": "resultado_finalizado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "resultado_finalizado?": {
+      "main": [
+        [
+          {
+            "node": "Midjourney baixar imagem",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "aguarde_upscale",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "aguarde_upscale": {
+      "main": [
+        [
+          {
+            "node": "midjourney_resultados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "imagem já foi gerada?1": {
+      "main": [
+        [
+          {
+            "node": "Leonardo.AI - Baixar imagem",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Aguardar Leonardo.AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aguardar Leonardo.AI": {
+      "main": [
+        [
+          {
+            "node": "Leonardo.AI - Resultados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leonard - Solicitar imagem": {
+      "main": [
+        [
+          {
+            "node": "Aguardar Leonardo.AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leonardo.AI - Baixar imagem": {
+      "main": [
+        [
+          {
+            "node": "Pega informações",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leonardo.AI - Resultados": {
+      "main": [
+        [
+          {
+            "node": "imagem já foi gerada?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Content": {
+      "main": [
+        [
+          {
+            "node": "Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pollinations": {
+      "main": [
+        [
+          {
+            "node": "Pega informações",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Planilha com Status Executando": {
+      "main": [
+        [
+          {
+            "node": "Qual Scraper?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "dados": {
+      "main": [
+        [
+          {
+            "node": "Assistants - SEO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scraper HTTP": {
+      "main": [
+        [
+          {
+            "node": "HTML extract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML extract": {
+      "main": [
+        [
+          {
+            "node": "dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dall-e": {
+      "main": [
+        [
+          {
+            "node": "Pega informações",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leonardo.AI prompt": {
+      "main": [
+        [
+          {
+            "node": "Leonard - Solicitar imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Midjourney prompt": {
+      "main": [
+        [
+          {
+            "node": "Midjourney gerar prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scraper Jina.ai": {
+      "main": [
+        [
+          {
+            "node": "dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qual Scraper?": {
+      "main": [
+        [
+          {
+            "node": "Scraper HTTP",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Scrape.do",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Scraper Jina.ai",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qual banco de imagem?": {
+      "main": [
+        [
+          {
+            "node": "Dall-e prompt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pollinations prompt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Leonardo.AI prompt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Midjourney prompt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Imagem no subtítulo?": {
+      "main": [
+        [
+          {
+            "node": "Content",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Content",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Qual banco de imagem?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "midjourney_seed": {
+      "main": [
+        [
+          {
+            "node": "imagem_gerada?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "imagem_gerada?": {
+      "main": [
+        [
+          {
+            "node": "midjourney_upscale",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "aguarde_geracao",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape.do": {
+      "main": [
+        [
+          {
+            "node": "HTML extract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assistants - SEO": {
+      "main": [
+        [
+          {
+            "node": "Dados SEO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dall-e prompt": {
+      "main": [
+        [
+          {
+            "node": "Dall-e",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pollinations prompt": {
+      "main": [
+        [
+          {
+            "node": "Pollinations",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validador": {
+      "main": [
+        [
+          {
+            "node": "Imagem no subtítulo?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assistants - Content": {
+      "main": [
+        [
+          {
+            "node": "Validador",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:A cada 15 min": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "05c3b3ad-01fd-4881-b818-f74e26e4e9a7",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-01-10T13:02:05.416Z",
+      "updatedAt": "2025-01-10T13:02:05.416Z",
+      "role": "workflow:owner",
+      "workflowId": "4ZRwex6YtzCACMVD",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": [
+    {
+      "createdAt": "2024-12-03T19:16:14.493Z",
+      "updatedAt": "2024-12-03T19:16:14.493Z",
+      "id": "YT23bLkSD5KeBWLV",
+      "name": "Robô Jack Sparrow"
+    }
+  ]
+}
