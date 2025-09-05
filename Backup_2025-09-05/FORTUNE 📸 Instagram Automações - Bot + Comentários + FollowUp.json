@@ -1,0 +1,813 @@
+{
+  "createdAt": "2025-02-19T18:56:32.588Z",
+  "updatedAt": "2025-03-24T13:54:26.732Z",
+  "id": "1SkraFr169MbeC3O",
+  "name": "FORTUNE 📸 Instagram Automações - Bot + Comentários + FollowUp",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.query['hub.challenge'] }}",
+        "options": {}
+      },
+      "id": "88714bdd-9198-4076-b0db-18db1b7a27a1",
+      "name": "Resposta - Challenge",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        260,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "15163d06-085b-4775-b8e5-514bc20162cb",
+              "name": "Token de acesso",
+              "value": "IGAA3xrmlWK3BBZAE1HZAmZADMnE0QWhTNTBXUndQQ1JocEhyMUJZAenBkc0dnNDhMZAzBENXlNTHcxWjgyVlppVUQ1NHpiVVBNaWtOOFRkeEt3TTdFNUpNVjJxaUZAESVV5MkJNR1lYWGNNUVdlMGtmT1djRkUwT0tiV2NER0p4VTJCTQZDZD",
+              "type": "string"
+            },
+            {
+              "id": "a40337ff-20f8-4057-aa4a-626d09c6046f",
+              "name": "Id do Instagram",
+              "value": "17841458914063970",
+              "type": "string"
+            },
+            {
+              "id": "22f6820c-81c2-4cb4-8160-3bc4bbf1f466",
+              "name": "baseUrl",
+              "value": "https://epiv2.integrasac.com.br",
+              "type": "string"
+            },
+            {
+              "id": "f609d7fb-a996-431a-acc7-a0e90cf23b07",
+              "name": "apikey",
+              "value": "23AD50451706-4741-A68D-6C0131B945E9",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f3296026-4563-4871-be62-8840cb7e8dcb",
+      "name": "Credenciais",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        260,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.instagram.com/v21.0/{{ $('Webhook - Conteudo').item.json.body.entry[0].changes[0].value.id }}/replies",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Credenciais').item.json['Token de acesso'] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "message",
+              "value": "=Opa @{{ $('Webhook - Conteudo').item.json.body.entry[0].changes[0].value.from.username }}, Obrigado por comentar, vou mandar uma DM pra você!!!"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "07ff95c2-ba05-404c-bd00-a6988e041dc9",
+      "name": "Responder comentário",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1040,
+        580
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "03dc2378-64b8-41c1-835e-f49b67c9cc64",
+              "leftValue": "={{ $('Webhook - Conteudo').item.json.body.entry[0]?.messaging?.[0]?.sender?.id || $('Webhook - Conteudo').item.json.body.entry[0].changes[0].value.from.id }}",
+              "rightValue": "17841409436000705",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "275eed37-db9b-462a-b7d4-bfee02dbab78",
+      "name": "Mensagem de mim?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        460,
+        480
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "7e72b947-4e7e-4ff6-a823-577b30702f1a",
+      "name": "Não faz nada",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        660,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.instagram.com/v21.0/{{ $('Webhook - Conteudo').item.json.body.entry[0].id }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Credenciais').item.json['Token de acesso'] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"recipient\": {\n    \"comment_id\": \"{{ $('Webhook - Conteudo').item.json.body.entry[0].changes[0].value.id }}\"\n  },\n  \"message\": {\n    \"attachment\": {\n      \"type\": \"template\",\n      \"payload\": {\n        \"template_type\": \"button\",\n        \"text\": \"Opa, vi que você teve interesse no nosso conteudo, acesse nosso site para mais informações\",\n        \"buttons\": [\n          {\n            \"type\": \"web_url\",\n            \"url\": \"https://fortunegroup.com.br\",\n            \"title\": \"Acessar site\"\n          },\n          {\n            \"type\": \"web_url\",\n            \"url\": \"https://news.fortunegroup.com.br/\",\n            \"title\": \"acessar portal de notícias\"\n          }\n        ]\n      }\n    }\n  }\n}\n",
+        "options": {}
+      },
+      "id": "8af7775e-f708-4e2f-a26b-36c7a54dca76",
+      "name": "Enviar mensagem com botões na DM",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1460,
+        580
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a6558b6f-6ad7-4ed6-89b0-ae1f0f354a00",
+              "leftValue": "={{ $('Webhook - Conteudo').item.json.body.entry[0].changes[0].value.text }}",
+              "rightValue": "Interessante",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "46114746-ec9a-4368-8888-9370e89fd306",
+              "leftValue": "={{ $('Webhook - Conteudo').item.json.body.entry[0].changes[0].value.text }}",
+              "rightValue": "Sustentabilidade",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "eba45359-d70f-4235-bfb7-d4a19f2a1480",
+              "leftValue": "={{ $('Webhook - Conteudo').item.json.body.entry[0].changes[0].value.text }}",
+              "rightValue": "Interessante",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "bf9732d3-6f03-42f0-8ace-a411a2ca1515",
+              "leftValue": "={{ $('Webhook - Conteudo').item.json.body.entry[0].changes[0].value.text }}",
+              "rightValue": "👏",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "c951d486-48db-4d60-83d0-7f0f47ebbaf6",
+              "leftValue": "={{ $('Webhook - Conteudo').item.json.body.entry[0].changes[0].value.text }}",
+              "rightValue": "🙌",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "id": "d3758917-13aa-433a-88ee-765f4b482170",
+      "name": "Verifica Post e mensagem",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        820,
+        700
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "8807b45e-ea2e-41b6-9755-5a43087adc78",
+      "name": "Não faz nada2",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        780
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "a513bf19-8fc5-4f52-a4d6-90e7d08e08ce",
+      "name": "Espera 5 segundos",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1260,
+        580
+      ],
+      "webhookId": "02a8b495-2dc1-4205-b53a-72c39d202d3e"
+    },
+    {
+      "parameters": {},
+      "id": "25611abd-2177-4173-a796-fd52a9fbeea0",
+      "name": "Fim",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1660,
+        580
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Credenciais').item.json.baseUrl }}/webhook/evolution",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $json.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"numberId\": \"{{ $('Credenciais').item.json['Id do Instagram'] }}\", \n    \"key\": {\n        \"remoteJid\": \"{{ $('Webhook - Conteudo').item.json.body.entry[0].messaging[0].sender.id }}\",\n        \"fromMe\": false,\n        \"id\": \"{{ $('Webhook - Conteudo').item.json.body.entry[0].messaging[0].message.mid }}\"\n    },\n    \"pushName\": \"User_Instagram\",\n    \"message\": {\n        \"conversation\": \"{{ $('Webhook - Conteudo').item.json.body.entry[0].messaging[0].message.text }}\"\n    },\n    \"messageType\": \"conversation\"\n}",
+        "options": {}
+      },
+      "id": "f03cc844-0dc4-46f9-885c-caa95203b1d9",
+      "name": "Enviar para Evolution API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        860,
+        480
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "9240fc52-4eda-4ab7-8a60-07d6ae9bfc54",
+      "name": "Não faz nada3",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1060,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "15163d06-085b-4775-b8e5-514bc20162cb",
+              "name": "Token de acesso",
+              "value": "IGAA3xrmlWK3BBZAE1HZAmZADMnE0QWhTNTBXUndQQ1JocEhyMUJZAenBkc0dnNDhMZAzBENXlNTHcxWjgyVlppVUQ1NHpiVVBNaWtOOFRkeEt3TTdFNUpNVjJxaUZAESVV5MkJNR1lYWGNNUVdlMGtmT1djRkUwT0tiV2NER0p4VTJCTQZDZD",
+              "type": "string"
+            },
+            {
+              "id": "a40337ff-20f8-4057-aa4a-626d09c6046f",
+              "name": "Id do Instagram",
+              "value": "17841458914063970",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "51d7b163-8258-4b96-986f-5e1f1e78b57c",
+      "name": "Credenciais1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        280,
+        1080
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Integração + Evo + Intagram",
+        "height": 300.2707230561937,
+        "width": 887.6722497524033,
+        "color": 7
+      },
+      "id": "e07b2e7c-8938-43dc-8bea-67b105db185b",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        980
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Fluxo Principal\n• Recebe interações, como mensagens e comentários no Instagram.\n• Confirma se não são de nossa autoria.\n• Se for um comentário, avalia se pertence ao post específico e contém a palavra \"quero\".\n• Se for uma mensagem, inicia a sessão na integração.",
+        "height": 653.1341408695973,
+        "width": 1876.3717067002117,
+        "color": 7
+      },
+      "id": "90d9cd7c-b6a9-41a3-851d-05cf6c5f4f5e",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.instagram.com/v21.0/{{ $json['Id do Instagram'] }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Credenciais1').item.json['Token de acesso'] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "messaging_type ",
+              "value": "=RESPONSE"
+            },
+            {
+              "name": "recipient[id]",
+              "value": "={{ $('Webhook - EVO').item.json.body.data.key.remoteJid }}"
+            },
+            {
+              "name": "=message[text]",
+              "value": "={{ $('Webhook - EVO').item.json.body.data.message.conversation }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a633c767-e405-4fc1-9746-cd6a65de5a40",
+      "name": "Responder DM",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        500,
+        1080
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### Botão Redirecionar URL\n{\n  \"type\": \"web_url\",\n  \"url\": \"https://site/whatsapp\",\n  \"title\": \"Comunidade no WhatsApp #01\"\n},\n\n### Botão Responder\n{\n  \"type\": \"postback\",\n  \"title\": \"Quero mais informações\",\n  \"payload\": \"123\"\n},\n\n### Botão Numero de Telefone\n{\n  \"type\": \"phone_number\",\n  \"title\": \"Ligar para suporte\",\n  \"payload\": \"+55seunumero\"\n}",
+        "height": 447.29182051379166,
+        "width": 412.9250873529719,
+        "color": 7
+      },
+      "id": "122f9dbb-10ab-44e4-b5fd-c379eaaf7d2d",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1880,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Desafio Get  \nUtilizado apenas uma única vez.  ",
+        "height": 280.677637371195,
+        "width": 441.750411424822,
+        "color": 7
+      },
+      "id": "437c0f35-42ad-4b81-9165-1e5e1f532e5e",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "cf6d6ec3-638d-4793-84ea-5d101de16037",
+      "name": "Fim1",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        700,
+        1080
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Webhook - Conteudo').item.json.body.entry[0].messaging }}",
+                    "rightValue": "messages",
+                    "operator": {
+                      "type": "array",
+                      "operation": "notEmpty",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Mensagem"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "a4adf206-19fa-4c38-9d88-f2cdb29da564",
+                    "leftValue": "={{ $('Webhook - Conteudo').item.json.body.entry[0].changes[0].field }}",
+                    "rightValue": "comments",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Comentario"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6b761e35-8361-448b-9db3-55604b015c7e",
+      "name": "Verifica conteudo",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        660,
+        580
+      ]
+    },
+    {
+      "parameters": {
+        "path": "insta",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "7eb3ffd6-4d22-4996-878b-7c91f5f89b9a",
+      "name": "Webhook - Challenge",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        60,
+        100
+      ],
+      "webhookId": "6761f957-d6b3-4b12-88fc-8619b26eea03"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "insta",
+        "options": {}
+      },
+      "id": "080297d8-1fc0-44ad-bc1d-cd18e2fbe5fc",
+      "name": "Webhook - Conteudo",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        60,
+        480
+      ],
+      "webhookId": "6761f957-d6b3-4b12-88fc-8619b26eea03"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "4c97ab0d-8064-4a9d-bd91-9f05c54f4a31",
+        "options": {}
+      },
+      "id": "123310c9-35b0-4945-a193-8fd4fcc3bd07",
+      "name": "Webhook - EVO",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        60,
+        1080
+      ],
+      "webhookId": "4c97ab0d-8064-4a9d-bd91-9f05c54f4a31"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d48d83f0-0341-4018-a5f4-2120a511c36f",
+              "leftValue": "={{ $('Webhook - Conteudo').item.json.body.entry[0].changes[0].value.media.id }}",
+              "rightValue": "=17861616102297179",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "26b58b99-14e5-48ba-aff0-00c52a63cb5a",
+              "leftValue": "={{ $('Webhook - Conteudo').item.json.body.entry[0].changes[0].value.text }}",
+              "rightValue": "Quero",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "id": "e40686bc-2cb0-4df4-93da-06623dd0d1e1",
+      "name": "Verifica Post e mensagem1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1060,
+        1040
+      ]
+    }
+  ],
+  "connections": {
+    "Credenciais": {
+      "main": [
+        [
+          {
+            "node": "Mensagem de mim?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Responder comentário": {
+      "main": [
+        [
+          {
+            "node": "Espera 5 segundos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Espera 5 segundos": {
+      "main": [
+        [
+          {
+            "node": "Enviar mensagem com botões na DM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar mensagem com botões na DM": {
+      "main": [
+        [
+          {
+            "node": "Fim",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensagem de mim?": {
+      "main": [
+        [
+          {
+            "node": "Não faz nada",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Verifica conteudo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar para Evolution API": {
+      "main": [
+        [
+          {
+            "node": "Não faz nada3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Credenciais1": {
+      "main": [
+        [
+          {
+            "node": "Responder DM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Responder DM": {
+      "main": [
+        [
+          {
+            "node": "Fim1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verifica conteudo": {
+      "main": [
+        [
+          {
+            "node": "Enviar para Evolution API",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Verifica Post e mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook - Challenge": {
+      "main": [
+        [
+          {
+            "node": "Resposta - Challenge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook - Conteudo": {
+      "main": [
+        [
+          {
+            "node": "Credenciais",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook - EVO": {
+      "main": [
+        [
+          {
+            "node": "Credenciais1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verifica Post e mensagem": {
+      "main": [
+        [
+          {
+            "node": "Responder comentário",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Não faz nada2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "983278df-0ebb-4690-b5c6-230eb9a623b6",
+  "triggerCount": 3,
+  "shared": [
+    {
+      "createdAt": "2025-02-19T18:56:32.588Z",
+      "updatedAt": "2025-02-19T18:56:32.588Z",
+      "role": "workflow:owner",
+      "workflowId": "1SkraFr169MbeC3O",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": [
+    {
+      "createdAt": "2024-12-15T22:18:14.158Z",
+      "updatedAt": "2024-12-15T22:18:14.158Z",
+      "id": "gdxddtefrDZkp2GZ",
+      "name": "IntegraSac"
+    }
+  ]
+}
