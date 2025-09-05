@@ -1,0 +1,665 @@
+{
+  "createdAt": "2025-01-12T13:20:30.259Z",
+  "updatedAt": "2025-01-12T19:45:06.999Z",
+  "id": "k52Ps1XiYGFOff8y",
+  "name": "Billy Agendamento automatizado google Agenda",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "f395c125-bda8-4c56-a29a-52b166687624",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        80,
+        280
+      ],
+      "webhookId": "428902b8-a32f-4ba0-a2e4-8a81f8c9fe94"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "f51ff42b4c83bf5f7650b75dde54d8ba41155ed04a8f70b3ed33c008ba1c444c@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "n8n"
+        },
+        "eventId": "={{ $fromAI(\"Event_ID\",\"Id do evento que deve ser excluído\") }}",
+        "options": {}
+      },
+      "id": "87840f04-6d1c-47ab-adf1-f01607fd9b96",
+      "name": "Deletar Evento",
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.1,
+      "position": [
+        660,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "f51ff42b4c83bf5f7650b75dde54d8ba41155ed04a8f70b3ed33c008ba1c444c@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "n8n"
+        },
+        "returnAll": true,
+        "options": {
+          "timeMin": "={{ $fromAI(\"Initital_DateTime\", \"Data e hora inicial da consulta Ex.: 2024-10-17 00:00:00\") }}",
+          "timeMax": "={{ $fromAI(\"Final_DateTime\", \"Data e hora final da consulta Ex.: 2024-10-17 00:00:00\") }}",
+          "timeZone": {
+            "__rl": true,
+            "value": "America/Sao_Paulo",
+            "mode": "list",
+            "cachedResultName": "America/Sao_Paulo"
+          }
+        }
+      },
+      "id": "ecbed233-ed03-4a4c-bdec-915c152628ac",
+      "name": "Buscar Eventos",
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.1,
+      "position": [
+        800,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "f51ff42b4c83bf5f7650b75dde54d8ba41155ed04a8f70b3ed33c008ba1c444c@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "n8n"
+        },
+        "start": "={{ $fromAI(\"Start_Time\",\"Horário inicial do evento ex.:2024-10-08 00:00:00\") }}",
+        "end": "={{ $fromAI(\"End_Time\",\"Horário final do evento ex.:2024-10-08 00:01:00\") }}",
+        "additionalFields": {
+          "description": "Consulta"
+        }
+      },
+      "id": "c9c1ee70-75c1-40a3-b8ed-b972bdc1fe23",
+      "name": "Criar Eventos",
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.1,
+      "position": [
+        940,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o",
+        "options": {}
+      },
+      "id": "1621260c-2198-4737-834e-fdd389facbd4",
+      "name": "OpenAI Chat Model1",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        100,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "1"
+      },
+      "id": "2df5b1bc-dace-4b3a-867e-ca428bb4676c",
+      "name": "Window Buffer Memory1",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.2,
+      "position": [
+        420,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "formatDate",
+        "date": "={{ $now }}",
+        "format": "custom",
+        "customFormat": "EEEE, MMMM dd yyyy 'at' hh:mm:ss",
+        "options": {
+          "timezone": true
+        }
+      },
+      "id": "44763f65-ccd2-42dd-8730-ec3bd92d2110",
+      "name": "Date & Time1",
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        420,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "16b62e7c-7e17-4408-9c73-07982ee5170a",
+        "options": {}
+      },
+      "id": "ab1f9547-14fd-4bc7-ac34-4c6be3fe9954",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        80,
+        100
+      ],
+      "webhookId": "56e11de0-5eef-4930-9a7b-a46221d066b8",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "AGENDAMENTO\n",
+        "height": 193.69640483039342,
+        "width": 450.10699482480516
+      },
+      "id": "2911f443-20bd-49a9-91bd-ec25ec5b2df5",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        600,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "content": "BASE DE CONHECIMENTO RAG",
+        "height": 649.5889407710083,
+        "width": 442.46788193296703,
+        "color": 4
+      },
+      "id": "db6111f7-a736-4e13-820e-a7895b0ce76c",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        540
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "bc303dca-c9b8-40fe-b850-3e515c903136",
+      "name": "Postgres Chat Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        300,
+        600
+      ],
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "content": "MEMÓRIA",
+        "height": 198.0867574653257,
+        "width": 348.449609291382,
+        "color": 6
+      },
+      "id": "1418c245-d569-4fe8-8b0f-31d83fc4376d",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "1ItwBF5OpqxmdhhRXfgbL54eh50sp8u-Q",
+          "mode": "list",
+          "cachedResultName": "informacoes dos servicos.pdf",
+          "cachedResultUrl": "https://drive.google.com/file/d/1ItwBF5OpqxmdhhRXfgbL54eh50sp8u-Q/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "id": "e8696bdf-3780-434a-8056-e2b7fe7a366f",
+      "name": "Google Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1880,
+        620
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "4bfaf95c-9d0a-4f39-93fd-ee998b44f53f",
+      "name": "When clicking ‘Test workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        1660,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {
+          "queryName": "match_documents"
+        }
+      },
+      "id": "b6a9d3ed-ec1d-43fe-a2e9-e80f73bf9930",
+      "name": "Supabase Vector Store1",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1,
+      "position": [
+        2080,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "89fec89e-480e-401a-b590-f243efce192a",
+      "name": "Embeddings OpenAI",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.1,
+      "position": [
+        2080,
+        840
+      ]
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "options": {}
+      },
+      "id": "7abe20cd-4c3b-4b58-b62d-d5dcd32ef8d5",
+      "name": "Default Data Loader",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1,
+      "position": [
+        2200,
+        840
+      ]
+    },
+    {
+      "parameters": {
+        "chunkOverlap": 200,
+        "options": {}
+      },
+      "id": "c6eb0526-e959-4e66-b483-411ac2b0629c",
+      "name": "Recursive Character Text Splitter",
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        2200,
+        1020
+      ]
+    },
+    {
+      "parameters": {
+        "content": "SALVA PDF em chunks no Supabase",
+        "height": 735.8117288680742,
+        "width": 866.7502137729865,
+        "color": 5
+      },
+      "id": "4a970f0c-45d0-44f2-964c-2f739ba5aae7",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1620,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "name": "conhecimento",
+        "description": "Essa é sua base de conhecimento, use essas informações para buscar informações sobre a empresa e responder perguntas do usuário"
+      },
+      "id": "6f516b5a-aeb0-4d8d-958e-b26e3ec7f838",
+      "name": "Vector Store Tool",
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1,
+      "position": [
+        1220,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "a982fbc0-5ab3-4b12-9e9a-6c19421241fb",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        840
+      ]
+    },
+    {
+      "parameters": {
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {
+          "queryName": "match_documents"
+        }
+      },
+      "id": "a1d829c4-6bda-4806-8452-da848b1fe1f9",
+      "name": "Supabase Vector Store",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1,
+      "position": [
+        1140,
+        840
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "3ee93409-40b8-45f0-80bd-c74ce76479e3",
+      "name": "Embeddings OpenAI3",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.1,
+      "position": [
+        1140,
+        1020
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('When chat message received').item.json.chatInput }}",
+        "options": {
+          "systemMessage": "=Você é um assistente virtual de atendimento especializado em uma clínica odontológica. Sua função principal é tirar dúvidas dos pacientes sobre os serviços oferecidos pela clínica, fornecer informações claras e precisas e auxiliar no agendamento de consultas diretamente em uma agenda integrada (tool). Você deve ser cordial, profissional e rápido nas respostas.\n\nExemplo de Diálogo:\n\n1. Perguntas Frequentes\nUsuário: Quais serviços odontológicos vocês oferecem?\nAssistente: Olá! Oferecemos diversos serviços, incluindo limpeza dentária, clareamento, ortodontia (aparelhos), implantes, restaurações e tratamentos de canal. Se precisar de mais detalhes sobre algum deles, é só perguntar! 😊\n\nUsuário: Vocês atendem crianças?\nAssistente: Sim! Temos profissionais especializados em odontopediatria para cuidar da saúde bucal das crianças com muito carinho. Posso ajudar a agendar uma consulta?\n\n2. Agendamento de Consultas\nUsuário: Quero marcar uma consulta.\nAssistente: Claro! Qual seria a melhor data e horário para você? Temos disponibilidade para esta semana.\n\n(Tool é acionada para verificar a agenda disponível)\nAssistente: Tenho horários disponíveis na quinta-feira às 10h ou sexta-feira às 14h. Qual prefere?\n\nUsuário: Sexta-feira às 14h.\nAssistente: Ótimo! Consulta agendada para sexta-feira às 14h. Você receberá uma mensagem de confirmação com o endereço da clínica. Caso precise alterar o horário, é só me avisar.\n\n3. Resolução de Dúvidas\nUsuário: Quanto custa o clareamento dental?\nAssistente: O clareamento dental custa a partir de R$ 500, dependendo do tipo de procedimento (consultório ou caseiro). Podemos agendar uma avaliação gratuita para verificar o melhor tratamento para você.\n\nUsuário: Preciso de documentação para a consulta?\nAssistente: Para a primeira consulta, pedimos apenas um documento de identificação com foto. Se tiver exames recentes, pode trazê-los também, mas não é obrigatório.\n\nInstruções Técnicas:\n\nSempre confirme as informações antes de agendar.\nUtilize a tool de agenda para verificar e registrar horários disponíveis.\nMantenha a cordialidade e adapte o tom ao perfil do cliente (mais formal ou descontraído).\nAo finalizar uma interação, ofereça suporte adicional: \"Posso ajudar em mais alguma coisa?\"\n\nA data de agora em inglês é:  {{ $('Date & Time1').item.json.formattedDate }}\nResponda sempre em português e no fuso horário de Brasilia.\nAntes de excluir algum evento, sempre consulte o id dele antes.\n\nConsulte as informações da ferramenta Base de conhecimento para responder as perguntas que você não souber responder."
+        }
+      },
+      "id": "d0bdf6ff-8779-4610-a840-1b5aed971044",
+      "name": "AI Agent de agendamento",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.6,
+      "position": [
+        700,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "content": "Automação criada por Billy Automações\nSe inscreva no meu canal:\nhttps://www.youtube.com/@BillyAutomacoes",
+        "height": 109.55384974206817,
+        "width": 380,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -100,
+        820
+      ],
+      "id": "af204df1-f5e8-4482-b728-a8b5b4347217",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "CONECTE O SEU WHATSAPP AQUI👇",
+        "height": 80,
+        "width": 180,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "939f93b9-c0c7-43a9-9e2e-3f9b10fa7129",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "USE ESSE CHAT PARA TESTES 👉",
+        "height": 80,
+        "width": 180,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        300
+      ],
+      "id": "aafa6189-acff-4ca0-8741-423134d0da8c",
+      "name": "Sticky Note7"
+    }
+  ],
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Date & Time1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deletar Evento": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent de agendamento",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Eventos": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent de agendamento",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar Eventos": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent de agendamento",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent de agendamento",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Window Buffer Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent de agendamento",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent de agendamento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Date & Time1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive": {
+      "main": [
+        [
+          {
+            "node": "Supabase Vector Store1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Supabase Vector Store1",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Vector Store Tool",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Vector Store Tool",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI3": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vector Store Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent de agendamento",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "76fe1c67-3099-41d7-888d-e21291c9d892",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-01-12T13:20:30.259Z",
+      "updatedAt": "2025-01-12T13:20:30.259Z",
+      "role": "workflow:owner",
+      "workflowId": "k52Ps1XiYGFOff8y",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
