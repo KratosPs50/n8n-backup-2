@@ -1,0 +1,534 @@
+{
+  "createdAt": "2024-11-07T20:41:28.009Z",
+  "updatedAt": "2024-12-12T23:25:31.198Z",
+  "id": "PwHe9soUtc9y2RQ4",
+  "name": "Agenda Integra Sac Notificação Mahi Clinica",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "for (const item of $input.all()) {\n    const customerName = item.json.customer_name || \"Cliente\";\n    const serviceName = item.json.service_name || \"Serviço\";\n    const date = item.json.date || \"Data\";\n    const time = item.json.time || \"Horário\";\n    \n    item.json.message = `Sua reserva para ${customerName} no serviço ${serviceName} foi confirmada para o dia ${date} às ${time}.`;\n}\n\nreturn $input.all();\n"
+      },
+      "id": "c4671430-0b57-4357-a1d3-ac22aa3a1849",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        980,
+        -40
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.wap_template }}",
+                    "rightValue": "bookingapprove",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "bdd61fd9-0633-4e19-83e6-ba37948552ec",
+                    "leftValue": "={{ $json.body.wap_template }}",
+                    "rightValue": "bookingreject",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c315ba7e-0f1c-4ce4-960c-dd6a66e9847d",
+                    "leftValue": "={{ $json.body.wap_template }}",
+                    "rightValue": "bookingreminder",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "e528bfd8-78c3-440d-96ed-086d3e82b692",
+                    "leftValue": "={{ $json.body.wap_template }}",
+                    "rightValue": "new-booking",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "54a3f02b-2ba4-43f9-b3c6-b0948cf94e8e",
+      "name": "Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        340,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of $input.all()) {\n    const customerName = item.json.customer_name || \"Cliente\";\n    const serviceName = item.json.service_name || \"Serviço\";\n    const date = item.json.date || \"Data\";\n    const time = item.json.time || \"Horário\";\n    \n    item.json.message = `Lembrete: Sua reserva para ${customerName} no serviço ${serviceName} está confirmada para o dia ${date} às ${time}.`;\n}\n\nreturn $input.all();\n"
+      },
+      "id": "f33e2321-f860-4953-9d6b-8b03b2c31cb5",
+      "name": "Code2",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        980,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of $input.all()) {\n    const customerName = item.json.customer_name || \"Cliente\";\n    const serviceName = item.json.service_name || \"Serviço\";\n    const date = item.json.date || \"Data\";\n    const time = item.json.time || \"Horário\";\n    \n    item.json.message = `Nova reserva para ${customerName} no serviço ${serviceName} para o dia ${date} às ${time}.`;\n}\n\nreturn $input.all();\n"
+      },
+      "id": "e4659e38-ae20-4c83-be4f-c289b27ae5ff",
+      "name": "Code3",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        980,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "98f9267a-8e6e-4dcb-8908-5c1570bcb0ec",
+              "name": "urlapi",
+              "value": "https://epiv2.integrasac.com.br",
+              "type": "string"
+            },
+            {
+              "id": "66304908-724e-4a3f-a68f-4cb1aea2151b",
+              "name": "instanceName:",
+              "value": "sIQqp6VjDevMIl5Y1tmSXBXyr_Whatsapp_IdCW_18",
+              "type": "string"
+            },
+            {
+              "id": "1d6f6c14-2114-4384-b115-12c3053748a2",
+              "name": "apikey:",
+              "value": "630D11A6-0FBB-4C1B-BC05-5E493C3FBC8B",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c4123562-04cb-4e95-b277-e1efc4ece898",
+      "name": "Info Base",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1220,
+        -40
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "98f9267a-8e6e-4dcb-8908-5c1570bcb0ec",
+              "name": "urlapi",
+              "value": "https://epiv2.integrasac.com.br",
+              "type": "string"
+            },
+            {
+              "id": "66304908-724e-4a3f-a68f-4cb1aea2151b",
+              "name": "instanceName:",
+              "value": "sIQqp6VjDevMIl5Y1tmSXBXyr_Whatsapp_IdCW_18",
+              "type": "string"
+            },
+            {
+              "id": "1d6f6c14-2114-4384-b115-12c3053748a2",
+              "name": "apikey:",
+              "value": "630D11A6-0FBB-4C1B-BC05-5E493C3FBC8B",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c9f620de-76db-4e98-a970-87503df2def3",
+      "name": "Info Base2",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1220,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "98f9267a-8e6e-4dcb-8908-5c1570bcb0ec",
+              "name": "urlapi",
+              "value": "https://epiv2.integrasac.com.br",
+              "type": "string"
+            },
+            {
+              "id": "66304908-724e-4a3f-a68f-4cb1aea2151b",
+              "name": "instanceName:",
+              "value": "sIQqp6VjDevMIl5Y1tmSXBXyr_Whatsapp_IdCW_18",
+              "type": "string"
+            },
+            {
+              "id": "1d6f6c14-2114-4384-b115-12c3053748a2",
+              "name": "apikey:",
+              "value": "630D11A6-0FBB-4C1B-BC05-5E493C3FBC8B",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "17d6df36-6982-4454-a03f-9dbcf5e6da7e",
+      "name": "Info Base3",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1220,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://epiv2.integrasac.com.br/message/sendText/SeuNomeDeInstancia",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer SuaApiKeyAqui"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"number\": \"NumeroDoDestinatario\",\n  \"text\": \"Sua mensagem aqui\",\n  \"options\": {\n    \"delay\": 1200,\n    \"quoted\": {\n      \"key\": {\n        \"id\": \"MESSAGE_ID\"\n      },\n      \"message\": {\n        \"conversation\": \"CONTENT_MESSAGE\"\n      }\n    },\n    \"linkPreview\": false,\n    \"mentionsEveryOne\": false,\n    \"mentioned\": [\n      \"NumeroDoDestinatario\"\n    ]\n  }\n}",
+        "options": {}
+      },
+      "id": "ca1ae703-e8ee-4f64-8f3b-b5bdd18847eb",
+      "name": "Agendamento aprovado",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1460,
+        -40
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://epiv2.integrasac.com.br/message/sendText/Agendamento",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "{\n  \"apikey\": \"0F07E028CCD6-4283-84CA-2EE88C2736AC\",\n  \"Content-Type\": \"application/json\"\n}\n\n",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n    \"number\": \"11952074491\",\n    \"text\": \"Infelizmente, sua reserva foi rejeitada. Por favor, faça outra reserva.\",\n    \"delay\": 1200,\n    \"linkPreview\": false,\n    \"mentionsEveryOne\": false,\n    \"mentioned\": [\n        \"11952074491\"\n    ]\n}\n",
+        "options": {}
+      },
+      "id": "c98f8264-be55-4978-85eb-255eab6b09ba",
+      "name": "Agendamento aprovado1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1460,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://epiv2.integrasac.com.br/message/sendText/SeuNomeDeInstancia",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer SuaApiKeyAqui"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"number\": \"NumeroDoDestinatario\",\n  \"text\": \"Sua mensagem aqui\",\n  \"options\": {\n    \"delay\": 1200,\n    \"quoted\": {\n      \"key\": {\n        \"id\": \"MESSAGE_ID\"\n      },\n      \"message\": {\n        \"conversation\": \"CONTENT_MESSAGE\"\n      }\n    },\n    \"linkPreview\": false,\n    \"mentionsEveryOne\": false,\n    \"mentioned\": [\n      \"NumeroDoDestinatario\"\n    ]\n  }\n}",
+        "options": {}
+      },
+      "id": "40ee5f43-9dea-4ac0-9491-065e97d8643e",
+      "name": "Agendamento aprovado2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1460,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://epiv2.integrasac.com.br/message/sendText/SeuNomeDeInstancia",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer SuaApiKeyAqui"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"number\": \"NumeroDoDestinatario\",\n  \"text\": \"Sua mensagem aqui\",\n  \"options\": {\n    \"delay\": 1200,\n    \"quoted\": {\n      \"key\": {\n        \"id\": \"MESSAGE_ID\"\n      },\n      \"message\": {\n        \"conversation\": \"CONTENT_MESSAGE\"\n      }\n    },\n    \"linkPreview\": false,\n    \"mentionsEveryOne\": false,\n    \"mentioned\": [\n      \"NumeroDoDestinatario\"\n    ]\n  }\n}",
+        "options": {}
+      },
+      "id": "f80d1713-eef0-468b-922b-ab78f161083a",
+      "name": "Agendamento aprovado3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1460,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "3e0dea33-b0d5-4c29-b77d-6e63e4fb5bd3",
+        "options": {}
+      },
+      "id": "03843762-b933-43a2-aee5-ed7a0a09b0b4",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        40,
+        260
+      ],
+      "webhookId": "9017116f-1fc8-4d34-a1de-eb63c58b9dc3"
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of $input.all()) {\n    // Extrai os dados dentro de item.json.body\n    const customerName = item.json.body.customer_name || \"Cliente\";\n    const serviceName = item.json.body.service_name || \"Serviço\";\n    \n    // Atualiza a mensagem com as informações formatadas\n    item.json.body.message = `Infelizmente, sua reserva para ${customerName} no serviço ${serviceName} foi rejeitada. Por favor, faça outra reserva.`;\n}\n\nreturn $input.all();\n"
+      },
+      "id": "6aa8434b-fb23-4029-85bd-d82898971650",
+      "name": "Code1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        980,
+        180
+      ]
+    }
+  ],
+  "connections": {
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Info Base",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Info Base": {
+      "main": [
+        [
+          {
+            "node": "Agendamento aprovado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "Info Base2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code3": {
+      "main": [
+        [
+          {
+            "node": "Info Base3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Info Base2": {
+      "main": [
+        [
+          {
+            "node": "Agendamento aprovado2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Info Base3": {
+      "main": [
+        [
+          {
+            "node": "Agendamento aprovado3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Agendamento aprovado1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "316760ef-63a9-47e6-8d89-c15e6308dc97",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2024-11-07T20:41:28.009Z",
+      "updatedAt": "2024-11-07T20:41:28.009Z",
+      "role": "workflow:owner",
+      "workflowId": "PwHe9soUtc9y2RQ4",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
