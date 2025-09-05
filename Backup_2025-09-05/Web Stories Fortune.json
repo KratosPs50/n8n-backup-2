@@ -1,0 +1,438 @@
+{
+  "createdAt": "2025-07-30T16:01:52.812Z",
+  "updatedAt": "2025-07-31T20:02:20.441Z",
+  "id": "tUzEI6gupV67Dt1C",
+  "name": "Web Stories Fortune",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=A partir do tema **{{ $json.title.rendered }}** gere um objeto em JSON de Web Stories com os {{ $('variaveis').item.json[\"Quantidade de frames\"] }} frames, com os dados abaixo:\n\nConteúdo: {{ $json.content.rendered }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=Você é um especialista em criar webstories do Google,  A partir do tema tema e contexto, gere um objeto em JSON de Web Stories com os {{ $('variaveis').item.json[\"Quantidade de frames\"] }} frames, com os dados abaixo.\n\nO Web Stories deve retornar de forma sequencial:\n\ntitle - titulo de cada frame, aonde o primeiro deve ser clickbait\n\ndescription - Complementando o stories, com no máximo 150 cada."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        32,
+        -160
+      ],
+      "id": "4e15936e-4d95-49b3-9621-fe1192155dbf",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0865924f-8268-4957-aa3a-afaf0d59a18c",
+              "name": "Planilha ID",
+              "value": "1-O0deiQY2IbIY9Vc1JxJ3LS__DTNX1ov8nF6ct_dhd8",
+              "type": "string"
+            },
+            {
+              "id": "98124d32-3dba-43a3-a3c2-5ddb880a8629",
+              "name": "Planilha Aba",
+              "value": "0",
+              "type": "string"
+            },
+            {
+              "id": "111f712d-e10c-47cc-a53d-9ac7d37ba954",
+              "name": "Quantidade de frames",
+              "value": "5",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -416,
+        -160
+      ],
+      "id": "bddbb758-8a29-428a-9b78-47c8471492a0",
+      "name": "variaveis"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -592,
+        -160
+      ],
+      "id": "6b9f5710-5f2b-46e2-807e-763a8c88301a",
+      "name": "Executar"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 1,
+        "options": {
+          "orderBy": "date",
+          "status": "publish"
+        }
+      },
+      "type": "n8n-nodes-base.wordpress",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        -160
+      ],
+      "id": "7d0f5fe3-96d3-44ae-8ff7-31f44a1cd8f6",
+      "name": "Ler Posts",
+      "credentials": {
+        "wordpressApi": {
+          "id": "WpmUPc56IE4VL24s",
+          "name": "Wordpress account NEWSI"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $node['variaveis'].json[\"Planilha ID\"] }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $node['variaveis'].json[\"Planilha Aba\"] }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Quantidade de Frame": "={{ $('variaveis').item.json[\"Quantidade de frames\"] }}",
+            "Título": "={{ $json.output.webStories.map(item => item.title).join(';')}}",
+            "Descrição": "={{ $json.output.webStories.map(item => item.description).join(';')}}",
+            "Texto do Botão": "Saiba Mais",
+            "Tema do Web Stories": "={{ $('Ler Posts').item.json.title.rendered }}",
+            "URL do Botão": "={{ $('Ler Posts').item.json.link }}"
+          },
+          "matchingColumns": [
+            "Tema do Web Stories"
+          ],
+          "schema": [
+            {
+              "id": "Idioma",
+              "displayName": "Idioma",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Quantidade de Frame",
+              "displayName": "Quantidade de Frame",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tema do Web Stories",
+              "displayName": "Tema do Web Stories",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Título",
+              "displayName": "Título",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Descrição",
+              "displayName": "Descrição",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Texto do Botão",
+              "displayName": "Texto do Botão",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "URL do Botão",
+              "displayName": "URL do Botão",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Banco de imagem",
+              "displayName": "Banco de imagem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Imagem",
+              "displayName": "Imagem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Hora",
+              "displayName": "Hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Prompt",
+              "displayName": "Prompt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Link",
+              "displayName": "Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Execução",
+              "displayName": "Execução",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID da Execução",
+              "displayName": "ID da Execução",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Dados Estruturados",
+              "displayName": "Dados Estruturados",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "103b4d4d-731e-4bc8-96d1-0d5d0d70d750",
+      "name": "Google Sheets - Salvar",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.3,
+      "position": [
+        416,
+        -160
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "z1VWO1EGILqORxWq",
+          "name": "Google Sheets account Fortune"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {
+          "responseFormat": "json_object"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -16,
+        64
+      ],
+      "id": "7d9ab2d4-871f-45d1-9827-9e878629c77f",
+      "name": "GPT",
+      "credentials": {
+        "openAiApi": {
+          "id": "fQUsqGYvG7BKn0Op",
+          "name": "OpenAi account FORTUNE POST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\"webStories\":[{\"title\": \"Você está sofrendo com eczema?!\",\"description\": \"Saiba qual especialista você deve procurar para tratar\"},{\"title\": \"Você está sofrendo com eczema?!\",\"description\": \"Saiba qual especialista você deve procurar para tratar\"},{\"title\": \"Você está sofrendo com eczema?!\",\"description\": \"Saiba qual especialista você deve procurar para tratar\"},{\"title\": \"Você está sofrendo com eczema?!\",\"description\": \"Saiba qual especialista você deve procurar para tratar\"}]}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        256,
+        64
+      ],
+      "id": "e413d16d-64ab-4c88-8202-a53b19d14908",
+      "name": "JSON Schema"
+    }
+  ],
+  "connections": {
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Salvar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "variaveis": {
+      "main": [
+        [
+          {
+            "node": "Ler Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Executar": {
+      "main": [
+        [
+          {
+            "node": "variaveis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ler Posts": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JSON Schema": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "bc228ca8-6a8f-4643-922d-dfc0c3f9e2ee",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-07-30T16:01:52.812Z",
+      "updatedAt": "2025-07-30T16:01:52.812Z",
+      "role": "workflow:owner",
+      "workflowId": "tUzEI6gupV67Dt1C",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
