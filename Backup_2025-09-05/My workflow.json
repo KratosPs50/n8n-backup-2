@@ -1,0 +1,811 @@
+{
+  "createdAt": "2025-02-04T22:54:52.921Z",
+  "updatedAt": "2025-02-06T01:21:17.461Z",
+  "id": "7dKDOxEFgpW1EdXx",
+  "name": "My workflow",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=# Identidade\nVocê é um corretor de imoveis, responda até 500 caracteres, seja objetivo e direto.\n\nInformações sobre os imoveis na tool \"Sobre_imoveis\""
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        780,
+        560
+      ],
+      "id": "56e384e6-5a36-47f7-8463-daca7c30c290",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1400,
+        640
+      ],
+      "id": "479258aa-f78b-4fee-8ea7-e9b87acb4731",
+      "name": "When clicking ‘Test workflow’",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        360,
+        560
+      ],
+      "id": "4f6355b9-a7f0-4af0-b9c5-8dad49102b3a",
+      "name": "When chat message received",
+      "webhookId": "b2d3ecf0-684b-4179-8f55-37a020bb944b"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        600,
+        700
+      ],
+      "id": "b1cc88f3-fea8-42a5-909f-9abf3693bbc6",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "AK2JwQJlNiAowLd0",
+          "name": "OpenAi account FORTUNE HOG"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1,
+      "position": [
+        720,
+        1080
+      ],
+      "id": "b960afd6-965f-4d74-afb1-2a5572ef8259",
+      "name": "Supabase Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "iEGs4pivgnZuzEir",
+          "name": "Supabase account Fortune"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {
+          "temperature": 0.5,
+          "topP": 1
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        1060,
+        1120
+      ],
+      "id": "e3e53e1b-9611-48bb-ab71-e4fa5fa47d7e",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "AK2JwQJlNiAowLd0",
+          "name": "OpenAi account FORTUNE HOG"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.1,
+      "position": [
+        920,
+        1220
+      ],
+      "id": "fbebcdf2-e0bc-4df8-bec2-fd38eea2ef5a",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "AK2JwQJlNiAowLd0",
+          "name": "OpenAi account FORTUNE HOG"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "1zvVt6pgnAAWfwehr80HyRfvkVLtWljMyMQ_1XCHvp7Y",
+          "mode": "list",
+          "cachedResultName": "Exemplo RAG Imóveis",
+          "cachedResultUrl": "https://docs.google.com/document/d/1zvVt6pgnAAWfwehr80HyRfvkVLtWljMyMQ_1XCHvp7Y/edit?usp=drivesdk"
+        },
+        "options": {
+          "googleFileConversion": {
+            "conversion": {
+              "docsToFormat": "application/pdf",
+              "drawingsToFormat": "application/pdf",
+              "slidesToFormat": "application/pdf"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -1160,
+        640
+      ],
+      "id": "641b84b1-4548-43b4-8802-55381518838b",
+      "name": "Google Drive2"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1,
+      "position": [
+        -880,
+        640
+      ],
+      "id": "d5fbd091-269e-4e50-945f-d02e18251cb5",
+      "name": "Supabase Vector Store3",
+      "credentials": {
+        "supabaseApi": {
+          "id": "iEGs4pivgnZuzEir",
+          "name": "Supabase account Fortune"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.1,
+      "position": [
+        -940,
+        820
+      ],
+      "id": "31703803-3d96-4b97-93d7-9ba40a2da1ed",
+      "name": "Embeddings OpenAI3",
+      "credentials": {
+        "openAiApi": {
+          "id": "AK2JwQJlNiAowLd0",
+          "name": "OpenAi account FORTUNE HOG"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1,
+      "position": [
+        -700,
+        820
+      ],
+      "id": "e9ac7cdb-472e-43e0-8c66-0d4a7dfd4889",
+      "name": "Default Data Loader2"
+    },
+    {
+      "parameters": {
+        "content": "# Inserindo Documento Manualmente",
+        "height": 620,
+        "width": 1080
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1480,
+        520
+      ],
+      "typeVersion": 1,
+      "id": "85c98150-cc95-423f-8c99-91f8f3eb8e21",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "chunkSize": 2000,
+        "chunkOverlap": 100,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        -800,
+        980
+      ],
+      "id": "6fce00a5-d5c7-4a7c-ae52-29a294daf78f",
+      "name": "Recursive Character Text Splitter"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('Data Handler').item.json.File.id }}",
+          "mode": "id"
+        },
+        "options": {
+          "googleFileConversion": {
+            "conversion": {
+              "docsToFormat": "application/pdf"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -660,
+        1360
+      ],
+      "id": "1dd9cada-1f6b-4e3f-9f31-4fff22ab588d",
+      "name": "Google Drive1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.1,
+      "position": [
+        -560,
+        1600
+      ],
+      "id": "7b68c16a-a3e8-48e3-9fc4-a81e32a7c785",
+      "name": "Embeddings OpenAI2",
+      "credentials": {
+        "openAiApi": {
+          "id": "AK2JwQJlNiAowLd0",
+          "name": "OpenAi account FORTUNE HOG"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "1VGJdyN9FBwF3ib4XAM7upxTSCBpvrIj6",
+          "mode": "list",
+          "cachedResultName": "Aula RAG",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1VGJdyN9FBwF3ib4XAM7upxTSCBpvrIj6"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1380,
+        1280
+      ],
+      "id": "8bfc9ddb-653f-436f-99a7-5e9457b7d8a7",
+      "name": "File Created",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "1VGJdyN9FBwF3ib4XAM7upxTSCBpvrIj6",
+          "mode": "list",
+          "cachedResultName": "Aula RAG",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1VGJdyN9FBwF3ib4XAM7upxTSCBpvrIj6"
+        },
+        "event": "fileUpdated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1380,
+        1500
+      ],
+      "id": "4aacbff5-cd9f-47b5-812d-e6a347195cbd",
+      "name": "File Updated"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0975a92b-edbb-49c6-be3a-f18cf1f2e9e7",
+              "name": "File.id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "4182e1ba-1f80-48ca-b67b-d1f2daf1a6ab",
+              "name": "File.name",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1100,
+        1360
+      ],
+      "id": "d54191bf-6d3b-45d8-ad3b-b696b86ade72",
+      "name": "Data Handler"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "tableId": "documents",
+        "filterType": "string",
+        "filterString": "=metadata->>id=like.*{{ $json.File.id }}"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -880,
+        1360
+      ],
+      "id": "9e80ccca-a7f8-43a8-bb73-85c4dc74d4a2",
+      "name": "Delete Row",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "iEGs4pivgnZuzEir",
+          "name": "Supabase account Fortune"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "id",
+                "value": "={{ $('Data Handler').item.json.File.id }}"
+              },
+              {
+                "name": "name",
+                "value": "={{ $('Data Handler').item.json.File.name }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        1500
+      ],
+      "id": "dde67a3d-3e01-405d-af81-b9d4f8dff704",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "chunkSize": 5000,
+        "chunkOverlap": 200,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        -380,
+        1620
+      ],
+      "id": "124a22e6-c9e4-4e13-914b-2acaf1386a45",
+      "name": "Recursive Character Text Splitter2"
+    },
+    {
+      "parameters": {
+        "content": "# Inserindo Documento Automaticamente",
+        "height": 600,
+        "width": 1560,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1480,
+        1180
+      ],
+      "typeVersion": 1,
+      "id": "42901017-1aca-430a-bcc0-b3c7279292aa",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {
+          "queryName": "match_documents"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        1360
+      ],
+      "id": "0090a70e-aa60-4a8c-87b2-bce7d847d91d",
+      "name": "Supabase Vector Store1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "iEGs4pivgnZuzEir",
+          "name": "Supabase account Fortune"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# O que é RAG (Retrieval-Augmented Generation)?\n\nRAG é uma técnica que combina **recuperação de informações** e **geração de texto por IA** para criar respostas mais precisas e contextuais. Ele usa dois componentes principais:\n\n1. **Recuperação (Retrieval):** Busca dados relevantes em bases de conhecimento (bancos de dados, documentos, APIs, etc.).\n2. **Geração (Generation):** Um modelo de linguagem, como GPT, utiliza os dados recuperados para criar respostas contextualizadas.\n\n## Benefícios do RAG\n- **Respostas mais precisas:** Combina informações externas com inteligência da IA.\n- **Atualização constante:** Usa bases de dados dinâmicas, dispensando re-treinamento do modelo.\n- **Economia de Custos:** Informações fora da instrução, consultando só quando é necesário\n- **Escalabilidade:** Atende a grandes volumes de consultas.\n\n## Como funciona?\n1. **Recebe uma pergunta.**\n2. **Busca informações relevantes** em uma base de dados ou documentos.\n3. **Gera uma resposta** combinando os dados recuperados e o modelo de IA.\n4. **Entrega a resposta** ao usuário.\n\n## Bancos de dados recomendados para RAG:\n- **Vetoriais:** Supabase, Pinecone, Weaviate, Milvus.\n- **Relacionais com vetores:** PostgreSQL (pgvector).\n- **Outros:** Elasticsearch, MongoDB.",
+        "height": 760,
+        "width": 700,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1340,
+        520
+      ],
+      "typeVersion": 1,
+      "id": "e71e14f9-a58a-4494-a316-46e8aab33c0d",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        600,
+        880
+      ],
+      "id": "ca46f51e-f509-4cf4-8d36-1de1ff2bd792",
+      "name": "Window Buffer Memory"
+    },
+    {
+      "parameters": {
+        "name": "Sobre_imoveis",
+        "description": "Informações sobre os imoveis",
+        "topK": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1,
+      "position": [
+        820,
+        840
+      ],
+      "id": "0d7dbf8e-11d6-4dc8-b716-74e450b0599c",
+      "name": "Sobre_imoveis"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "infoemções Sobre imoveis",
+        "operation": "get",
+        "documentURL": "=https://docs.google.com/document/d/1zvVt6pgnAAWfwehr80HyRfvkVLtWljMyMQ_1XCHvp7Y/edit?tab=t.0"
+      },
+      "type": "n8n-nodes-base.googleDocsTool",
+      "typeVersion": 2,
+      "position": [
+        420,
+        880
+      ],
+      "id": "58578ba3-8256-4e3d-891a-66746e970905",
+      "name": "Sobre_imoveis1"
+    },
+    {
+      "parameters": {
+        "content": "# Aula Pedro Almeida | Automações e IA\n\nAcesse meus Links:\n- **Grupo de WhatsApp:** [Clique aqui](https://chat.whatsapp.com/CtZDRhxz4tw9hKOdObzA0V)\n- **Instagram:** [Clique aqui](https://www.instagram.com/pedrolucasalmeida/)\n- **Site:** [Clique aqui](https://pedrolucasalmeida.com.br/)",
+        "height": 247,
+        "width": 728
+      },
+      "id": "eca92da7-6594-40a3-8881-2009cbb4dd4b",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Google Drive2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Sobre_imoveis",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Sobre_imoveis",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive2": {
+      "main": [
+        [
+          {
+            "node": "Supabase Vector Store3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI3": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store3",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader2": {
+      "ai_document": [
+        [
+          {
+            "node": "Supabase Vector Store3",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader2",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive1": {
+      "main": [
+        [
+          {
+            "node": "Supabase Vector Store1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI2": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "File Created": {
+      "main": [
+        [
+          {
+            "node": "Data Handler",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "File Updated": {
+      "main": [
+        [
+          {
+            "node": "Data Handler",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data Handler": {
+      "main": [
+        [
+          {
+            "node": "Delete Row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete Row": {
+      "main": [
+        [
+          {
+            "node": "Google Drive1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Supabase Vector Store1",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter2": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sobre_imoveis": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "1b07bda7-b199-40a9-af55-9567eefcf4be",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-02-04T22:54:52.921Z",
+      "updatedAt": "2025-02-04T22:54:52.921Z",
+      "role": "workflow:owner",
+      "workflowId": "7dKDOxEFgpW1EdXx",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": [
+    {
+      "createdAt": "2024-12-26T02:31:59.341Z",
+      "updatedAt": "2024-12-26T02:31:59.341Z",
+      "id": "7ErN6XQXFpVcM0iJ",
+      "name": "Youtube"
+    },
+    {
+      "createdAt": "2025-02-04T19:24:40.778Z",
+      "updatedAt": "2025-02-04T19:24:40.778Z",
+      "id": "2AMrr0aqCSJapYLM",
+      "name": "Pedro Almeida"
+    }
+  ]
+}
