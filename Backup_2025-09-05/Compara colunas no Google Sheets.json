@@ -1,0 +1,230 @@
+{
+  "createdAt": "2025-06-22T19:42:56.930Z",
+  "updatedAt": "2025-06-22T19:42:56.930Z",
+  "id": "zHDZGXEn1tSKyY76",
+  "name": "Compara colunas no Google Sheets",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        -20
+      ],
+      "id": "836fd620-4bfb-4572-b6f9-80ffb435b3b9"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "update",
+        "sheetId": "1wuUzSFSrzgYoR7EecUoIBm3E12lWMkLEDiawFHAhx7A",
+        "range": "Emails!A:Z",
+        "options": {
+          "valueInputMode": "USER_ENTERED",
+          "valueRenderMode": "FORMATTED_VALUE"
+        }
+      },
+      "name": "Atualiza Status",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        580,
+        0
+      ],
+      "executeOnce": false,
+      "id": "26944522-4779-47f3-908d-90b5d9c1c6f8"
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "status",
+              "value": "enviado"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Status Enviado",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        380,
+        0
+      ],
+      "id": "7b3b3750-b4d7-491b-a45f-57e5a55f980d"
+    },
+    {
+      "parameters": {
+        "mode": "keepKeyMatches",
+        "propertyName1": "e-mails",
+        "propertyName2": "e-mails enviados"
+      },
+      "name": "Merge",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 1,
+      "position": [
+        200,
+        0
+      ],
+      "id": "1b325aba-c6c5-4ee9-a42c-8fbca8de895e"
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "e-mails",
+              "value": "={{$json[\"e-mails\"]}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "e-mails",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        -20,
+        -100
+      ],
+      "id": "1051e3ee-2317-4e52-b3a9-47a3c2d97c85"
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "e-mails enviados",
+              "value": "={{$json[\"e-mails enviados\"]}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "e-mails enviados",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        -20,
+        60
+      ],
+      "id": "e3ef1ece-09d7-4595-96fe-19c83ef12c8f"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "sheetId": "1wuUzSFSrzgYoR7EecUoIBm3E12lWMkLEDiawFHAhx7A",
+        "range": "Emails!A:Z",
+        "options": {
+          "valueRenderMode": "FORMATTED_VALUE"
+        }
+      },
+      "name": "Obtém emails",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        -280,
+        -20
+      ],
+      "executeOnce": false,
+      "id": "b436d20e-bb91-4571-9bc8-e79385700a73"
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Obtém emails",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Status Enviado": {
+      "main": [
+        [
+          {
+            "node": "Atualiza Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "e-mails": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "e-mails enviados": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Status Enviado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obtém emails": {
+      "main": [
+        [
+          {
+            "node": "e-mails",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "e-mails enviados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "6f3f7c3e-eaf6-4e74-a998-56171bed1609",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-06-22T19:42:56.930Z",
+      "updatedAt": "2025-06-22T19:42:56.930Z",
+      "role": "workflow:owner",
+      "workflowId": "zHDZGXEn1tSKyY76",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
