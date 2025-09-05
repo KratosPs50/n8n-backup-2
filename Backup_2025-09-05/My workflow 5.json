@@ -1,0 +1,78 @@
+{
+  "createdAt": "2025-07-20T22:11:43.947Z",
+  "updatedAt": "2025-07-20T22:11:43.947Z",
+  "id": "rvxFXDusG72aArxb",
+  "name": "My workflow 5",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "9189e44a-65f4-43de-9036-c8766aedd57e",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.4,
+      "position": [
+        160,
+        -20
+      ],
+      "id": "d48040ac-a82b-4317-907e-85517d69e70d",
+      "name": "MySQL",
+      "credentials": {
+        "mySql": {
+          "id": "fsvQ5CjO8JleVrPv",
+          "name": "MySQL account 2"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "MySQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "af7c9179-0f32-4f3e-a3da-2991188836f6",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-07-20T22:11:43.947Z",
+      "updatedAt": "2025-07-20T22:11:43.947Z",
+      "role": "workflow:owner",
+      "workflowId": "rvxFXDusG72aArxb",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
