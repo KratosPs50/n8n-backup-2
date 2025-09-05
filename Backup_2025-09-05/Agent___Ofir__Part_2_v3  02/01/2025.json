@@ -1,0 +1,1027 @@
+{
+  "createdAt": "2025-01-03T23:08:46.292Z",
+  "updatedAt": "2025-01-03T23:26:26.331Z",
+  "id": "koUExWJgP7IX3sQs",
+  "name": "Agent___Ofir__Part_2_v3  02/01/2025",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "# GERENCIAR Tabelas",
+        "height": 620,
+        "width": 620,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1320,
+        220
+      ],
+      "typeVersion": 1,
+      "id": "1fe379ec-4de3-484b-8391-b7a2d6acc583",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO clientes (nome, email, telefone, cidade, idade, ativo, departamentos)\nVALUES ('Mariana Silva', 'mariana.silva@example.com', '5548965351234@s.whatsapp.net', 'São Paulo', 30,TRUE, 'Secretária');\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -880,
+        540
+      ],
+      "id": "071f5815-f8b6-4c30-abf0-e092618e7b1f",
+      "name": "Inserir dado na tabelas clientes",
+      "credentials": {
+        "postgres": {
+          "id": "UG4CqzCe8yk5SvOn",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DROP TABLE clientes;\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -1260,
+        340
+      ],
+      "id": "352d56fe-e48b-47f1-8d34-e6f62d1af56f",
+      "name": "Apagar tabelas clientes",
+      "credentials": {
+        "postgres": {
+          "id": "UG4CqzCe8yk5SvOn",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "CREATE TABLE clientes (\n    id SERIAL PRIMARY KEY,\n    nome VARCHAR(100) ,\n    email VARCHAR(100) ,\n    telefone VARCHAR(40) UNIQUE NOT NULL,\n    cidade VARCHAR(50),\n    idade INT,\n    data JSONB DEFAULT '{}',\n    ativo BOOLEAN DEFAULT TRUE,\n    departamentos VARCHAR(50) DEFAULT 'Secretária',\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -1000,
+        340
+      ],
+      "id": "d5bf1cbc-e376-4140-a105-7d6291958f6c",
+      "name": "Criar tabelas clientes",
+      "credentials": {
+        "postgres": {
+          "id": "UG4CqzCe8yk5SvOn",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM clientes;\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -1260,
+        540
+      ],
+      "id": "14363f4a-64df-428f-9bff-a13a3fff718e",
+      "name": "Apagar os dados da tabelas clientes",
+      "credentials": {
+        "postgres": {
+          "id": "UG4CqzCe8yk5SvOn",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c726cfce-7c48-4057-9306-549db3087ca4",
+              "leftValue": "={{ $json.cliente.telefone }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "8ae92606-9a5b-4ae8-be0f-b11fcf3c34ca",
+              "leftValue": "={{ $('ver cliente').item.json.body.instance }}",
+              "rightValue": "ctrx",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        160,
+        720
+      ],
+      "id": "7720ef45-2a43-4374-9524-582bc77bd73b",
+      "name": "Cliente esta cadastrado ?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "=\n{\n\"telefone\": \"{{ $json.telefone }}\",\n\"data\": {{ JSON.stringify($json.data) }},\n\"departamento\": \"{{ $json.departamentos }}\",\n\"Sucesso\": \"se voce estiver lendo essa mensagem, é porque deu certo \"\n}\n ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1140,
+        720
+      ],
+      "id": "75983d57-1225-44d5-b8e3-404eda257145",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "content": "\n# Gerenciar Clientes pós Cadastro",
+        "height": 80,
+        "width": 1260,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "6cbbe77d-bd0f-4846-a08d-5633f6f87c75",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "agent_ofir/v1/cliente",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -580,
+        340
+      ],
+      "id": "181329a3-422a-4ecd-a391-007706c44f67",
+      "name": "Criar cliente",
+      "webhookId": "6b6f712a-b0e9-428d-9358-9f005ab7943a"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM clientes;\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -1040,
+        680
+      ],
+      "id": "319c9947-15cb-4efe-b65c-854a1280d0cb",
+      "name": "Mostrar clientes",
+      "credentials": {
+        "postgres": {
+          "id": "UG4CqzCe8yk5SvOn",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n-n8n.irhj0j.easypanel.host/webhook/7dcbe8c2-5812-4891-b099-7aff9d2bdc85",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "telefone",
+              "value": "={{ $json.body.data.key.remoteJid }}"
+            },
+            {
+              "name": "instance",
+              "value": "={{ $json.body.instance }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -300,
+        340
+      ],
+      "id": "44df76f8-44c0-4e5f-810d-73c4ab85af26",
+      "name": "Puxar_cliente"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "7dcbe8c2-5812-4891-b099-7aff9d2bdc85",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -580,
+        720
+      ],
+      "id": "bca9002f-a7e2-4ba5-ba2c-52b0f7ecb535",
+      "name": "ver cliente",
+      "webhookId": "564f4654-0255-4602-97eb-512b6a01553a"
+    },
+    {
+      "parameters": {
+        "content": "\n# Cria, verifica e salva cliente no banco de dados e no clickup",
+        "height": 80,
+        "width": 1860,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -620,
+        600
+      ],
+      "typeVersion": 1,
+      "id": "9dc62870-ea9b-4046-a88b-b84464421874",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 180,
+        "width": 200,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -540,
+        780
+      ],
+      "typeVersion": 1,
+      "id": "8dc98105-234a-4f2d-8c43-6303dad03762",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5106aa04-33c6-432a-b6c2-4d6925b11154",
+              "name": "telefone",
+              "value": "={{ $json.telefone }}",
+              "type": "string"
+            },
+            {
+              "id": "a6879f06-840e-41f3-a98a-13e96f4edc32",
+              "name": "data",
+              "value": "={{ $json.data }}",
+              "type": "string"
+            },
+            {
+              "id": "d36a5a60-4040-42ea-be57-2dd8aa1313f0",
+              "name": "Sucesso",
+              "value": "={{ $json.Sucesso }}",
+              "type": "string"
+            },
+            {
+              "id": "b00904bd-680f-4397-bb33-a7cf8c534311",
+              "name": "departamentos",
+              "value": "=Secretária",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        340
+      ],
+      "id": "35757d4e-b470-4add-b5dd-99e76d7f6f7e",
+      "name": "Dados do cliente"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.departamentos }}",
+                    "rightValue": "Secretária",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Secretária"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "079e837a-aded-4c67-8f71-60f7c8bf9090",
+                    "leftValue": "={{ $json.departamentos }}",
+                    "rightValue": "Comercial",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Comercial"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        240,
+        340
+      ],
+      "id": "0adbe6b9-03cd-4f20-a2b6-5a5ace0164b5",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "acf18696-3a72-48b9-bb10-9f8e12fb5657",
+              "name": "telefone",
+              "value": "={{ $json.telefone }}",
+              "type": "string"
+            },
+            {
+              "id": "3e0efdb9-40eb-4eb1-a0d7-8f15a9eee6e9",
+              "name": "data",
+              "value": "={{ $json.data }}",
+              "type": "string"
+            },
+            {
+              "id": "74603870-c26c-4016-97d2-7b3d47acfd51",
+              "name": "departamentos",
+              "value": "=Comercial",
+              "type": "string"
+            },
+            {
+              "id": "c75b6a56-615b-42b3-ba50-3442461cbbd0",
+              "name": "mensagem",
+              "value": "Olá, bem vindo",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        540,
+        120
+      ],
+      "id": "8ba26b0f-e39f-447b-b2c1-f99ba151baec",
+      "name": "Secretária"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "acf18696-3a72-48b9-bb10-9f8e12fb5657",
+              "name": "telefone",
+              "value": "={{ $json.telefone }}",
+              "type": "string"
+            },
+            {
+              "id": "3e0efdb9-40eb-4eb1-a0d7-8f15a9eee6e9",
+              "name": "data",
+              "value": "={{ $json.data }}",
+              "type": "string"
+            },
+            {
+              "id": "74603870-c26c-4016-97d2-7b3d47acfd51",
+              "name": "departamentos",
+              "value": "={{ $json.departamentos }}",
+              "type": "string"
+            },
+            {
+              "id": "c75b6a56-615b-42b3-ba50-3442461cbbd0",
+              "name": "mensagem",
+              "value": "Precisando de mai alguma coisa, estou a disposicao",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        540,
+        360
+      ],
+      "id": "00d9abc4-538c-4f69-bf27-07220804771b",
+      "name": "Comercial"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "acf18696-3a72-48b9-bb10-9f8e12fb5657",
+              "name": "telefone",
+              "value": "={{ $json.telefone }}",
+              "type": "string"
+            },
+            {
+              "id": "3e0efdb9-40eb-4eb1-a0d7-8f15a9eee6e9",
+              "name": "data",
+              "value": "={{ $json.data }}",
+              "type": "string"
+            },
+            {
+              "id": "74603870-c26c-4016-97d2-7b3d47acfd51",
+              "name": "departamentos",
+              "value": "={{ $json.departamentos }}",
+              "type": "string"
+            },
+            {
+              "id": "c75b6a56-615b-42b3-ba50-3442461cbbd0",
+              "name": "mensagem",
+              "value": "Olá, bem vindo",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        840,
+        360
+      ],
+      "id": "e6b4ba2a-0ec9-47d8-b260-a85e14532bd8",
+      "name": "Retorno do Agente"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d07d2af6-b2cb-4d21-bf70-4577bea9b8c9",
+              "leftValue": "={{ $json.departamentos }}",
+              "rightValue": "={{ $('Switch').item.json.departamentos }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1100,
+        360
+      ],
+      "id": "73556244-3ece-4191-814e-462ec7c21359",
+      "name": "Transferir Cliente ?"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO clientes (telefone,data)\nVALUES ('{{ $('Cliente_Info').item.json.cliente.telefone }}', '{{ JSON.stringify($json.data) }}'::jsonb)\nON CONFLICT (telefone) \nDO UPDATE SET \n    data = clientes.data || EXCLUDED.data,\n    updated_at = CURRENT_TIMESTAMP\nRETURNING *;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        900,
+        720
+      ],
+      "id": "dc6e4618-5a8a-4355-a048-14a90bc16aed",
+      "name": "Atualiza CRM",
+      "credentials": {
+        "postgres": {
+          "id": "UG4CqzCe8yk5SvOn",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# CLICKUP",
+        "height": 80,
+        "width": 200,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        380,
+        860
+      ],
+      "typeVersion": 1,
+      "id": "36261488-8826-4d62-8f13-dc6fe2be4172",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "team": "9011840284",
+        "space": "90113049086",
+        "folder": "90114790673",
+        "list": "901108102634",
+        "name": "Lead",
+        "additionalFields": {
+          "assignees": [],
+          "customFieldsJson": "=\n[ {\"id\": \"2cfd7951-c26f-4931-b9e4-00ef2bfb5e08\" , \"value\": \" {{ $json.telefone }}\"} ]\n"
+        }
+      },
+      "type": "n8n-nodes-base.clickUp",
+      "typeVersion": 1,
+      "position": [
+        420,
+        720
+      ],
+      "id": "6c7d30d5-36a8-4185-bf95-b64073f7135e",
+      "name": "ClickUp criar task"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 180,
+        "width": 200,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -540,
+        400
+      ],
+      "typeVersion": 1,
+      "id": "0c6c92cc-e73c-4928-9df5-2bdaf475f15f",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n\"data\":{ \n \"crmid\":\"{{ $json.id || \"\" }}\"\n}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        640,
+        720
+      ],
+      "id": "a26f6ed8-8008-4637-9ea9-863db5644411",
+      "name": "Conversor Json"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO clientes (nome, email, telefone, cidade, updated_at)\nVALUES ('', '', '{{ $json.body.telefone }}', '', CURRENT_TIMESTAMP)\nON CONFLICT (telefone)\nDO UPDATE SET\n    nome = EXCLUDED.nome,\n    email = EXCLUDED.email,\n    cidade = EXCLUDED.cidade,\n    updated_at = EXCLUDED.updated_at\nRETURNING *;\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -300,
+        720
+      ],
+      "id": "7e3cf7b2-25f0-47ac-83fc-3679b777bf4f",
+      "name": "Verifica ou Cria LEAD",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "UG4CqzCe8yk5SvOn",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b5435c22-6147-4e5b-82ae-90e315fb06e3",
+              "name": "cliente.telefone",
+              "value": "={{ $json.telefone }}",
+              "type": "string"
+            },
+            {
+              "id": "f5e19370-4080-4ee4-8839-ff14dbba4b24",
+              "name": "cliente.data",
+              "value": "={{ $json.data }}",
+              "type": "string"
+            },
+            {
+              "id": "0ceb4f6f-bf1f-4078-a23b-e43864f1c324",
+              "name": "cliente.departamentos",
+              "value": "={{ $json.departamentos }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -60,
+        720
+      ],
+      "id": "1a8bcd02-aa66-4f49-8c1a-7748109f8dbb",
+      "name": "Cliente_Info"
+    },
+    {
+      "parameters": {
+        "content": "\n# Do Whatsapp",
+        "height": 80,
+        "width": 580,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -620,
+        220
+      ],
+      "typeVersion": 1,
+      "id": "5ae0fdb3-60fc-4ed7-8a8e-a5cfb2e09ac8",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "```\n                                                                                                                                        \n                                                                                                                                        \nDDDDDDDDDDDDD          iiii                                                                tttt            iiii                         \nD::::::::::::DDD      i::::i                                                            ttt:::t           i::::i                        \nD:::::::::::::::DD     iiii                                                             t:::::t            iiii                         \nDDD:::::DDDDD:::::D                                                                     t:::::t                                         \n  D:::::D    D:::::D iiiiiii nnnn  nnnnnnnn      aaaaaaaaaaaaa       ssssssssss   ttttttt:::::ttttttt    iiiiiii   aaaaaaaaaaaaa        \n  D:::::D     D:::::Di:::::i n:::nn::::::::nn    a::::::::::::a    ss::::::::::s  t:::::::::::::::::t    i:::::i   a::::::::::::a       \n  D:::::D     D:::::D i::::i n::::::::::::::nn   aaaaaaaaa:::::a ss:::::::::::::s t:::::::::::::::::t     i::::i   aaaaaaaaa:::::a      \n  D:::::D     D:::::D i::::i nn:::::::::::::::n           a::::a s::::::ssss:::::stttttt:::::::tttttt     i::::i            a::::a      \n  D:::::D     D:::::D i::::i   n:::::nnnn:::::n    aaaaaaa:::::a  s:::::s  ssssss       t:::::t           i::::i     aaaaaaa:::::a      \n  D:::::D     D:::::D i::::i   n::::n    n::::n  aa::::::::::::a    s::::::s            t:::::t           i::::i   aa::::::::::::a      \n  D:::::D     D:::::D i::::i   n::::n    n::::n a::::aaaa::::::a       s::::::s         t:::::t           i::::i  a::::aaaa::::::a      \n  D:::::D    D:::::D  i::::i   n::::n    n::::na::::a    a:::::a ssssss   s:::::s       t:::::t    tttttt i::::i a::::a    a:::::a      \nDDD:::::DDDDD:::::D  i::::::i  n::::n    n::::na::::a    a:::::a s:::::ssss::::::s      t::::::tttt:::::ti::::::ia::::a    a:::::a      \nD:::::::::::::::DD   i::::::i  n::::n    n::::na:::::aaaa::::::a s::::::::::::::s       tt::::::::::::::ti::::::ia:::::aaaa::::::a      \nD::::::::::::DDD     i::::::i  n::::n    n::::n a::::::::::aa:::a s:::::::::::ss          tt:::::::::::tti::::::i a::::::::::aa:::a     \nDDDDDDDDDDDDD        iiiiiiii  nnnnnn    nnnnnn  aaaaaaaaaa  aaaa  sssssssssss              ttttttttttt  iiiiiiii  aaaaaaaaaa  aaaa     \n                                                                                                                                        \n                                                                                                                                        \n                                                                                                                                        \n                                                                                                                                        \n                                                                                                                                        \n                                                                                                                                        \n                                                                                                                                        \n ```\n    \n",
+        "height": 420,
+        "width": 1180
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1200,
+        -600
+      ],
+      "typeVersion": 1,
+      "id": "eed0c753-63b0-4199-beb8-7d0bfb9f1a2f",
+      "name": "Sticky Note2"
+    }
+  ],
+  "connections": {
+    "Cliente esta cadastrado ?": {
+      "main": [
+        [
+          {
+            "node": "ClickUp criar task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar cliente": {
+      "main": [
+        [
+          {
+            "node": "Puxar_cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Puxar_cliente": {
+      "main": [
+        [
+          {
+            "node": "Dados do cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ver cliente": {
+      "main": [
+        [
+          {
+            "node": "Verifica ou Cria LEAD",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dados do cliente": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Secretária",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Comercial",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Secretária": {
+      "main": [
+        [
+          {
+            "node": "Retorno do Agente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Comercial": {
+      "main": [
+        [
+          {
+            "node": "Retorno do Agente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retorno do Agente": {
+      "main": [
+        [
+          {
+            "node": "Transferir Cliente ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transferir Cliente ?": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ClickUp criar task": {
+      "main": [
+        [
+          {
+            "node": "Conversor Json",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Atualiza CRM": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Conversor Json": {
+      "main": [
+        [
+          {
+            "node": "Atualiza CRM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verifica ou Cria LEAD": {
+      "main": [
+        [
+          {
+            "node": "Cliente_Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cliente_Info": {
+      "main": [
+        [
+          {
+            "node": "Cliente esta cadastrado ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Criar cliente": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n-n8n.irhj0j.easypanel.host",
+            "user-agent": "axios/1.7.7",
+            "content-length": "692",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "content-type": "application/json",
+            "x-forwarded-for": "172.18.0.1",
+            "x-forwarded-host": "n8n-n8n.irhj0j.easypanel.host",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "8a3add010405",
+            "x-real-ip": "172.18.0.1"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "event": "messages.upsert",
+            "instance": "ctrx",
+            "data": {
+              "key": {
+                "remoteJid": "554896538802@s.whatsapp.net",
+                "fromMe": true,
+                "id": "12641ED133F5C9E99D8AA4531FC05852"
+              },
+              "pushName": "Enio",
+              "status": "SERVER_ACK",
+              "message": {
+                "conversation": "Oi",
+                "messageContextInfo": {
+                  "messageSecret": "LO084CCBVP2cTDiIYMVvPy6ENgljhlrlv4Bo0PEkTCQ="
+                }
+              },
+              "messageType": "conversation",
+              "messageTimestamp": 1735863810,
+              "instanceId": "7b23363e-7a47-4c87-8580-c36da5c3113c",
+              "source": "android"
+            },
+            "destination": "https://n8n-n8n.irhj0j.easypanel.host/webhook/agent_ofir/v1/cliente",
+            "date_time": "2025-01-02T21:23:30.684Z",
+            "sender": "554896538802@s.whatsapp.net",
+            "server_url": "http://localhost:8080",
+            "apikey": "9167B7DCFC78-478F-9F92-B34C2D8293B1"
+          },
+          "webhookUrl": "https://n8n-n8n.irhj0j.easypanel.host/webhook/agent_ofir/v1/cliente",
+          "executionMode": "production"
+        }
+      }
+    ],
+    "ver cliente": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n-n8n.irhj0j.easypanel.host",
+            "user-agent": "axios/1.7.4",
+            "content-length": "60",
+            "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "authorization": "loS6OhT5zhQtBKMOo9wu09bI",
+            "content-type": "application/json",
+            "x-forwarded-for": "172.18.0.1",
+            "x-forwarded-host": "n8n-n8n.irhj0j.easypanel.host",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "8a3add010405",
+            "x-real-ip": ""
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "telefone": "554896538802@s.whatsapp.net",
+            "instance": "ctrx"
+          },
+          "webhookUrl": "https://n8n-n8n.irhj0j.easypanel.host/webhook/7dcbe8c2-5812-4891-b099-7aff9d2bdc85",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "versionId": "05276e83-2da5-4e23-acea-788dac7e0cd1",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-01-03T23:08:46.292Z",
+      "updatedAt": "2025-01-03T23:08:46.292Z",
+      "role": "workflow:owner",
+      "workflowId": "koUExWJgP7IX3sQs",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": [
+    {
+      "createdAt": "2025-01-03T23:08:30.432Z",
+      "updatedAt": "2025-01-03T23:08:30.432Z",
+      "id": "olE8ipWW1ZCaIBgY",
+      "name": "AF-V 3.0"
+    },
+    {
+      "createdAt": "2025-01-03T23:08:30.443Z",
+      "updatedAt": "2025-01-03T23:08:30.443Z",
+      "id": "yEzQssXwMpwhutpl",
+      "name": "Part 2"
+    }
+  ]
+}
