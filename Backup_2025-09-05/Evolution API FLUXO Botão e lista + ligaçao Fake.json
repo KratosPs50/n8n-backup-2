@@ -1,0 +1,203 @@
+{
+  "createdAt": "2024-10-20T21:31:36.457Z",
+  "updatedAt": "2024-10-20T21:45:09.368Z",
+  "id": "wlZhyivWZ1sJVzyY",
+  "name": "Evolution API FLUXO Botão e lista + ligaçao Fake",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "bf744c16-4eb1-42f1-bcc1-bf916d838ae2",
+      "name": "When clicking ‘Test workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        980,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.url }}/message/sendList/{{ $json.instancia }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $json.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"number\": \"{{ $json.numero }}\",\n    \"title\": \"Se torne um Gestor de Automações\",\n    \"description\": \"Descubra o Poder do n8n com a Nexxus Academy e seja um Gestor Bem Pago!\",\n    \"buttonText\": \"Clique Aqui!\",\n    \"footerText\": \"Acesse:\\nhttps://nexxusacademy.com.br/\",\n    \"sections\": [\n        {\n            \"title\": \"Formação\",\n            \"rows\": [\n                {\n                    \"title\": \"1 Formação Nexxus Academy\",\n                    \"description\": \"Você já sentiu que seu trabalho poderia ser muito mais eficiente se as tarefas repetitivas fossem automatizadas? Imagine agora a possibilidade de automatizar processos complexos e simplificar seu dia a dia, independentemente de ser um iniciante ou especialista. O curso de automação da Nexxus Academy, liderado por Ruan Santana, está aqui para transformar sua maneira de trabalhar.\",\n                    \"rowId\": \"rowId 001\"\n                },\n                {\n                    \"title\": \"2 Formação Nexxus Academy\",\n                    \"description\": \"Você já sentiu que seu trabalho poderia ser muito mais eficiente se as tarefas repetitivas fossem automatizadas? Imagine agora a possibilidade de automatizar processos complexos e simplificar seu dia a dia, independentemente de ser um iniciante ou especialista. O curso de automação da Nexxus Academy, liderado por Ruan Santana, está aqui para transformar sua maneira de trabalhar.\",\n                    \"rowId\": \"rowId 001\"\n                }\n            ]\n        },\n        {\n            \"title\": \"Curso\",\n            \"rows\": [\n                {\n                    \"title\": \"1 Agência Automatizada\",\n                    \"description\": \"Agências e gestores de tráfego, chega de processos manuais! Com nosso método, você vai lucrar mais e aumentar a percepção que os cliente tem da sua empresa, dobrando seu LTV.\",\n                    \"rowId\": \"rowId 001\"\n                },\n                {\n                    \"title\": \"2 Agência Automatizada\",\n                    \"description\": \"Agências e gestores de tráfego, chega de processos manuais! Com nosso método, você vai lucrar mais e aumentar a percepção que os cliente tem da sua empresa, dobrando seu LTV.\",\n                    \"rowId\": \"rowId 001\"\n                }\n            ]\n        }\n    ],\n    \"delay\": 1200\n} ",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "457b039f-950a-495b-999d-b4afcb7e306b",
+      "name": "ENVIAR LISTA",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1640,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.url }}/message/sendButtons/{{ $json.instancia }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $json.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"number\": \"{{ $json.numero }}\",\n    \"title\": \"Se torne um Gestor de Automações\",\n    \"description\": \"Descubra o Poder do n8n com a Nexxus Academy e seja um Gestor Bem Pago!\",\n    \"footer\": \"Acesse:\\nnexxusacademy.com.br/\",\n    \"buttons\": [\n        {\n            \"type\": \"reply\",\n            \"displayText\": \"Quero Formamação Nexxus\",\n            \"id\": \"nexxus\"\n        },\n        {\n            \"type\": \"copy\",\n            \"displayText\": \"Copia Link\",\n            \"copyCode\": \"https://nexxusacademy.com.br/\"\n        },\n        {\n            \"type\": \"url\",\n            \"displayText\": \"Comprar Agora\",\n            \"url\": \"https://nexxusacademy.com.br/\"\n        },\n        {\n            \"type\": \"call\",\n            \"displayText\": \"Me ligue e tire suas dúvidas\",\n            \"phoneNumber\": \"5575981787697\"\n        }\n    ],\n    \"delay\": 1200\n}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "98bc1a40-0084-4523-98a6-8d5984f83a8f",
+      "name": "ENVIAR BOTOES",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1640,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.url }}/call/offer/{{ $json.instancia }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $json.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"number\": \"{{ $json.numero }}\",\n    \"isVideo\": true,\n    \"callDuration\": 3\n} ",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "ca1dfded-3a6d-494d-81cd-07b731514e44",
+      "name": "FAKE CALL",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1640,
+        740
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e91c8adc-07d5-47dd-90d4-2e6b9bc40480",
+              "name": "instancia",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "910acfca-c0b4-44f4-ad3c-2470594e754f",
+              "name": "apikey",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "62e2b3f0-389d-454a-92d7-4f4a54791a73",
+              "name": "url",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "618ceb17-0bbf-4f93-8198-7a3ed0024e60",
+              "name": "numero",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ebb53ab9-bff9-4c0d-b6c9-cf017c4d713a",
+      "name": "DADOS - EVO",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1260,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "content": "🔑\n**Transforme sua Carreira com Automação: Descubra o Poder do n8n com a Nexxus Academy**\n[https://nexxusacademy.com.br](https://nexxusacademy.com.br/)\n\n🔥\n**Automatize sua agência e triplique a sua produtividade**\nhttps://nexxusacademy.com.br/agencia-automatizada\n\nSuporte: 557581787697",
+        "height": 284.1315789473684,
+        "width": 386.4473684210534
+      },
+      "id": "3db0a212-b767-4a49-88bc-694086d1e653",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1160,
+        180
+      ]
+    }
+  ],
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "DADOS - EVO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "bd5b5f79-4722-4c1c-85cb-8d0d051ca345",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2024-10-20T21:31:36.457Z",
+      "updatedAt": "2024-10-20T21:31:36.457Z",
+      "role": "workflow:owner",
+      "workflowId": "wlZhyivWZ1sJVzyY",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
