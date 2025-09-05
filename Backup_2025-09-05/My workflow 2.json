@@ -1,0 +1,320 @@
+{
+  "createdAt": "2025-06-23T00:17:36.938Z",
+  "updatedAt": "2025-06-23T03:24:35.562Z",
+  "id": "vJ0TUM597SuecRiw",
+  "name": "My workflow 2",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes"
+            }
+          ]
+        }
+      },
+      "id": "a90c1aa1-4cbf-49cf-8c9e-3080da2e7e67",
+      "name": "Schedule Trigger (1 min)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1600,
+        580
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nif (items.length === 0) return [];\nconst ultimo = items.reduce((a,b) => a.json.row_number > b.json.row_number ? a : b);\nreturn [ultimo];"
+      },
+      "id": "043c7875-5bb0-498d-b945-c7eccbccfc21",
+      "name": "Code – Mantém só último",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1080,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of $input.all()) {\n  const n = item.json[\"Data de Nascimento\"];\n  item.json.data_nascimento = new Date(n).toISOString().split('T')[0];\n}\nreturn $input.all();"
+      },
+      "id": "a09e5e66-9c35-4586-be83-0dae63dad956",
+      "name": "Normalize Date",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -780,
+        580
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const senhaOriginal='HayAhMoVe2025@';\nconst senhaHash='$2a$12$Fu/rrbjSZVmTrsYwR0dSx.T39YSnhOm3upe8MzDtAaW2TrZY6dZq2';\nfor(const item of $input.all()){\n item.json.senhaOriginal=senhaOriginal;\n item.json.senhaHash=senhaHash;\n}\nreturn $input.all();"
+      },
+      "id": "d3d8aadd-c18c-4f1a-b070-81ee0fdf7fbb",
+      "name": "Hash Password",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -800,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "query",
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "id": "107c35b0-2555-4c88-914c-8aed1beaa36d",
+      "name": "MySQL – Verifica usuário",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2,
+      "position": [
+        -1400,
+        120
+      ],
+      "credentials": {
+        "mySql": {
+          "id": null,
+          "name": "### MYSQL IGREJA ###"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json[\"0\"].found }}",
+              "operation": "larger",
+              "value2": 0
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "75d574d5-a0dc-48d4-a233-bd4f4efb7446",
+      "name": "IF – Já existe?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -400,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "table": "users",
+        "options": {}
+      },
+      "id": "5699037d-ba26-4a26-893d-8944568affbf",
+      "name": "MySQL – Insert (novo)",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2,
+      "position": [
+        240,
+        920
+      ],
+      "credentials": {
+        "mySql": {
+          "id": null,
+          "name": "### MYSQL IGREJA ###"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of $input.all()) {\n  const n=item.json.Name||'usuário';\n  const e=item.json.Email||'';\n  const s=item.json.senhaOriginal;\n  item.json.assunto='Acesso liberado – Hayah Training';\n  item.json.msg=`Olá ${n}! ✅ Seu acesso foi criado.\\nUsuário: ${e}\\nSenha: ${s}\\nAcesse: https://move.hayahtraining.com/login/`;\n}\nreturn $input.all();"
+      },
+      "id": "579247a5-9ea1-410f-a1a6-9ae3c9dc8053",
+      "name": "Set Mensagens – Novo",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -20,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of $input.all()) {\n  const n=item.json.Name||'usuário';\n  const e=item.json.Email||'';\n  item.json.assunto='Você já possui cadastro – Hayah Training';\n  item.json.msg=`Olá ${n}! ✅ Nosso sistema indica que o seu e-mail (${e}) já possui acesso.\\nSe esqueceu a senha, use o link “Esqueci minha senha” na página de login.`;\n}\nreturn $input.all();"
+      },
+      "id": "3530cfd2-998d-4980-9526-bfe101d5d2ff",
+      "name": "Set Mensagens – Já cadastrado",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -100,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "=contato@hayahtraining.com",
+        "toEmail": "={{$json.Email}}",
+        "subject": "={{$json.assunto}}",
+        "text": "={{$json.msg}}",
+        "options": {}
+      },
+      "id": "9557a8dd-3bcb-4270-96d6-37d03e687af4",
+      "name": "Enviar E-mail",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [
+        200,
+        280
+      ],
+      "webhookId": "25dd3055-b6d7-4273-8101-421d4c51e5a1",
+      "credentials": {
+        "smtp": {
+          "id": "atvXJVDFInYVg0OS",
+          "name": "SMTP - Brevo - Ingreja"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "options_message": {}
+      },
+      "id": "7449f15a-7fd8-43c2-bf5a-e541e7575ac5",
+      "name": "WhatsApp – Evolution",
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        500,
+        960
+      ],
+      "credentials": {
+        "evolutionApi": {
+          "id": null,
+          "name": "### EVOLUTION TOKEN ###"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$item().$binary === undefined}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "bb22b8cd-c135-464c-b25b-54a62723fe86",
+      "name": "IF – E-mail OK?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        400,
+        280
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "f07d8551-b2f4-4939-9d40-eec0b9b94bee",
+      "name": "Google Sheets – Atualiza status",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 5,
+      "position": [
+        660,
+        280
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": null,
+          "name": "### SUA CREDENCIAL ###"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "181LKBpkCgsVT_rTuSpyaxsgrWHWrAIe0DjZdoOS7M1o",
+          "mode": "list",
+          "cachedResultName": "Planilha Inscrição PAGA pronta para o Infix v02",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/181LKBpkCgsVT_rTuSpyaxsgrWHWrAIe0DjZdoOS7M1o/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 144992678,
+          "mode": "list",
+          "cachedResultName": "Português",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/181LKBpkCgsVT_rTuSpyaxsgrWHWrAIe0DjZdoOS7M1o/edit#gid=144992678"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Envio por E-mail"
+            },
+            {
+              "lookupColumn": "Envio por Whatsapp"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        -1340,
+        580
+      ],
+      "id": "9879d137-ca8e-4be3-a0e2-dfcd537297f5",
+      "name": "Google Sheets – Ler últimos",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "z1VWO1EGILqORxWq",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger (1 min)": {
+      "main": [
+        []
+      ]
+    },
+    "Google Sheets – Ler últimos": {
+      "main": [
+        [
+          {
+            "node": "Code – Mantém só último",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "356079b0-9bfe-4cb1-9363-9f332dafb037",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-06-23T00:17:36.938Z",
+      "updatedAt": "2025-06-23T00:17:36.938Z",
+      "role": "workflow:owner",
+      "workflowId": "vJ0TUM597SuecRiw",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
