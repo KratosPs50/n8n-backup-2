@@ -1,0 +1,1476 @@
+{
+  "createdAt": "2025-06-23T04:27:15.371Z",
+  "updatedAt": "2025-06-23T04:27:15.371Z",
+  "id": "CH4lgr262wxTrLyB",
+  "name": "My workflow 4",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://painelcrm.3dllhouseimob.com.br/api/leads",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "authtoken",
+              "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiTGVhbmRybyIsIm5hbWUiOiJ0eXBlYm90IiwiQVBJX1RJTUUiOjE2OTk4OTk4NzR9.OQF4vy4Ja1OzcGTXZicFEDCLG7K6uaJwB-uE9EpDJ8g"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "source",
+              "value": "={{ $json.body.source }}"
+            },
+            {
+              "name": "status",
+              "value": "={{ $json.body.status }}"
+            },
+            {
+              "name": "name",
+              "value": "={{ $json[\"body\"][\"nome\"] }}"
+            },
+            {
+              "name": "phonenumber",
+              "value": "={{ $json.body.phonenumber }}"
+            },
+            {
+              "name": "custom_fields[leads][7]",
+              "value": "={{ $('Recebe os dados do SITE').item.json[\"body\"][\"custom_fields[leads][7]\"] }}"
+            },
+            {
+              "name": "=assigned",
+              "value": "={{ $json.body.assigned }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1cd01908-bd6e-4174-822c-00da3e01dfdb",
+      "name": "ENVIA PARA O PERFEX",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        920,
+        -320
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      randomNumber: Math.floor(Math.random() * 7) + 1\n    }\n  }\n];\n"
+      },
+      "id": "c870569a-e02a-47f5-86d3-9d7f03c73778",
+      "name": "Code2",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2140,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Supõe-se que 'status' e 'source' são propriedades no corpo do JSON que são strings ou números.\n// Tenta acessar os dados, mas verifica se eles existem primeiro\nlet data = $('Recebe os dados do SITE').json;\nlet statusValue = data && data.body ? data.body.status : null;\nlet sourceValue = data && data.body ? data.body.source : null;\n\n// Converter para número, caso seja uma string\nstatusValue = typeof statusValue === 'string' ? parseInt(statusValue, 10) : statusValue;\nsourceValue = typeof sourceValue === 'string' ? parseInt(sourceValue, 10) : sourceValue;\n\nlet statusDescription;\nlet sourceDescription;\n\n// Determinar a descrição do status\nswitch (statusValue) {\n  case 1:\n    statusDescription = \"Frio\";\n    break;\n  case 2:\n    statusDescription = \"Morno\";\n    break;\n  case 3:\n    statusDescription = \"Posivel Led Quente\";\n    break;\n  case 4:\n    statusDescription = \"Novo\";\n    break;\n  default:\n    statusDescription = \"Led Novo\";\n}\n\n// Determinar a descrição da fonte\nswitch (sourceValue) {\n  case 1:\n    sourceDescription = \"Facebook\";\n    break;\n  case 2:\n    sourceDescription = \"Instagran\";\n    break;\n  case 3:\n    sourceDescription = \"google\";\n    break;\n  case 4:\n    sourceDescription = \"Whatsapp\";\n    break;\n  default:\n    sourceDescription = \"Fluxo de atenendimento imovel *Bromélia*\";\n}\n\n// Definir a descrição no item de saída\nreturn [{ json: { ...items[0].json, statusDescription: statusDescription, sourceDescription: sourceDescription } }];\n"
+      },
+      "id": "d118862a-efb2-4436-9368-d3de1fe3655a",
+      "name": "Code4",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        620,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "stringValue": "={{ $('Recebe os dados do SITE').item.json.body.source }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "97c6593a-b121-4d2e-b368-516617f7d4d2",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        3120,
+        -60
+      ]
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "stringValue": "={{ $('Recebe os dados do SITE').item.json.body.source }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "eb6034e0-c313-4d0e-a691-31ae7b0cdfc0",
+      "name": "Edit Fields1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        3120,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "stringValue": "={{ $('Recebe os dados do SITE').item.json.body.source }}$('Code2').params[\"notice\"]$('Code2').params[\"jsCode\"]{{ $('Code2').params[\"language\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "037bd3d6-0b8c-4faf-8c84-f1ca414bb2e4",
+      "name": "Edit Fields3",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        3120,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Supõe-se que 'status' e 'source' são propriedades no corpo do JSON que são strings ou números.\n// Tenta acessar os dados, mas verifica se eles existem primeiro\nlet data = $('Recebe os dados do SITE').json;\nlet statusValue = data && data.body ? data.body.status : null;\nlet sourceValue = data && data.body ? data.body.source : null;\n\n// Converter para número, caso seja uma string\nstatusValue = typeof statusValue === 'string' ? parseInt(statusValue, 10) : statusValue;\nsourceValue = typeof sourceValue === 'string' ? parseInt(sourceValue, 10) : sourceValue;\n\nlet statusDescription;\nlet sourceDescription;\n\n// Determinar a descrição do status\nswitch (statusValue) {\n  case 1:\n    statusDescription = \"Frio\";\n    break;\n  case 2:\n    statusDescription = \"Morno\";\n    break;\n  case 3:\n    statusDescription = \"Posivel Led Quente\";\n    break;\n  case 4:\n    statusDescription = \"Novo\";\n    break;\n  default:\n    statusDescription = \"Valor não reconhecido\";\n}\n\n// Determinar a descrição da fonte\nswitch (sourceValue) {\n  case 1:\n    sourceDescription = \"Facebook\";\n    break;\n  case 2:\n    sourceDescription = \"Instagran\";\n    break;\n  case 3:\n    sourceDescription = \"google\";\n    break;\n  case 4:\n    sourceDescription = \"Whatsapp\";\n    break;\n  default:\n    sourceDescription = \"Origem não reconhecida\";\n}\n\n// Definir a descrição no item de saída\nreturn [{ json: { ...items[0].json, statusDescription: statusDescription, sourceDescription: sourceDescription } }];\n"
+      },
+      "id": "fafc33dd-0fa9-4c08-9e2a-0e6a58c06fb9",
+      "name": "Code01",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2860,
+        -60
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Supõe-se que 'status' e 'source' são propriedades no corpo do JSON que são strings ou números.\n// Tenta acessar os dados, mas verifica se eles existem primeiro\nlet data = $('Recebe os dados do SITE').json;\nlet statusValue = data && data.body ? data.body.status : null;\nlet sourceValue = data && data.body ? data.body.source : null;\n\n// Converter para número, caso seja uma string\nstatusValue = typeof statusValue === 'string' ? parseInt(statusValue, 10) : statusValue;\nsourceValue = typeof sourceValue === 'string' ? parseInt(sourceValue, 10) : sourceValue;\n\nlet statusDescription;\nlet sourceDescription;\n\n// Determinar a descrição do status\nswitch (statusValue) {\n  case 1:\n    statusDescription = \"Frio\";\n    break;\n  case 2:\n    statusDescription = \"Morno\";\n    break;\n  case 3:\n    statusDescription = \"Posivel Led Quente\";\n    break;\n  case 4:\n    statusDescription = \"Novo\";\n    break;\n  default:\n    statusDescription = \"Valor não reconhecido\";\n}\n\n// Determinar a descrição da fonte\nswitch (sourceValue) {\n  case 1:\n    sourceDescription = \"Facebook\";\n    break;\n  case 2:\n    sourceDescription = \"Instagran\";\n    break;\n  case 3:\n    sourceDescription = \"google\";\n    break;\n  case 4:\n    sourceDescription = \"Whatsapp\";\n    break;\n  default:\n    sourceDescription = \"Origem não reconhecida\";\n}\n\n// Definir a descrição no item de saída\nreturn [{ json: { ...items[0].json, statusDescription: statusDescription, sourceDescription: sourceDescription } }];\n"
+      },
+      "id": "396a838f-66b6-43b6-b5ca-772faef3572d",
+      "name": "Code02",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2860,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Supõe-se que 'status' e 'source' são propriedades no corpo do JSON que são strings ou números.\n// Tenta acessar os dados, mas verifica se eles existem primeiro\nlet data = $('Recebe os dados do SITE').json;\nlet statusValue = data && data.body ? data.body.status : null;\nlet sourceValue = data && data.body ? data.body.source : null;\n\n// Converter para número, caso seja uma string\nstatusValue = typeof statusValue === 'string' ? parseInt(statusValue, 10) : statusValue;\nsourceValue = typeof sourceValue === 'string' ? parseInt(sourceValue, 10) : sourceValue;\n\nlet statusDescription;\nlet sourceDescription;\n\n// Determinar a descrição do status\nswitch (statusValue) {\n  case 1:\n    statusDescription = \"Frio\";\n    break;\n  case 2:\n    statusDescription = \"Morno\";\n    break;\n  case 3:\n    statusDescription = \"Posivel Led Quente\";\n    break;\n  case 4:\n    statusDescription = \"Novo\";\n    break;\n  default:\n    statusDescription = \"Valor não reconhecido\";\n}\n\n// Determinar a descrição da fonte\nswitch (sourceValue) {\n  case 1:\n    sourceDescription = \"Facebook\";\n    break;\n  case 2:\n    sourceDescription = \"Instagran\";\n    break;\n  case 3:\n    sourceDescription = \"google\";\n    break;\n  case 4:\n    sourceDescription = \"Whatsapp\";\n    break;\n  default:\n    sourceDescription = \"Origem não reconhecida\";\n}\n\n// Definir a descrição no item de saída\nreturn [{ json: { ...items[0].json, statusDescription: statusDescription, sourceDescription: sourceDescription } }];\n"
+      },
+      "id": "eb8807c9-0293-48ae-986a-dffc0abaf270",
+      "name": "Code04",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2860,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apioi.onlinechat.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer SEOOQM8MLI8XVU148UI2J07RNI0EHJ"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "5511952074491"
+            },
+            {
+              "name": "body",
+              "value": "=Um lead chamado *{{ $('Recebe os dados do SITE').item.json[\"body\"][\"name\"] }}*, acaba de se cadastrar pelo *{{ $('Recebe os dados do SITE').item.json[\"body\"][\"source\"]}}*, com status *{{ $('Recebe os dados do SITE').item.json[\"body\"][\"status\"] }}*. Agiliza."
+            },
+            {
+              "name": "queueId"
+            },
+            {
+              "name": "userId"
+            },
+            {
+              "name": "closeTicket",
+              "value": "true"
+            },
+            {
+              "name": "sendSignature",
+              "value": "false"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "c44ad964-6a6b-43f3-945e-cabccc70b7ec",
+      "name": "corretor 01 marcelo",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        3420,
+        -60
+      ],
+      "typeVersion": 4.1
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apioi.onlinechat.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer SEOOQM8MLI8XVU148UI2J07RNI0EHJ"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "5511952074491"
+            },
+            {
+              "name": "body",
+              "value": "=Um lead chamado *{{ $json[\"body\"][\"name\"] }}*, acaba de se cadastrar pelo *{{ $json.sourceDescription }}*, com status *{{ $json.statusDescription }}*. Agiliza.{{ $parameter[\"bodyParameters\"][\"parameters\"][0][\"nome\"] }}"
+            },
+            {
+              "name": "queueId"
+            },
+            {
+              "name": "userId"
+            },
+            {
+              "name": "closeTicket",
+              "value": "true"
+            },
+            {
+              "name": "sendSignature",
+              "value": "false"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "075ebe84-9dd7-4a98-b649-28ddc9a9b6ef",
+      "name": "corretor taina",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        3420,
+        420
+      ],
+      "typeVersion": 4.1
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apioi.onlinechat.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer SEOOQM8MLI8XVU148UI2J07RNI0EHJ"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "5511952074491"
+            },
+            {
+              "name": "body",
+              "value": "=Um lead chamado *{{ $json[\"body\"][\"name\"] }}*, acaba de se cadastrar pelo *{{ $json.sourceDescription }}*, com status *{{ $json.statusDescription }}*. Agiliza.{{ $parameter[\"bodyParameters\"][\"parameters\"][0][\"nome\"] }}"
+            },
+            {
+              "name": "queueId"
+            },
+            {
+              "name": "userId"
+            },
+            {
+              "name": "closeTicket",
+              "value": "true"
+            },
+            {
+              "name": "sendSignature",
+              "value": "false"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "019d5215-e6fa-4bc5-9145-a9d67be5ef91",
+      "name": "Gerente Rafael",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        3420,
+        120
+      ],
+      "typeVersion": 4.1
+    },
+    {
+      "parameters": {
+        "jsCode": "// Supõe-se que 'status' e 'source' são propriedades no corpo do JSON que são strings ou números.\n// Tenta acessar os dados, mas verifica se eles existem primeiro\nlet data = $('Recebe os dados do SITE').json;\nlet statusValue = data && data.body ? data.body.status : null;\nlet sourceValue = data && data.body ? data.body.source : null;\n\n// Converter para número, caso seja uma string\nstatusValue = typeof statusValue === 'string' ? parseInt(statusValue, 10) : statusValue;\nsourceValue = typeof sourceValue === 'string' ? parseInt(sourceValue, 10) : sourceValue;\n\nlet statusDescription;\nlet sourceDescription;\n\n// Determinar a descrição do status\nswitch (statusValue) {\n  case 1:\n    statusDescription = \"Frio\";\n    break;\n  case 2:\n    statusDescription = \"Morno\";\n    break;\n  case 3:\n    statusDescription = \"Posivel Led Quente\";\n    break;\n  case 4:\n    statusDescription = \"Novo\";\n    break;\n  default:\n    statusDescription = \"Valor não reconhecido\";\n}\n\n// Determinar a descrição da fonte\nswitch (sourceValue) {\n  case 1:\n    sourceDescription = \"Facebook\";\n    break;\n  case 2:\n    sourceDescription = \"Instagran\";\n    break;\n  case 3:\n    sourceDescription = \"google\";\n    break;\n  case 4:\n    sourceDescription = \"Whatsapp\";\n    break;\n  default:\n    sourceDescription = \"Origem não reconhecida\";\n}\n\n// Definir a descrição no item de saída\nreturn [{ json: { ...items[0].json, statusDescription: statusDescription, sourceDescription: sourceDescription } }];\n"
+      },
+      "id": "9191c026-07ce-4cc8-84cf-1cb89f1c8e14",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2860,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "stringValue": "={{ $('Recebe os dados do SITE').item.json.body.source }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4f3a2bc1-e88c-41c1-a850-b27123731758",
+      "name": "Edit Fields4",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        3120,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apioi.onlinechat.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer SEOOQM8MLI8XVU148UI2J07RNI0EHJ"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "5511984649822"
+            },
+            {
+              "name": "body",
+              "value": "=Um lead chamado *{{ $json[\"body\"][\"name\"] }}*, acaba de se cadastrar pelo *{{ $json.sourceDescription }}*, com status *{{ $json.statusDescription }}*. Agiliza.{{ $parameter[\"bodyParameters\"][\"parameters\"][0][\"nome\"] }}"
+            },
+            {
+              "name": "queueId"
+            },
+            {
+              "name": "userId"
+            },
+            {
+              "name": "closeTicket",
+              "value": "true"
+            },
+            {
+              "name": "sendSignature",
+              "value": "false"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "fe17e011-63eb-470e-8ee4-0994f3f887fe",
+      "name": "corretor jonathan",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        3420,
+        600
+      ],
+      "typeVersion": 4.1
+    },
+    {
+      "parameters": {
+        "jsCode": "// Supõe-se que 'status' e 'source' são propriedades no corpo do JSON que são strings ou números.\n// Tenta acessar os dados, mas verifica se eles existem primeiro\nlet data = $('Recebe os dados do SITE').json;\nlet statusValue = data && data.body ? data.body.status : null;\nlet sourceValue = data && data.body ? data.body.source : null;\n\n// Converter para número, caso seja uma string\nstatusValue = typeof statusValue === 'string' ? parseInt(statusValue, 10) : statusValue;\nsourceValue = typeof sourceValue === 'string' ? parseInt(sourceValue, 10) : sourceValue;\n\nlet statusDescription;\nlet sourceDescription;\n\n// Determinar a descrição do status\nswitch (statusValue) {\n  case 1:\n    statusDescription = \"Frio\";\n    break;\n  case 2:\n    statusDescription = \"Morno\";\n    break;\n  case 3:\n    statusDescription = \"Posivel Led Quente\";\n    break;\n  case 4:\n    statusDescription = \"Novo\";\n    break;\n  default:\n    statusDescription = \"Valor não reconhecido\";\n}\n\n// Determinar a descrição da fonte\nswitch (sourceValue) {\n  case 1:\n    sourceDescription = \"Facebook\";\n    break;\n  case 2:\n    sourceDescription = \"Instagran\";\n    break;\n  case 3:\n    sourceDescription = \"google\";\n    break;\n  case 4:\n    sourceDescription = \"Whatsapp\";\n    break;\n  default:\n    sourceDescription = \"Origem não reconhecida\";\n}\n\n// Definir a descrição no item de saída\nreturn [{ json: { ...items[0].json, statusDescription: statusDescription, sourceDescription: sourceDescription } }];\n"
+      },
+      "id": "a019a655-c2a0-4aa3-b503-4b84ef5125bc",
+      "name": "Code3",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2860,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "include": "none",
+        "options": {}
+      },
+      "id": "0eb8af0a-7a6a-482e-9ca0-8a6a49ac71c0",
+      "name": "Edit Fields5",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        3120,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apioi.onlinechat.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer SEOOQM8MLI8XVU148UI2J07RNI0EHJ"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "5511952074491"
+            },
+            {
+              "name": "body",
+              "value": "=Um lead chamado *{{ $json[\"body\"][\"name\"] }}*, acaba de se cadastrar pelo *{{ $json.sourceDescription }}*, com status *{{ $json.statusDescription }}*. Agiliza.{{ $parameter[\"bodyParameters\"][\"parameters\"][0][\"nome\"] }}"
+            },
+            {
+              "name": "queueId"
+            },
+            {
+              "name": "userId"
+            },
+            {
+              "name": "closeTicket",
+              "value": "true"
+            },
+            {
+              "name": "sendSignature",
+              "value": "false"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "20e54638-3c91-4053-8658-53805e0256a0",
+      "name": "Gerente Rafael2",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        3420,
+        260
+      ],
+      "typeVersion": 4.1
+    },
+    {
+      "parameters": {
+        "jsCode": "// Supõe-se que 'status' e 'source' são propriedades no corpo do JSON que são strings ou números.\n// Tenta acessar os dados, mas verifica se eles existem primeiro\nlet data = $('Recebe os dados do SITE').json;\nlet statusValue = data && data.body ? data.body.status : null;\nlet sourceValue = data && data.body ? data.body.source : null;\n\n// Converter para número, caso seja uma string\nstatusValue = typeof statusValue === 'string' ? parseInt(statusValue, 10) : statusValue;\nsourceValue = typeof sourceValue === 'string' ? parseInt(sourceValue, 10) : sourceValue;\n\nlet statusDescription;\nlet sourceDescription;\n\n// Determinar a descrição do status\nswitch (statusValue) {\n  case 1:\n    statusDescription = \"Frio\";\n    break;\n  case 2:\n    statusDescription = \"Morno\";\n    break;\n  case 3:\n    statusDescription = \"Posivel Led Quente\";\n    break;\n  case 4:\n    statusDescription = \"Assado\";\n    break;\n  default:\n    statusDescription = \"Valor não reconhecido\";\n}\n\n// Determinar a descrição da fonte\nswitch (sourceValue) {\n  case 1:\n    sourceDescription = \"Facebook\";\n    break;\n  case 2:\n    sourceDescription = \"Instagran\";\n    break;\n  case 3:\n    sourceDescription = \"google\";\n    break;\n  case 4:\n    sourceDescription = \"Whatsapp\";\n    break;\n  default:\n    sourceDescription = \"Origem não reconhecida\";\n}\n\n// Definir a descrição no item de saída\nreturn [{ json: { ...items[0].json, statusDescription: statusDescription, sourceDescription: sourceDescription } }];\n"
+      },
+      "id": "d5060fd1-e08a-4ead-8c27-e133ca15c8fd",
+      "name": "Code1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2860,
+        760
+      ]
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "stringValue": "={{ $('Recebe os dados do SITE').item.json.body.source }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9eb6c173-d115-4631-8e52-7f57607bb07e",
+      "name": "Edit Fields6",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        3120,
+        760
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apioi.onlinechat.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer SEOOQM8MLI8XVU148UI2J07RNI0EHJ"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "5511984649822"
+            },
+            {
+              "name": "body",
+              "value": "=Um lead chamado *{{ $json[\"body\"][\"name\"] }}*, acaba de se cadastrar pelo *{{ $json.sourceDescription }}*, com status *{{ $json.statusDescription }}*. Agiliza.{{ $parameter[\"bodyParameters\"][\"parameters\"][0][\"nome\"] }}"
+            },
+            {
+              "name": "queueId"
+            },
+            {
+              "name": "userId"
+            },
+            {
+              "name": "closeTicket",
+              "value": "true"
+            },
+            {
+              "name": "sendSignature",
+              "value": "false"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "c2469d62-ca14-4e2d-b8c9-1aa2d5628a9f",
+      "name": "corretor jonathan1",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        3420,
+        760
+      ],
+      "typeVersion": 4.1
+    },
+    {
+      "parameters": {
+        "jsCode": "// Supõe-se que 'status' e 'source' são propriedades no corpo do JSON que são strings ou números.\n// Tenta acessar os dados, mas verifica se eles existem primeiro\nlet data = $('Recebe os dados do SITE').json;\nlet statusValue = data && data.body ? data.body.status : null;\nlet sourceValue = data && data.body ? data.body.source : null;\n\n// Converter para número, caso seja uma string\nstatusValue = typeof statusValue === 'string' ? parseInt(statusValue, 10) : statusValue;\nsourceValue = typeof sourceValue === 'string' ? parseInt(sourceValue, 10) : sourceValue;\n\nlet statusDescription;\nlet sourceDescription;\n\n// Determinar a descrição do status\nswitch (statusValue) {\n  case 1:\n    statusDescription = \"Frio\";\n    break;\n  case 2:\n    statusDescription = \"Morno\";\n    break;\n  case 3:\n    statusDescription = \"Posivel Led Quente\";\n    break;\n  case 4:\n    statusDescription = \"Assado\";\n    break;\n  default:\n    statusDescription = \"Valor não reconhecido\";\n}\n\n// Determinar a descrição da fonte\nswitch (sourceValue) {\n  case 1:\n    sourceDescription = \"Facebook\";\n    break;\n  case 2:\n    sourceDescription = \"Instagran\";\n    break;\n  case 3:\n    sourceDescription = \"google\";\n    break;\n  case 4:\n    sourceDescription = \"Whatsapp\";\n    break;\n  default:\n    sourceDescription = \"Origem não reconhecida\";\n}\n\n// Definir a descrição no item de saída\nreturn [{ json: { ...items[0].json, statusDescription: statusDescription, sourceDescription: sourceDescription } }];\n"
+      },
+      "id": "f9986011-ab32-4ac6-a2d7-78f031583a60",
+      "name": "Code5",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2860,
+        940
+      ]
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "stringValue": "={{ $('Recebe os dados do SITE').item.json.body.source }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2dc1dfb9-659c-441a-8c0d-e29ecbd653b3",
+      "name": "Edit Fields7",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        3120,
+        940
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apioi.onlinechat.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer SEOOQM8MLI8XVU148UI2J07RNI0EHJ"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "5511985391382"
+            },
+            {
+              "name": "body",
+              "value": "=Um lead chamado *{{ $json[\"body\"][\"name\"] }}*, acaba de se cadastrar pelo *{{ $json.sourceDescription }}*, com status *{{ $json.statusDescription }}*. Agiliza.{{ $parameter[\"bodyParameters\"][\"parameters\"][0][\"nome\"] }}"
+            },
+            {
+              "name": "queueId"
+            },
+            {
+              "name": "userId"
+            },
+            {
+              "name": "closeTicket",
+              "value": "true"
+            },
+            {
+              "name": "sendSignature",
+              "value": "false"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "c3f18e37-323f-45be-81fe-d3a9fef84231",
+      "name": "corretor jonathan2",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        3420,
+        940
+      ],
+      "typeVersion": 4.1
+    },
+    {
+      "parameters": {
+        "jsCode": "// Supõe-se que 'status' e 'source' são propriedades no corpo do JSON que são strings ou números.\n// Tenta acessar os dados, mas verifica se eles existem primeiro\nlet data = $('Recebe os dados do SITE').json;\nlet statusValue = data && data.body ? data.body.status : null;\nlet sourceValue = data && data.body ? data.body.source : null;\n\n// Converter para número, caso seja uma string\nstatusValue = typeof statusValue === 'string' ? parseInt(statusValue, 10) : statusValue;\nsourceValue = typeof sourceValue === 'string' ? parseInt(sourceValue, 10) : sourceValue;\n\nlet statusDescription;\nlet sourceDescription;\n\n// Determinar a descrição do status\nswitch (statusValue) {\n  case 1:\n    statusDescription = \"Frio\";\n    break;\n  case 2:\n    statusDescription = \"Morno\";\n    break;\n  case 3:\n    statusDescription = \"Posivel Led Quente\";\n    break;\n  case 4:\n    statusDescription = \"Novo\";\n    break;\n  default:\n    statusDescription = \"Valor não reconhecido\";\n}\n\n// Determinar a descrição da fonte\nswitch (sourceValue) {\n  case 1:\n    sourceDescription = \"Facebook\";\n    break;\n  case 2:\n    sourceDescription = \"Instagran\";\n    break;\n  case 3:\n    sourceDescription = \"google\";\n    break;\n  case 4:\n    sourceDescription = \"Whatsapp\";\n    break;\n  default:\n    sourceDescription = \"Origem não reconhecida\";\n}\n\n// Definir a descrição no item de saída\nreturn [{ json: { ...items[0].json, statusDescription: statusDescription, sourceDescription: sourceDescription } }];\n"
+      },
+      "id": "ffc48ef7-5e40-4aeb-8a0d-d17e572f52c7",
+      "name": "Code7",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        620,
+        -320
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Supõe-se que 'status' e 'source' são propriedades no corpo do JSON que são strings ou números.\n// Tenta acessar os dados, mas verifica se eles existem primeiro\nlet data = $('Recebe os dados do SITE').json;\nlet statusValue = data && data.body ? data.body.status : null;\nlet sourceValue = data && data.body ? data.body.source : null;\n\n// Converter para número, caso seja uma string\nstatusValue = typeof statusValue === 'string' ? parseInt(statusValue, 10) : statusValue;\nsourceValue = typeof sourceValue === 'string' ? parseInt(sourceValue, 10) : sourceValue;\n\nlet statusDescription;\nlet sourceDescription;\n\n// Determinar a descrição do status\nswitch (statusValue) {\n  case 1:\n    statusDescription = \"Frio\";\n    break;\n  case 2:\n    statusDescription = \"Morno\";\n    break;\n  case 3:\n    statusDescription = \"Posivel Led Quente\";\n    break;\n  case 4:\n    statusDescription = \"Novo\";\n    break;\n  default:\n    statusDescription = \"Led Novo\";\n}\n\n// Determinar a descrição da fonte\nswitch (sourceValue) {\n  case 1:\n    sourceDescription = \"Facebook\";\n    break;\n  case 2:\n    sourceDescription = \"Instagran\";\n    break;\n  case 3:\n    sourceDescription = \"google\";\n    break;\n  case 4:\n    sourceDescription = \"Whatsapp\";\n    break;\n  default:\n    sourceDescription = \"Fluxo de atenendimento imovel *Bromélia*\";\n}\n\n// Definir a descrição no item de saída\nreturn [{ json: { ...items[0].json, statusDescription: statusDescription, sourceDescription: sourceDescription } }];\n"
+      },
+      "id": "8ff4cd44-5ae3-49cc-859c-4548b60438f9",
+      "name": "Code6",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        620,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apioi.onlinechat.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer SEOOQM8MLI8XVU148UI2J07RNI0EHJ"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "5511952074491"
+            },
+            {
+              "name": "body",
+              "value": "=Um lead chamado *{{ $json[\"body\"][\"nome\"] }}*, acaba de se cadastrar pelo *{{ $json.sourceDescription }}*, o contato dele e *{{ $json[\"body\"][\"phonenumber\"] }}*. Agiliza."
+            },
+            {
+              "name": "queueId"
+            },
+            {
+              "name": "userId"
+            },
+            {
+              "name": "closeTicket",
+              "value": "true"
+            },
+            {
+              "name": "sendSignature",
+              "value": "false"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "ef101059-c0d5-4849-974d-9712cb9e220f",
+      "name": "Leandro1",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        920,
+        300
+      ],
+      "typeVersion": 4.1
+    },
+    {
+      "parameters": {
+        "jsCode": "// Supõe-se que 'status' e 'source' são propriedades no corpo do JSON que são strings ou números.\n// Tenta acessar os dados, mas verifica se eles existem primeiro\nlet data = $('Recebe os dados do SITE').json;\nlet statusValue = data && data.body ? data.body.status : null;\nlet sourceValue = data && data.body ? data.body.source : null;\n\n// Converter para número, caso seja uma string\nstatusValue = typeof statusValue === 'string' ? parseInt(statusValue, 10) : statusValue;\nsourceValue = typeof sourceValue === 'string' ? parseInt(sourceValue, 10) : sourceValue;\n\nlet statusDescription;\nlet sourceDescription;\n\n// Determinar a descrição do status\nswitch (statusValue) {\n  case 1:\n    statusDescription = \"Frio\";\n    break;\n  case 2:\n    statusDescription = \"Morno\";\n    break;\n  case 3:\n    statusDescription = \"Posivel Led Quente\";\n    break;\n  case 4:\n    statusDescription = \"Assado\";\n    break;\n  default:\n    statusDescription = \"Led Novo\";\n}\n\n// Determinar a descrição da fonte\nswitch (sourceValue) {\n  case 1:\n    sourceDescription = \"Facebook\";\n    break;\n  case 2:\n    sourceDescription = \"Instagran\";\n    break;\n  case 3:\n    sourceDescription = \"google\";\n    break;\n  case 4:\n    sourceDescription = \"Whatsapp\";\n    break;\n  default:\n    sourceDescription = \"Fluxo de atenendimento imovel *Bromélia*\";\n}\n\n// Definir a descrição no item de saída\nreturn [{ json: { ...items[0].json, statusDescription: statusDescription, sourceDescription: sourceDescription } }];\n"
+      },
+      "id": "0e203d3f-d194-42bd-a787-b5fb9f392d8b",
+      "name": "Code10",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        360,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "SOURCE",
+              "stringValue": "={{ $('Recebe os dados do SITE').item.json.body.source }}"
+            },
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "id": "6407be1f-dc14-4c74-a990-2931a88477aa",
+      "name": "Edit Fields10",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        620,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Supõe-se que 'status' e 'source' são propriedades no corpo do JSON que são strings ou números.\n// Tenta acessar os dados, mas verifica se eles existem primeiro\nlet data = $('Recebe os dados do SITE').json;\nlet statusValue = data && data.body ? data.body.status : null;\nlet sourceValue = data && data.body ? data.body.source : null;\n\n// Converter para número, caso seja uma string\nstatusValue = typeof statusValue === 'string' ? parseInt(statusValue, 10) : statusValue;\nsourceValue = typeof sourceValue === 'string' ? parseInt(sourceValue, 10) : sourceValue;\n\nlet statusDescription;\nlet sourceDescription;\n\n// Determinar a descrição do status\nswitch (statusValue) {\n  case 1:\n    statusDescription = \"Frio\";\n    break;\n  case 2:\n    statusDescription = \"Morno\";\n    break;\n  case 3:\n    statusDescription = \"Posivel Led Quente\";\n    break;\n  case 4:\n    statusDescription = \"Novo\";\n    break;\n  default:\n    statusDescription = \"Led Novo\";\n}\n\n// Determinar a descrição da fonte\nswitch (sourceValue) {\n  case 1:\n    sourceDescription = \"Facebook\";\n    break;\n  case 2:\n    sourceDescription = \"Instagran\";\n    break;\n  case 3:\n    sourceDescription = \"google\";\n    break;\n  case 4:\n    sourceDescription = \"Whatsapp\";\n    break;\n  default:\n    sourceDescription = \"Fluxo de atenendimento imovel *Bromélia*\";\n}\n\n// Definir a descrição no item de saída\nreturn [{ json: { ...items[0].json, statusDescription: statusDescription, sourceDescription: sourceDescription } }];\n"
+      },
+      "id": "f03653d9-60cb-45b4-8573-0e57bb7c5b99",
+      "name": "Code11",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        620,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apioi.onlinechat.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer SEOOQM8MLI8XVU148UI2J07RNI0EHJ"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "557592314744"
+            },
+            {
+              "name": "body",
+              "value": "=Um lead chamado *{{ $json[\"body\"][\"nome\"] }}*, acaba de se cadastrar pelo *{{ $json.sourceDescription }}*, o contato dele e *{{ $json[\"body\"][\"phonenumber\"] }}*. Agiliza."
+            },
+            {
+              "name": "queueId"
+            },
+            {
+              "name": "userId"
+            },
+            {
+              "name": "closeTicket",
+              "value": "true"
+            },
+            {
+              "name": "sendSignature",
+              "value": "false"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "20a7e1cb-cb5a-4cda-9496-d3ce6798d6ad",
+      "name": "Leandro2",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        920,
+        480
+      ],
+      "typeVersion": 4.1
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apioi.onlinechat.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer SEOOQM8MLI8XVU148UI2J07RNI0EHJ"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $json[\"body\"][\"phonenumber\"].replace(/^\\+/, '') }}"
+            },
+            {
+              "name": "body",
+              "value": "=Bem vindo a 3Dll Home  {{ $json[\"body\"][\"name\"] }}, é muito bom ter você aqui. Jajá iremos lhe atender."
+            },
+            {
+              "name": "userId"
+            },
+            {
+              "name": "queueId",
+              "value": "=44"
+            },
+            {
+              "name": "sendSignature",
+              "value": "false"
+            },
+            {
+              "name": "closeTicket"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "6201bfd1-9b7a-4ec1-b4d6-9212e5c1f7d2",
+      "name": "Online Chat auto atendimento",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        920,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "value1": "={{ $('Code2').item.json[\"randomNumber\"] }}",
+        "rules": {
+          "rules": [
+            {
+              "operation": "equal",
+              "value2": 1,
+              "outputKey": "0"
+            },
+            {
+              "operation": "equal",
+              "value2": 2,
+              "outputKey": "1"
+            },
+            {
+              "operation": "equal",
+              "value2": 3,
+              "outputKey": "2"
+            },
+            {
+              "operation": "equal",
+              "value2": 4,
+              "outputKey": "3"
+            },
+            {
+              "operation": "equal",
+              "value2": 5,
+              "outputKey": "4"
+            },
+            {
+              "operation": "equal",
+              "value2": 6,
+              "outputKey": "5"
+            },
+            {
+              "operation": "equal",
+              "value2": 7,
+              "outputKey": "6"
+            }
+          ]
+        }
+      },
+      "id": "790cfb82-b865-4cde-ac78-0334f7918d96",
+      "name": "Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 2,
+      "position": [
+        2400,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apioi.onlinechat.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer SEOOQM8MLI8XVU148UI2J07RNI0EHJ"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "5513991363845"
+            },
+            {
+              "name": "body",
+              "value": "=Um lead chamado *{{ $json[\"body\"][\"nome\"] }}*, acaba de se cadastrar pelo *{{ $json.sourceDescription }}*, o contato dele e *{{ $json[\"body\"][\"phonenumber\"] }}*. Agiliza."
+            },
+            {
+              "name": "queueId"
+            },
+            {
+              "name": "userId"
+            },
+            {
+              "name": "closeTicket",
+              "value": "true"
+            },
+            {
+              "name": "sendSignature",
+              "value": "false"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "d7043558-cad8-4771-a26d-48b2b4e31a79",
+      "name": "Leonardo",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        920,
+        100
+      ],
+      "typeVersion": 4.1
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apioi.onlinechat.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer SEOOQM8MLI8XVU148UI2J07RNI0EHJ"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "5511985391382"
+            },
+            {
+              "name": "body",
+              "value": "=Um lead chamado *{{ $json[\"body\"][\"nome\"] }}*, escolheo o imovel com  {{$json[\"body\"][\"custom_fields[leads][7]\"] }} e acaba de se cadastrar pelo *{{ $json.sourceDescription }}*, o contato dele e {{$json[\"body\"][\"phonenumber\"]}} com status*{{ $json.statusDescription }}*. Agiliza."
+            },
+            {
+              "name": "queueId"
+            },
+            {
+              "name": "userId"
+            },
+            {
+              "name": "closeTicket",
+              "value": "true"
+            },
+            {
+              "name": "sendSignature",
+              "value": "false"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "99d5fd2d-d1c0-40b9-baaf-3bdcb9b9ef41",
+      "name": "Leandro5",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        920,
+        680
+      ],
+      "typeVersion": 4.1
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "perfex",
+        "options": {}
+      },
+      "id": "4780cfe0-07ce-4f46-9afa-634b43d93403",
+      "name": "Recebe os dados do SITE",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -120,
+        300
+      ],
+      "webhookId": "edbcbbd6-af33-460c-8c0c-b2f43dedfbe2"
+    }
+  ],
+  "connections": {
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "corretor 01 marcelo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "corretor taina",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code01": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code02": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code04": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "corretor jonathan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Gerente Rafael",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "Gerente Rafael2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields6": {
+      "main": [
+        [
+          {
+            "node": "corretor jonathan1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code5": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields7": {
+      "main": [
+        [
+          {
+            "node": "corretor jonathan2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code4": {
+      "main": [
+        [
+          {
+            "node": "Leonardo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code7": {
+      "main": [
+        [
+          {
+            "node": "ENVIA PARA O PERFEX",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code6": {
+      "main": [
+        [
+          {
+            "node": "Leandro1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code10": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields10": {
+      "main": [
+        [
+          {
+            "node": "Leandro5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code11": {
+      "main": [
+        [
+          {
+            "node": "Leandro2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Code01",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code02",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code04",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recebe os dados do SITE": {
+      "main": [
+        [
+          {
+            "node": "Code4",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code7",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Online Chat auto atendimento",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code6",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code10",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "7ab8d104-92a5-49e3-9045-822a4bb73d30",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-06-23T04:27:15.371Z",
+      "updatedAt": "2025-06-23T04:27:15.371Z",
+      "role": "workflow:owner",
+      "workflowId": "CH4lgr262wxTrLyB",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": [
+    {
+      "createdAt": "2025-06-23T04:26:19.527Z",
+      "updatedAt": "2025-06-23T04:26:19.527Z",
+      "id": "6aXVpgrJgZr6w3OX",
+      "name": "N8N"
+    },
+    {
+      "createdAt": "2025-06-23T04:26:19.530Z",
+      "updatedAt": "2025-06-23T04:26:19.530Z",
+      "id": "K4v3nXZzC502brrp",
+      "name": "Typebot"
+    },
+    {
+      "createdAt": "2025-06-23T04:26:19.534Z",
+      "updatedAt": "2025-06-23T04:26:19.534Z",
+      "id": "nHOm1FENUM8goqHo",
+      "name": "Perfex"
+    }
+  ]
+}
