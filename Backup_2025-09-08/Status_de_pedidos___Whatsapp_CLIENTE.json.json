@@ -1,0 +1,871 @@
+{
+  "createdAt": "2025-06-26T23:28:13.517Z",
+  "updatedAt": "2025-06-27T15:54:07.540Z",
+  "id": "WWn0VedknOcsGhvq",
+  "name": "Status_de_pedidos___Whatsapp_CLIENTE.json",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "options_message": {}
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -600,
+        -140
+      ],
+      "id": "2cf94354-2282-4c50-b924-284512e34eaf",
+      "name": "Evolution API",
+      "credentials": {
+        "evolutionApi": {
+          "id": "XCbW6Ni25rMmpU3Q",
+          "name": "Evolution account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8b8132c5-77a6-45fe-ad49-da79a8bf1c38",
+              "name": "Nome",
+              "value": "={{ $json.body.billing.first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "d6322cb9-d051-4b95-af47-7bb971f9c002",
+              "name": "Sobre Nome",
+              "value": "={{ $json.body.billing.last_name }}",
+              "type": "string"
+            },
+            {
+              "id": "3f9cbe1c-142f-4da9-98e5-e46c219e12e4",
+              "name": "Endereço",
+              "value": "={{ $json.body.billing.address_1 }}",
+              "type": "string"
+            },
+            {
+              "id": "579b22ba-cc48-403d-8074-74bee1df68ff",
+              "name": "Complemento",
+              "value": "={{ $json.body.billing.address_2 }}",
+              "type": "string"
+            },
+            {
+              "id": "48eca193-2b4c-4c99-bfbb-46f65a859c48",
+              "name": "Cidade",
+              "value": "={{ $json.body.billing.city }}",
+              "type": "string"
+            },
+            {
+              "id": "d4ae6c00-158c-4070-93b8-18a78dda4178",
+              "name": "Estado",
+              "value": "={{ $json.body.billing.state }}",
+              "type": "string"
+            },
+            {
+              "id": "161dbd2e-20b0-459b-95b0-f07d8b9782fd",
+              "name": "CEP",
+              "value": "={{ $json.body.billing.postcode }}",
+              "type": "string"
+            },
+            {
+              "id": "be648554-954c-43cc-855b-e6c6d4688220",
+              "name": "Telefone",
+              "value": "={{ $json.body.billing.phone }}",
+              "type": "string"
+            },
+            {
+              "id": "48afb4fb-6a7c-4fc4-84fa-254f38ec4a68",
+              "name": "Email",
+              "value": "={{ $json.body.billing.email }}",
+              "type": "string"
+            },
+            {
+              "id": "7f47a0af-da30-4e38-aa78-2930ebb9d8a4",
+              "name": "CPF",
+              "value": "={{ $json.body.billing.cpf }}",
+              "type": "string"
+            },
+            {
+              "id": "96928ed0-4fc2-414e-a335-c9433cab83f6",
+              "name": "Produto",
+              "value": "={{ $json.body.line_items[0].name }}",
+              "type": "string"
+            },
+            {
+              "id": "ffa11830-6fdc-4792-bc66-6a7e7d60f214",
+              "name": "Código de rastreio",
+              "value": "={{ $json.body.correios_tracking_code }}",
+              "type": "string"
+            },
+            {
+              "id": "fef3977a-4a6f-4df8-bd76-0c71c520fa82",
+              "name": "Numero do pedido",
+              "value": "={{ $json.body.number }}",
+              "type": "string"
+            },
+            {
+              "id": "2e1c6040-5cc8-4cac-97cb-16bd5448fb62",
+              "name": "Status do pedido",
+              "value": "={{ $json.body.status }}",
+              "type": "string"
+            },
+            {
+              "id": "1836847d-3a26-4e37-9b7f-5cab5db78a52",
+              "name": "Link de pagamento",
+              "value": "={{ $json.body.payment_url }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "87508027-8660-4538-923b-b1cf1a282d5a",
+      "name": "Tratando Dados / Credenciais",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1700,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "instanceName": "integrasacbr@gmail.com",
+        "token": "Mr89562312@",
+        "options_Create_instance": {}
+      },
+      "id": "0b659a9d-0355-4f3d-b4b6-b4717a485ea7",
+      "name": "Processando",
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -1180,
+        -560
+      ],
+      "credentials": {
+        "evolutionApi": {
+          "id": "XCbW6Ni25rMmpU3Q",
+          "name": "Evolution account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "instanceName": "integrasacbr@gmail.com",
+        "token": "Mr89562312@",
+        "options_Create_instance": {}
+      },
+      "id": "9cbe3543-917b-4df3-808d-55a4aa85c31b",
+      "name": "Processando - 2",
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -960,
+        -560
+      ],
+      "credentials": {
+        "evolutionApi": {
+          "id": "XCbW6Ni25rMmpU3Q",
+          "name": "Evolution account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options_Create_instance": {}
+      },
+      "id": "b98cfc5d-b95f-4f46-856e-b55ed25b81ec",
+      "name": "Pedido em separação",
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -1180,
+        -360
+      ],
+      "credentials": {
+        "evolutionApi": {
+          "id": "XCbW6Ni25rMmpU3Q",
+          "name": "Evolution account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options_Create_instance": {}
+      },
+      "id": "1e88de7f-b905-449e-b3cb-915f95b2ff83",
+      "name": "Enviado para transportadora",
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -1180,
+        -180
+      ],
+      "credentials": {
+        "evolutionApi": {
+          "id": "XCbW6Ni25rMmpU3Q",
+          "name": "Evolution account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options_Create_instance": {}
+      },
+      "id": "23a3b6ca-ace3-4f5a-a108-878a4fd278fc",
+      "name": "Enviado para transportadora - 2",
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -960,
+        -180
+      ]
+    },
+    {
+      "parameters": {
+        "options_Create_instance": {}
+      },
+      "id": "8bda5a52-533d-4802-889d-93b3178183c5",
+      "name": "Pedido concluído",
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -1180,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "options_Create_instance": {}
+      },
+      "id": "b37ae101-9a0e-4921-b55b-04b8966980a2",
+      "name": "Cancelado",
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -1180,
+        540
+      ]
+    },
+    {
+      "parameters": {
+        "options_Create_instance": {}
+      },
+      "id": "da4300cf-64b2-4ccb-939d-8d8c13559de4",
+      "name": "Pagamento pendente",
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -1180,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "options_Create_instance": {}
+      },
+      "id": "bdfda737-3417-4501-be8d-72f4cfdcc00a",
+      "name": "Falha no pagamento",
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -1180,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "options_Create_instance": {}
+      },
+      "id": "601a6897-70c9-429e-8a69-8daa45202c9c",
+      "name": "Reembolsado",
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -1180,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "options_Create_instance": {}
+      },
+      "id": "89f9a953-52cc-47cd-a4b5-44163591793f",
+      "name": "Reembolsado - 2",
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -960,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "options_Create_instance": {}
+      },
+      "id": "01933fbc-a197-470f-9fc7-27cf4fc003dd",
+      "name": "Pagamento pendente - 2",
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -960,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "options_Create_instance": {}
+      },
+      "id": "e675a0f3-e8d1-497b-8297-b1d22fc18639",
+      "name": "Falha no pagamento - 2",
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -960,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "options_Create_instance": {}
+      },
+      "id": "8162365b-16bc-4f60-bc65-5bc81ce65d6b",
+      "name": "Carrinho abandonado",
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        220,
+        60
+      ]
+    },
+    {
+      "parameters": {
+        "options_Create_instance": {}
+      },
+      "id": "674eda3c-1862-4aed-b819-4e64d3479ffb",
+      "name": "Carrinho abandonado 2",
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        420,
+        60
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9a102497-0b0f-43da-8f3a-403930037208",
+              "name": "Nome abandonado",
+              "value": "={{ $json.body.first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "c56c1237-398d-4bdf-a852-9695cad6f3e3",
+              "name": "Status abandonado",
+              "value": "={{ $json.body.order_status }}",
+              "type": "string"
+            },
+            {
+              "id": "5bb2bf13-ce7c-4600-b32b-726554850b75",
+              "name": "Checkout url abandonado",
+              "value": "={{ $json.body.checkout_url }}",
+              "type": "string"
+            },
+            {
+              "id": "62b90f94-54f7-4236-b159-a2d1caa3b497",
+              "name": "Cupom de desconto abandonado",
+              "value": "={{ $json.body.coupon_code }}",
+              "type": "string"
+            },
+            {
+              "id": "77e9846b-0b74-4909-90e0-0a3caf48604f",
+              "name": "Nome dos produtos abandonado",
+              "value": "={{ $json.body.product_names }}",
+              "type": "string"
+            },
+            {
+              "id": "5dec34bd-f0a6-4287-9c30-162115b52617",
+              "name": "Telefone abandonado",
+              "value": "={{ $json.body.phone_number }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3875b5fa-92ff-4d6d-90ae-2c01da2ee97c",
+      "name": "Tratando Dados / Credenciais1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -160,
+        60
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "64db272f-2d78-49fa-ae15-96ff1cec8d4f",
+                    "leftValue": "={{ $json['Status abandonado'] }}",
+                    "rightValue": "abandoned",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Carrinho abandonado"
+            }
+          ]
+        },
+        "looseTypeValidation": "=",
+        "options": {}
+      },
+      "id": "9128615d-062d-470d-8f8a-d262f4d01816",
+      "name": "Verificar Status1",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.1,
+      "position": [
+        20,
+        60
+      ]
+    },
+    {
+      "parameters": {
+        "instanceName": "integrasacbr@gmail.com",
+        "token": "Mr89562312@",
+        "options_Create_instance": {}
+      },
+      "id": "b7e70061-b56e-4d20-ae69-1d988bc08350",
+      "name": "Lojista",
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        -560
+      ],
+      "credentials": {
+        "evolutionApi": {
+          "id": "XCbW6Ni25rMmpU3Q",
+          "name": "Evolution account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options_Create_instance": {}
+      },
+      "id": "ed04ba53-91b0-47f7-9a67-b3c7a4f069b9",
+      "name": "Lojista1",
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json['Status do pedido'] }}",
+                    "rightValue": "processing",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "9993e36f-1141-4030-aa20-d772fc37b909"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Processando"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "1e0d4f69-7f81-4ca5-985a-e31c158cacf7",
+                    "leftValue": "={{ $json['Status do pedido'] }}",
+                    "rightValue": "separation-request",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Pedido em separação"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "747fb4e8-a7b7-433f-8264-da70e4e64056",
+                    "leftValue": "={{ $json['Status do pedido'] }}",
+                    "rightValue": "em-separacao",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Enviado para transportadora"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "c3206a77-d947-4ac1-b6c1-9e6580f986b8",
+                    "leftValue": "={{ $json['Status do pedido'] }}",
+                    "rightValue": "completed",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Concluído"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "59cd783b-b201-4258-bf32-f0dd56064a7f",
+                    "leftValue": "={{ $json['Status do pedido'] }}",
+                    "rightValue": "pending",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Pagamento pendente"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "59c5ea26-51a9-4118-91e3-df5d866d6ad5",
+                    "leftValue": "={{ $json['Status do pedido'] }}",
+                    "rightValue": "failed",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Falha no pagamento"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "97a4b820-f288-4c0a-9cd3-76c6fa189e3d",
+                    "leftValue": "={{ $json['Status do pedido'] }}",
+                    "rightValue": "cancelled",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Cancelado"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "718f2208-4b3c-4e41-9605-4c3a95733b70",
+                    "leftValue": "={{ $json['Status do pedido'] }}",
+                    "rightValue": "refunded",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Reembolsado"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "64db272f-2d78-49fa-ae15-96ff1cec8d4f",
+                    "leftValue": "={{ $json['Status abandonado'] }}",
+                    "rightValue": "abandoned",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Carrinho abandonado"
+            }
+          ]
+        },
+        "looseTypeValidation": "=",
+        "options": {}
+      },
+      "id": "78570338-4092-449a-a05f-8f857905312d",
+      "name": "Verificar Status",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.1,
+      "position": [
+        -1500,
+        -20
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "CLIENT CART",
+        "options": {}
+      },
+      "id": "309048c5-737c-44c8-a270-e4b168a1fda4",
+      "name": "Webhook1",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -340,
+        60
+      ],
+      "webhookId": "0c436309-2ff0-4b21-8ba0-735d90ecca33",
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "CLIENTE",
+        "options": {}
+      },
+      "id": "86a4f1a4-1134-4984-9bd5-043b488109fc",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1980,
+        100
+      ],
+      "webhookId": "a44a9e18-c95f-4675-b36b-b2cb6c75ed0a",
+      "notesInFlow": false
+    }
+  ],
+  "connections": {
+    "Tratando Dados / Credenciais": {
+      "main": [
+        [
+          {
+            "node": "Verificar Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tratando Dados / Credenciais1": {
+      "main": [
+        [
+          {
+            "node": "Verificar Status1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Tratando Dados / Credenciais1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Tratando Dados / Credenciais",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Processando": {
+      "main": [
+        [
+          {
+            "node": "Processando - 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Processando - 2": {
+      "main": [
+        [
+          {
+            "node": "Lojista",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar Status": {
+      "main": [
+        [
+          {
+            "node": "Processando",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pedido em separação",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "8d13f290-ffaf-4895-9668-211aeb28912d",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-06-26T23:28:13.517Z",
+      "updatedAt": "2025-06-26T23:28:13.517Z",
+      "role": "workflow:owner",
+      "workflowId": "WWn0VedknOcsGhvq",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
