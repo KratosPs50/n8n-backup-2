@@ -1,0 +1,611 @@
+{
+  "createdAt": "2024-10-20T21:34:08.291Z",
+  "updatedAt": "2024-11-09T02:05:00.629Z",
+  "id": "r3D1TbntwW8JJW2O",
+  "name": "exemplo",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "dc4a51de-38d8-4f3d-9c7d-1576a9f2184f",
+              "name": "telefoneCliente",
+              "value": "={{ $('Validar Telefone').item.json.whatsapp_formatado }}",
+              "type": "string"
+            },
+            {
+              "id": "3a272e2c-5c79-4395-8184-db6f7d9fa7af",
+              "name": "mensagem",
+              "value": "={{ $json.mensagem }}",
+              "type": "string"
+            },
+            {
+              "id": "6e5b899a-f95b-488c-9b20-f65c9e6c8f0c",
+              "name": "nomeDoCliente",
+              "value": "={{ $('Webhook').item.json.body.data.pushName }}",
+              "type": "string"
+            },
+            {
+              "id": "6a8a6e99-e825-40e9-b7c8-421460e8b654",
+              "name": "idconversa",
+              "value": "={{ $('Webhook').item.json.body.data.key.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8ee888e1-2593-4a13-9086-ff50b0753c73",
+      "name": "Campos Iniciais1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        620,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "audio64",
+        "options": {
+          "fileName": "transcricao.ogg",
+          "mimeType": "audio/ogg"
+        }
+      },
+      "id": "1aa355e6-9166-41c5-8d9d-8854400f6fa2",
+      "name": "Converter em Audio",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        540,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b6cd097d-3a3a-4cdc-a6f1-13c118a4618c",
+              "name": "audio64",
+              "value": "={{ $('Webhook').item.json.body.data.message.base64 }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "85ac5ecb-fc37-4825-8349-482be6a2c222",
+      "name": "Salva Informações do Audio",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        360,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b6cd097d-3a3a-4cdc-a6f1-13c118a4618c",
+              "name": "image64",
+              "value": "={{ $('Webhook').item.json.body.data.message.base64 }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "713bd424-331c-4dd6-8eec-1d318f90ffd2",
+      "name": "Salva Informações da Imagem",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        360,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b6cd097d-3a3a-4cdc-a6f1-13c118a4618c",
+              "name": "mensagem",
+              "value": "={{\n  $node['Webhook'].json.body.data.message.imageMessage?.caption\n    ? (\n        $json.content \n          ? ${$json.content} Legenda: ${$node['Webhook'].json.body.data.message.imageMessage.caption } } \n          : 'Erro: json.content ausente para imagem com legenda'\n      ) \n    : ${$json.content || ''} ${$json.text ? ' Transcrição: ' + $json.text : ''}\n}}\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "32786ec2-0448-4ee6-866f-addeb42f91ac",
+      "name": "Mensagem1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        920,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Webhook').item.json.body.data.messageType }}",
+                    "rightValue": "conversation",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Mensagem de Texto"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "86e7e773-8586-458f-a1fb-2890f2030230",
+                    "leftValue": "={{ $('Webhook').item.json.body.data.messageType }}",
+                    "rightValue": "extendedTextMessage",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Mensagem"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "7f108034-a1be-4e90-b42e-e4f8a719e311",
+                    "leftValue": "={{ $('Webhook').item.json.body.data.messageType }}",
+                    "rightValue": "editedMessage",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Mensagem Editada"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "256e7cf8-be54-4c41-ba80-2d9eb0a07563",
+                    "leftValue": "={{ $('Webhook').item.json.body.data.messageType }}",
+                    "rightValue": "audioMessage",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Áudio"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "da03e413-3422-419c-af1a-71ff87c307e2",
+                    "leftValue": "={{ $('Webhook').item.json.body.data.messageType }}",
+                    "rightValue": "imageMessage",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Imagem"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1eb53632-7e5f-4770-a099-3dbfa3278511",
+      "name": "Tipo da Mensagem",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        -60,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "35fa457c-66ec-469e-bcff-e138580a8137",
+              "name": "mensagem",
+              "value": "={{ \n  typeof $node['Webhook'].json.body.data.message.conversation === 'string' ? \n  $node['Webhook'].json.body.data.message.conversation : \n  (\n    $node['Webhook'].json.body.data.contextInfo?.quotedMessage?.conversation ? \n    Menção: ${$node['Webhook'].json.body.data.contextInfo.quotedMessage.conversation}, Mensagem: ${$node['Webhook'].json.body.data.message.extendedTextMessage?.text || ''} : \n    $node['Webhook'].json.body.data.message.extendedTextMessage?.text || \n    $node['Webhook'].json.body.data.message.editedMessage?.message?.protocolMessage?.editedMessage?.conversation+'*' || \n    ''\n  )\n}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "375ad7ad-4392-4838-b4c0-54d49b4e2164",
+      "name": "Mensagem em Texto",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        420,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chatwoot-evolution.00we27.easypanel.host/chat/getBase64FromMediaMessage/viana",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "=viana"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"message\": {\n    \"key\": {\n      \"id\": \"{{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"data\"][\"key\"][\"id\"] }}\"\n    }\n  },\n  \"convertToMp4\": false\n}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "5d2629fc-e1bd-4faa-817f-829e3d71f440",
+      "name": "Pega o base64 da imagem",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        520,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "base64",
+        "options": {
+          "fileName": "={{ $json.fileName }}",
+          "mimeType": "={{ $json.mimetype }}"
+        }
+      },
+      "id": "0d2f077a-4a1f-4c42-b549-ba165db11c65",
+      "name": "Converte imagem em arquivo",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        700,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini-2024-07-18",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI-2024-07-18"
+        },
+        "text": "Analise a imagem e determine se ela contém um produto ou um comprovante de pagamento via Pix. Se for um produto, descreva suas características principais. Se for um comprovante, extraia o valor, data, hora e outros detalhes relevantes da transação.",
+        "inputType": "base64",
+        "simplify": "={{ $('Salva Informações da Imagem').item.json.image64 }}",
+        "options": {}
+      },
+      "id": "a7b45c54-8972-4497-bb2c-4ca11ab5b63e",
+      "name": "OpenAI",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.4,
+      "position": [
+        880,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "538fa480-6311-4a98-aef2-4803ffdac7d0",
+              "name": "id",
+              "value": "={{ $('Webhook').item.json.body.data.key.id }}",
+              "type": "string"
+            },
+            {
+              "id": "99ca0f63-9f7e-463b-9170-29037978d317",
+              "name": "remote",
+              "value": "={{ $('Webhook').item.json.body.data.key.remoteJid }}",
+              "type": "string"
+            },
+            {
+              "id": "df88b87e-0b04-4fab-8cf2-8f13b61af997",
+              "name": "",
+              "value": "={{ $('Webhook').item.json.body.data.messageType }}",
+              "type": "string"
+            },
+            {
+              "id": "240d1312-012e-470a-9ffd-820443ccf0a2",
+              "name": "Mensagem",
+              "value": "={{ $('Tipo da Mensagem').item.json.body.data.message.extendedTextMessage.text }}",
+              "type": "string"
+            },
+            {
+              "id": "c0956b9d-2016-4d52-a172-fb2cf1237967",
+              "name": "time",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            },
+            {
+              "id": "8d47a8d3-eba9-424a-95b8-cc8ae46f5a73",
+              "name": "",
+              "value": "={{ $('Webhook').item.json.body.data }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "82d2970f-360d-4030-99d2-74716760b44a",
+      "name": "Edit Fields4",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        800,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {
+          "language": "pt"
+        }
+      },
+      "id": "b4f930e7-3812-4172-bd56-9adc56685e71",
+      "name": "Transcreve Audio",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.3,
+      "position": [
+        720,
+        620
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    }
+  ],
+  "connections": {
+    "Campos Iniciais1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Converter em Audio": {
+      "main": [
+        [
+          {
+            "node": "Transcreve Audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salva Informações do Audio": {
+      "main": [
+        [
+          {
+            "node": "Converter em Audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salva Informações da Imagem": {
+      "main": [
+        [
+          {
+            "node": "Pega o base64 da imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensagem1": {
+      "main": [
+        [
+          {
+            "node": "Campos Iniciais1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tipo da Mensagem": {
+      "main": [
+        [
+          {
+            "node": "Mensagem em Texto",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mensagem em Texto",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mensagem em Texto",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Salva Informações do Audio",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Salva Informações da Imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensagem em Texto": {
+      "main": [
+        [
+          {
+            "node": "Campos Iniciais1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pega o base64 da imagem": {
+      "main": [
+        [
+          {
+            "node": "Converte imagem em arquivo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Converte imagem em arquivo": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Mensagem1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcreve Audio": {
+      "main": [
+        [
+          {
+            "node": "Mensagem1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "f8091dc1-7511-47be-a7d6-099303cb8634",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2024-10-20T21:34:08.291Z",
+      "updatedAt": "2024-10-20T21:34:08.291Z",
+      "role": "workflow:owner",
+      "workflowId": "r3D1TbntwW8JJW2O",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
