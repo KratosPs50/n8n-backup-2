@@ -1,0 +1,614 @@
+{
+  "createdAt": "2025-06-23T00:52:49.891Z",
+  "updatedAt": "2025-06-23T12:22:26.705Z",
+  "id": "3d95C8VxWdsPJEe7",
+  "name": "Formulario___IGREJA evo teste",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "table": {
+          "__rl": true,
+          "value": "users",
+          "mode": "name"
+        },
+        "dataMode": "defineBelow",
+        "valuesToSend": {
+          "values": [
+            {
+              "column": "role_id",
+              "value": "3"
+            },
+            {
+              "column": "name",
+              "value": "={{ $json.Name }}"
+            },
+            {
+              "column": "username",
+              "value": "={{ $json.Name }}"
+            },
+            {
+              "column": "email",
+              "value": "={{ $json.Email }}"
+            },
+            {
+              "column": "password",
+              "value": "={{ $json.senhaHash }}"
+            },
+            {
+              "column": "is_active",
+              "value": "1"
+            },
+            {
+              "column": "created_at",
+              "value": "={{$now}}"
+            },
+            {
+              "column": "phone",
+              "value": "={{ $json.Telefone }}"
+            },
+            {
+              "column": "language_code",
+              "value": "pt-br"
+            },
+            {
+              "column": "language_name",
+              "value": "Português Brasileiro"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e43fd941-a3d4-48d3-91c1-8de44ad3d7a7",
+      "name": "MySQL – Insert",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2,
+      "position": [
+        2500,
+        540
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "mySql": {
+          "id": "1fSum8YauGSS56h9",
+          "name": "MySQL - IGREJA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// --- Hash Password (versão sem bcrypt, hash fixo) ---\n\n// Senha padrão que será enviada ao aluno\nconst senhaOriginal = 'HayAhMoVe2025@';\n\n// Hash pré-gerado (com bcrypt) para armazenar no banco de dados\nconst senhaHash = '$2a$12$Fu/rrbjSZVmTrsYwR0dSx.T39YSnhOm3upe8MzDtAaW2TrZY6dZq2';\n\n// Percorre os itens recebidos do node anterior\nfor (const item of $input.all()) {\n  // Adiciona a senha original e o hash no JSON\n  item.json.senhaOriginal = senhaOriginal;\n  item.json.senhaHash = senhaHash;\n}\n\nreturn $input.all();\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2440,
+        300
+      ],
+      "id": "c6ecd5b4-70d0-4e1c-aa7a-b71e31d0cd94",
+      "name": "Hash Password"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "seconds"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        140,
+        160
+      ],
+      "id": "0ce91d26-aa36-4127-9927-9aa0ae6faa77",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of $input.all()) {\n  if (item.json?.Email && item.json?.senhaOriginal) {\n    const nome  = item.json.Name || 'usuário';\n    const email = item.json.Email;\n    const senha = item.json.senhaOriginal;\n\n    item.json.msgEmailBody = `\n      <p>Olá <strong>${nome}</strong>! ✅ Seu acesso foi criado.</p>\n      <p><strong>Usuário:</strong> ${email}<br>\n      <strong>Senha:</strong> ${senha}</p>\n      <p>Acesse: <a href=\"https://move.hayahtraining.com\" target=\"_blank\">https://move.hayahtraining.com</a></p>\n      <p>Recomendamos que você altere sua senha no primeiro acesso.</p>\n      <p>Em caso de dúvidas, estamos à disposição.<br>Equipe Hayah Training</p>\n    `.trim();\n\n    item.json.msgEmailSubject = 'Acesso liberado – Hayah Training';\n    item.json.msgEmail = email;\n    item.json.msgTexto = `Olá ${nome}! ✅ Seu acesso foi criado.\\nUsuário: ${email}\\nSenha: ${senha}\\nAcesse: https://move.hayahtraining.com/login/`;\n  }\n}\n\nreturn $input.all();\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3160,
+        320
+      ],
+      "id": "15c22a6a-13c4-4138-b713-2f26b65169f2",
+      "name": "Set Mensagens"
+    },
+    {
+      "parameters": {
+        "fromEmail": "=contato@hayahtraining.com",
+        "toEmail": "={{ $('Google Sheets').item.json.Email }}",
+        "subject": "={{ $json.msgEmailSubject }}",
+        "text": "={{ $json.msgTexto }}",
+        "options": {}
+      },
+      "id": "1b36227d-1120-44b2-9d70-43a0c4d987df",
+      "name": "E-mail – Confirmação",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [
+        3500,
+        320
+      ],
+      "webhookId": "c77a0118-0950-4910-b4b9-b4b0a73aecd9",
+      "credentials": {
+        "smtp": {
+          "id": "atvXJVDFInYVg0OS",
+          "name": "SMTP - Brevo - Ingreja"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2840,
+        320
+      ],
+      "id": "681f343a-4381-4d40-9224-553ee8a7e05a",
+      "name": "Merge",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1opANlFTG4bmc0Z1I5cssG5jYgqdy0pHy3mKnCGBjQdo",
+          "mode": "list",
+          "cachedResultName": "Planilha Inscrição PAGA pronta para  v03",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1opANlFTG4bmc0Z1I5cssG5jYgqdy0pHy3mKnCGBjQdo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 144992678,
+          "mode": "list",
+          "cachedResultName": "Português",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1opANlFTG4bmc0Z1I5cssG5jYgqdy0pHy3mKnCGBjQdo/edit#gid=144992678"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Enviado por E-mail"
+            },
+            {
+              "lookupColumn": "Enviado por Whatsapp"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        400,
+        180
+      ],
+      "id": "d41c9e1a-8212-4789-9771-3a2dbd16ec81",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "z1VWO1EGILqORxWq",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "FORMULARIO - IGREJA \n",
+        "height": 960,
+        "width": 3820,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        240,
+        -40
+      ],
+      "typeVersion": 1,
+      "id": "0e25bfac-3946-47f4-806c-53ac3c809dc0",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "options_message": {}
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        3500,
+        580
+      ],
+      "id": "2b94cdeb-34e3-4f5c-92f7-d9e4ba91427c",
+      "name": "Evolution API"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Recebe todos os dados da planilha\nconst items = $input.all();\n\n// Encontra o item com o maior row_number\nconst ultimo = items.reduce((anterior, atual) => {\n  return (anterior.json.row_number > atual.json.row_number) ? anterior : atual;\n});\n\n// Retorna apenas o último item\nreturn [ultimo];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        180
+      ],
+      "id": "9d78cb54-da55-44bc-ab13-dd82a179b4df",
+      "name": "Code – Mantém só últimoe"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "d0207610-995c-4723-8b61-42ad8bf48eaa",
+              "leftValue": "={{$json[\"Enviado por E-mail\"]}}\n{{$json[\"Enviado por Whatsapp\"]}}\n",
+              "rightValue": "is empty\n",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "d6cd1859-371e-43b7-8e0c-aef6dfd9d71c",
+      "name": "IF importado?1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        960,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of $input.all()) {\n  const nascimento = item.json[\"Data de Nascimento\"];\n  item.json.data_nascimento = new Date(nascimento).toISOString().split('T')[0];\n}\n\nreturn $input.all();\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1260,
+        200
+      ],
+      "id": "6d61f78d-5165-4472-848b-d656b76c8bcc",
+      "name": "Normalize Date1"
+    },
+    {
+      "parameters": {
+        "operation": "query",
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "id": "61ce3a0a-f638-42fc-99bb-3d7839cf82b4",
+      "name": "MySQL – Verifica usuário",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2,
+      "position": [
+        1740,
+        200
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "9ZzSHzNcvWMPNu1G",
+          "name": "MySQL account HOGWARTS"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json[\"0\"].found }}",
+              "operation": "larger",
+              "value2": 0
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7ea10c52-3735-4ef2-bb28-ecbade57b2e5",
+      "name": "IF – Já existe?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1940,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "table": "users",
+        "options": {}
+      },
+      "id": "47bd2098-31f4-408b-94e9-27252db6d793",
+      "name": "MySQL – Insert (novo)",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2,
+      "position": [
+        2200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// --- Hash Password (versão sem bcrypt, hash fixo) ---\n\n// Senha padrão que será enviada ao aluno\nconst senhaOriginal = 'HayAhMoVe2025@';\n\n// Hash pré-gerado (com bcrypt) para armazenar no banco de dados\nconst senhaHash = '$2a$12$Fu/rrbjSZVmTrsYwR0dSx.T39YSnhOm3upe8MzDtAaW2TrZY6dZq2';\n\n// Percorre os itens recebidos do node anterior\nfor (const item of $input.all()) {\n  // Adiciona a senha original e o hash no JSON\n  item.json.senhaOriginal = senhaOriginal;\n  item.json.senhaHash = senhaHash;\n}\n\nreturn $input.all();\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1500,
+        200
+      ],
+      "id": "7895a142-216f-48f0-861b-070d8d3c4fba",
+      "name": "Hash Password2"
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of $input.all()) {\n  const n=item.json.Name||'usuário';\n  const e=item.json.Email||'';\n  item.json.assunto='Você já possui cadastro – Hayah Training';\n  item.json.msg=`Olá ${n}! ✅ Nosso sistema indica que o seu e-mail (${e}) já possui acesso.\\nSe esqueceu a senha, use o link “Esqueci minha senha” na página de login.`;\n}\nreturn $input.all();"
+      },
+      "id": "b75946e8-2910-43c8-ae9a-f1ec276fc521",
+      "name": "Set Mensagens – Já cadastrado",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2200,
+        60
+      ]
+    }
+  ],
+  "connections": {
+    "Hash Password": {
+      "main": [
+        [
+          {
+            "node": "MySQL – Insert",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL – Insert": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Set Mensagens": {
+      "main": [
+        [
+          {
+            "node": "E-mail – Confirmação",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Set Mensagens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        []
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Code – Mantém só últimoe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code – Mantém só últimoe": {
+      "main": [
+        [
+          {
+            "node": "IF importado?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF importado?1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Normalize Date1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Date1": {
+      "main": [
+        [
+          {
+            "node": "Hash Password2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hash Password2": {
+      "main": [
+        [
+          {
+            "node": "MySQL – Verifica usuário",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL – Verifica usuário": {
+      "main": [
+        [
+          {
+            "node": "IF – Já existe?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF – Já existe?": {
+      "main": [
+        [
+          {
+            "node": "Set Mensagens – Já cadastrado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "MySQL – Insert (novo)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Google Sheets": [
+      {
+        "json": {
+          "row_number": 2,
+          "Name": "Henrique André",
+          "Email": "henriqueandre_18@hotmail.com",
+          "Telefone": 17136322018,
+          "Data de Nascimento": "1984-06-14",
+          "Password": "",
+          "CPF / ID": 45620168840,
+          "CEP / Zip Code": 33919,
+          "Cidade": "Florida",
+          "País": "Estados Unidos",
+          "Escolaridade": "Pós-graduação (Especialização, Mestrado ou Doutorado)",
+          "LinkedIn": "",
+          "Enviado por E-mail": "Concluido",
+          "Enviado por Whatsapp": ""
+        }
+      },
+      {
+        "json": {
+          "row_number": 3,
+          "Name": "Pedro",
+          "Email": "klamaxx1245@gmail.com",
+          "Telefone": 5511984652324,
+          "Data de Nascimento": "2015-06-10",
+          "Password": "",
+          "CPF / ID": 999999998,
+          "CEP / Zip Code": 99999997,
+          "Cidade": "Madri",
+          "País": "Espanha",
+          "Escolaridade": "Ensino Médio Completo",
+          "LinkedIn": "Teste",
+          "Enviado por E-mail": "Concluido",
+          "Enviado por Whatsapp": ""
+        }
+      },
+      {
+        "json": {
+          "row_number": 4,
+          "Name": "Richarlison",
+          "Email": "toddynlesado12@gmail.com",
+          "Telefone": 5511985757575,
+          "Data de Nascimento": "2003-06-05",
+          "Password": "",
+          "CPF / ID": 99999999999,
+          "CEP / Zip Code": 99999999,
+          "Cidade": "Madri",
+          "País": "Espanha",
+          "Escolaridade": "Ensino Médio Completo",
+          "LinkedIn": "Richarlison",
+          "Enviado por E-mail": "Concluido",
+          "Enviado por Whatsapp": ""
+        }
+      },
+      {
+        "json": {
+          "row_number": 5,
+          "Name": "LUCAS HENRIQUE JORDAO GOMES",
+          "Email": "lucasxt321@hotmail.com.br",
+          "Telefone": 119894529977,
+          "Data de Nascimento": "1999-08-15",
+          "Password": "",
+          "CPF / ID": 48075614801,
+          "CEP / Zip Code": 4355050,
+          "Cidade": "São Paulo",
+          "País": "Brasil",
+          "Escolaridade": "Ensino Médio Completo",
+          "LinkedIn": "",
+          "Enviado por E-mail": "",
+          "Enviado por Whatsapp": ""
+        }
+      }
+    ]
+  },
+  "versionId": "6f03436f-e8ce-427e-b3f7-eeb17f52a414",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-06-23T00:52:49.891Z",
+      "updatedAt": "2025-06-23T00:52:49.891Z",
+      "role": "workflow:owner",
+      "workflowId": "3d95C8VxWdsPJEe7",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
