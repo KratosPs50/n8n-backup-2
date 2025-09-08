@@ -1,0 +1,225 @@
+{
+  "createdAt": "2024-11-16T15:58:46.037Z",
+  "updatedAt": "2024-12-07T14:58:25.028Z",
+  "id": "K8JYPMTGiixsdgAx",
+  "name": "Canal_Pro_Leads___CRM",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "79b550d2-ad30-43a1-8393-f91e24a51fee",
+              "name": "Leadgen_id",
+              "value": "={{ $json.body.entry[0].changes[0].value.leadgen_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "65682348-8df5-4bff-9f9e-da6972271bdb",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        740,
+        1020
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=http://graph.facebook.com/v21.0/{{ $json.Leadgen_id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "facebookGraphApi",
+        "options": {}
+      },
+      "id": "f3f80be3-872d-42b5-a80a-878dc122b971",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        1020
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e5b1f30e-1849-47f3-a2b8-fb3d29273c61",
+              "name": "Nome",
+              "value": "={{ $json.field_data[0].values[0] }}",
+              "type": "string"
+            },
+            {
+              "id": "07f53e71-b274-4ae5-9023-88796a58ce29",
+              "name": "E-mail",
+              "value": "={{ $json.field_data[1].values[0] }}\n",
+              "type": "string"
+            },
+            {
+              "id": "d7c3da07-767d-47a8-9103-854cae69264c",
+              "name": "Telefone",
+              "value": "={{ $json.field_data[2].values[0] }}\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f81a1d06-f0fc-4960-829f-36a1f7b60fc0",
+      "name": "Edit Fields1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1180,
+        1020
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://crm.andreiadantasbugalho.com.br/api/leads",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "authtoken",
+              "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiRmFjZWJvb2siLCJuYW1lIjoiQ29ycmV0b3IiLCJBUElfVElNRSI6MTcyODM1Nzc4MX0.u5pscqzMI_8WO1k_QLUKU-KBIdJEVVQPsH-SGSAfKRc"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "name",
+              "value": "={{ $json.Nome }}"
+            },
+            {
+              "name": "status",
+              "value": "1"
+            },
+            {
+              "name": "source",
+              "value": "2"
+            },
+            {
+              "name": "assigned",
+              "value": "1"
+            },
+            {
+              "name": "email",
+              "value": "={{ $json['E-mail'] }}"
+            },
+            {
+              "name": "phonenumber",
+              "value": "={{ $json.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5e8be51f-d7e7-4651-b2aa-c2679fecb1cc",
+      "name": "HTTP Request2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1420,
+        1020
+      ]
+    },
+    {
+      "parameters": {
+        "content": "Leads Facebook - CRM",
+        "height": 359.4661323930874,
+        "width": 1178.1141539112414,
+        "color": 3
+      },
+      "id": "3a95c4f0-2ed9-4474-95a5-76e5bf0238eb",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        460,
+        900
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "56b5f4fb-1df9-4dfa-b8e8-a34c34448613",
+        "options": {}
+      },
+      "id": "41474a93-04c5-4749-a722-8afc815d8088",
+      "name": "Webhook1",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        520,
+        1020
+      ],
+      "webhookId": "f39c873c-86c8-46d9-9713-01e36363fc46"
+    }
+  ],
+  "connections": {
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "536d013e-ac81-408e-a2b4-7a375abb0458",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2024-11-16T15:58:46.037Z",
+      "updatedAt": "2024-11-16T15:58:46.037Z",
+      "role": "workflow:owner",
+      "workflowId": "K8JYPMTGiixsdgAx",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
