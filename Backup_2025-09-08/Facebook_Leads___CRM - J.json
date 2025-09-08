@@ -1,0 +1,329 @@
+{
+  "createdAt": "2024-12-19T18:17:48.533Z",
+  "updatedAt": "2025-06-23T12:21:03.851Z",
+  "id": "2Lv72BWWIV2p5leR",
+  "name": "Facebook_Leads___CRM - J",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.query['hub.challenge'] }}",
+        "options": {}
+      },
+      "id": "60c65fc8-b086-4deb-b2af-6150aa18c0e8",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        780,
+        580
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "79b550d2-ad30-43a1-8393-f91e24a51fee",
+              "name": "Leadgen_id",
+              "value": "={{ $json.body.entry[0].changes[0].value.leadgen_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a5db1723-65d2-4ce8-bf4e-ff3f9d27420d",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        740,
+        1020
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=http://graph.facebook.com/v21.0/{{ $json.Leadgen_id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "facebookGraphApi",
+        "options": {}
+      },
+      "id": "434949c6-2c3f-4995-8a34-1cb53175594a",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        1020
+      ],
+      "credentials": {
+        "facebookGraphApi": {
+          "id": "FAvOpV2dROikRcDo",
+          "name": "Facebook Graph account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e5b1f30e-1849-47f3-a2b8-fb3d29273c61",
+              "name": "Nome",
+              "value": "={{ $json.field_data[0].values[0] }}",
+              "type": "string"
+            },
+            {
+              "id": "07f53e71-b274-4ae5-9023-88796a58ce29",
+              "name": "E-mail",
+              "value": "={{ $json.field_data[1].values[0] }}\n",
+              "type": "string"
+            },
+            {
+              "id": "d7c3da07-767d-47a8-9103-854cae69264c",
+              "name": "Telefone",
+              "value": "={{ $json.field_data[2].values[0] }}\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "84c5d182-a962-4703-b304-506206560409",
+      "name": "Edit Fields1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1180,
+        1020
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://crm.andreiadantasbugalho.com.br/api/leads",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "authtoken",
+              "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiRmFjZWJvb2siLCJuYW1lIjoiQ29ycmV0b3IiLCJBUElfVElNRSI6MTcyODM1Nzc4MX0.u5pscqzMI_8WO1k_QLUKU-KBIdJEVVQPsH-SGSAfKRc"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "name",
+              "value": "={{ $json.Nome }}"
+            },
+            {
+              "name": "status",
+              "value": "1"
+            },
+            {
+              "name": "source",
+              "value": "2"
+            },
+            {
+              "name": "assigned",
+              "value": "1"
+            },
+            {
+              "name": "email",
+              "value": "={{ $json['E-mail'] }}"
+            },
+            {
+              "name": "phonenumber",
+              "value": "={{ $json.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "60f0c5cf-73d6-4f4d-9657-69e50b69d6a7",
+      "name": "HTTP Request2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1420,
+        1020
+      ]
+    },
+    {
+      "parameters": {
+        "path": "2b6abd3c-b538-4ee0-8dc6-d2a0ff795195",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "117c5019-4903-43bb-8797-1216bd177e16",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        560,
+        580
+      ],
+      "webhookId": "42d38ec1-ed9f-4533-b95a-1d7166798841"
+    },
+    {
+      "parameters": {
+        "content": "Validação facebook",
+        "height": 315.8329159320999,
+        "width": 567.24912345741
+      },
+      "id": "83c1cdc6-d381-4afe-8a51-7390017037da",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        460,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "content": "Leads Facebook - CRM",
+        "height": 339,
+        "width": 1178,
+        "color": 3
+      },
+      "id": "fed627a7-d13e-40db-89aa-2984b2c06299",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        460,
+        900
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "2b6abd3c-b538-4ee0-8dc6-d2a0ff795195",
+        "options": {}
+      },
+      "id": "0a297440-3bb9-4250-bce7-43943a7aa0c2",
+      "name": "Webhook2",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        520,
+        1020
+      ],
+      "webhookId": "e153c740-5616-4362-bdac-e7ec0937e417"
+    }
+  ],
+  "connections": {
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "editwebhoock.integrasac.com.br",
+            "user-agent": "facebookplatform/1.0 (+http://developers.facebook.com)",
+            "accept": "*/*",
+            "accept-encoding": "gzip, br",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-connecting-ip": "2a03:2880:27ff:73::",
+            "cf-ipcountry": "US",
+            "cf-ray": "8f589803199cf26c-IAD",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-warp-tag-id": "87495cbc-9d0a-443e-8e0d-8d5e4cd8a07b",
+            "x-forwarded-for": "192.168.100.80",
+            "x-forwarded-host": "editwebhoock.integrasac.com.br",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "7be8f877473f",
+            "x-real-ip": "192.168.100.80"
+          },
+          "params": {},
+          "query": {
+            "hub.mode": "subscribe",
+            "hub.challenge": "1049850984",
+            "hub.verify_token": "EAAGwBUSZAji4BO9ZAzPlpT4MlZBFUSOvo80Oav63xYR4MCzo4snKOjFHBS1G0867kTqRcZCpZCdacgQhsa9dl0ZALLzMePKVcV9puV8TUnM0PNZA3y8o6lnvAomjrjojLA3vJFAsD2LdmZCGJMqSmZAfyzVzbsJTNR5Up6lbwIXOfbzqD3UQlDC0tctuOi8jJbrU2JpxcBZAVmbwMBmsag"
+          },
+          "body": {},
+          "webhookUrl": "https://editwebhoock.integrasac.com.br/webhook/2b6abd3c-b538-4ee0-8dc6-d2a0ff795195",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "versionId": "6013d4c3-b8dc-4f2f-9e84-b1e009bca437",
+  "triggerCount": 2,
+  "shared": [
+    {
+      "createdAt": "2024-12-19T18:17:48.533Z",
+      "updatedAt": "2024-12-19T18:17:48.533Z",
+      "role": "workflow:owner",
+      "workflowId": "2Lv72BWWIV2p5leR",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": [
+    {
+      "createdAt": "2024-12-15T22:18:14.158Z",
+      "updatedAt": "2024-12-15T22:18:14.158Z",
+      "id": "gdxddtefrDZkp2GZ",
+      "name": "IntegraSac"
+    }
+  ]
+}
