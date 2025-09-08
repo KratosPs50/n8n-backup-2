@@ -1,0 +1,456 @@
+{
+  "createdAt": "2025-09-03T16:58:43.013Z",
+  "updatedAt": "2025-09-05T19:34:09.407Z",
+  "id": "lNwpmU498QmTVAfZ",
+  "name": "Backup Drive",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "27e72d18-01de-4f15-a075-9d87af599c46",
+      "name": "Daily Trigger",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [
+        -1056,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "400c349a-6694-4ebc-8cc8-4b36b30cdd05",
+              "name": "folderName",
+              "value": "=Backup_{{ $now.format('yyyy-MM-dd') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5b00805c-aeef-4114-ae7e-38a5034d62ea",
+      "name": "Set Variables",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -832,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "2eef1c84-581a-4048-8605-d64f2d06860a",
+      "name": "Split Workflows",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -320,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "workflow-content",
+              "name": "nodes",
+              "value": "={{ JSON.stringify($json, null, 2) }}",
+              "type": "string"
+            },
+            {
+              "id": "workflow-filename",
+              "name": "fileName",
+              "value": "={{ $json.name }}.json",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2215f321-0a69-416b-9748-5978075c1606",
+      "name": "Prepare File Content",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        272
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "owner": {
+          "__rl": true,
+          "value": "KratosPs50",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "n8n-backup-2",
+          "mode": "list",
+          "cachedResultName": "n8n-backup-2",
+          "cachedResultUrl": "https://github.com/KratosPs50/n8n-backup-2"
+        },
+        "filePath": "={{ $('Set Variables').item.json.folderName }}/{{ $('Prepare File Content').item.json.fileName }}",
+        "binaryData": true,
+        "commitMessage": "={{ $now.setZone('America/Sao_Paulo').format('yyyy-MM-dd HH:mm:ss') }} Backup completo\n"
+      },
+      "id": "29f6c9b1-6934-4d2a-93df-83ddcc33e4b5",
+      "name": "Upload to GitHub",
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1,
+      "position": [
+        448,
+        336
+      ],
+      "webhookId": "20f36eee-6bfe-4264-9490-d76d5c1ef46d",
+      "alwaysOutputData": false,
+      "notesInFlow": true,
+      "credentials": {
+        "githubApi": {
+          "id": "xaGHp9iLPOXlZZda",
+          "name": "GitHub account Backups"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "owner": {
+          "__rl": true,
+          "value": "=KratosPs50",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "n8n-backup-2",
+          "mode": "list",
+          "cachedResultName": "n8n-backup-2",
+          "cachedResultUrl": "https://github.com/KratosPs50/n8n-backup-2"
+        },
+        "filePath": "={{ $('Set Variables').item.json.folderName }}/README.md",
+        "fileContent": "=# N8N Workflow Backup - {{ $('Set Variables').item.json.folderName }}\n\nEsta pasta contém o backup de todos os fluxos de trabalho N8N a partir de {{ $now.setZone('America/Sao_Paulo').format('yyyy-MM-dd HH:mm:ss') }}\n\n## Backup Detalhes\n- Hora do Backup: {{ $now.setZone('America/Sao_Paulo').format('yyyy-MM-dd HH:mm:ss') }}\n- Total de Workflows: {{ $('Get many workflows').all().length }}\n\n## Arquivos\nCada fluxo de trabalho é salvo como um arquivo JSON separado com o formato\n\n---\n*Gerado automaticamente pelo N8N Backup Workflow*",
+        "commitMessage": "=Adicionar README para pasta de backup"
+      },
+      "id": "22693205-3529-4f26-ac7f-4878c97c4b36",
+      "name": "Create README",
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "5f0a2d4b-f990-480e-8bf7-1aea62f5fc7c",
+      "credentials": {
+        "githubApi": {
+          "id": "xaGHp9iLPOXlZZda",
+          "name": "GitHub account Backups"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "nodes",
+        "options": {
+          "fileName": "={{ $json.fileName }}"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        224,
+        272
+      ],
+      "id": "a7fe4060-723d-4633-b117-8d260ee1566f",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "10VZnK3xi87EB7XgG6vGULO7CzQGCrnWcE3CuvhgKtNk",
+          "mode": "list",
+          "cachedResultName": "Backups Diarios n8n",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10VZnK3xi87EB7XgG6vGULO7CzQGCrnWcE3CuvhgKtNk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10VZnK3xi87EB7XgG6vGULO7CzQGCrnWcE3CuvhgKtNk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "File Name": "={{ $('Prepare File Content').item.json.fileName }}",
+            "Error Message": "={{ $json.error }}",
+            "Folder Name": "={{ $('Set Variables').item.json.folderName }}",
+            "Datetime": "{{ $now.setZone('America/Sao_Paulo').format('yyyy-MM-dd HH:mm:ss') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Datetime",
+              "displayName": "Datetime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Folder Name",
+              "displayName": "Folder Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "File Name",
+              "displayName": "File Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Error Message",
+              "displayName": "Error Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        672,
+        352
+      ],
+      "id": "55c8a891-3222-4451-8dc3-d5090e99638d",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "QoOkWaTYmCHsMVUl",
+          "name": "Google Sheets Backup WorkFlow"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "filters": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.n8n",
+      "typeVersion": 1,
+      "position": [
+        -624,
+        256
+      ],
+      "id": "4a854d27-b578-45b5-85cd-a9c6e298d69c",
+      "name": "Get many workflows",
+      "credentials": {
+        "n8nApi": {
+          "id": "kvDVu23gPpy9LILz",
+          "name": "n8n account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Atualizar as Credencias\n Coloque suas Credencias de acordo com seu n8n",
+        "height": 336,
+        "width": 256,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -704,
+        96
+      ],
+      "typeVersion": 1,
+      "id": "07bb8d89-b7bf-4143-9ac8-31ac7b1f0465",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Atualizar as Credencias\nColoque suas Credencias de acordo com sua Conta GitHub",
+        "height": 336,
+        "width": 256,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -80,
+        -160
+      ],
+      "typeVersion": 1,
+      "id": "087d5e3b-ac5d-48ae-b947-176e41bb4ecd",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Atualizar as Credencias\nColoque suas Credencias de acordo com seu GitHub e Seu Google Cloud",
+        "height": 336,
+        "width": 512,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        368,
+        208
+      ],
+      "typeVersion": 1,
+      "id": "52c2cad9-2dc5-41f8-837a-7657f4ffbb89",
+      "name": "Sticky Note2"
+    }
+  ],
+  "connections": {
+    "Daily Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set Variables",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Variables": {
+      "main": [
+        [
+          {
+            "node": "Get many workflows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Workflows": {
+      "main": [
+        [
+          {
+            "node": "Create README",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare File Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare File Content": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to GitHub": {
+      "main": [
+        [
+          {
+            "node": "Split Workflows",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Upload to GitHub",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Split Workflows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many workflows": {
+      "main": [
+        [
+          {
+            "node": "Split Workflows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "4d4a719d-5a8c-42fe-915f-5db7d870c27f",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-09-03T16:58:43.013Z",
+      "updatedAt": "2025-09-03T16:58:43.013Z",
+      "role": "workflow:owner",
+      "workflowId": "lNwpmU498QmTVAfZ",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
