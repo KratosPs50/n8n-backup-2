@@ -1,0 +1,241 @@
+{
+  "createdAt": "2025-01-06T20:42:25.967Z",
+  "updatedAt": "2025-01-06T20:42:25.967Z",
+  "id": "Pm04CDntVnjZGbPL",
+  "name": "Resumidor de grupo do WhatsApp DInastia",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fa68a674-bc29-4286-a075-35f22e8e705b",
+              "name": "grupoId",
+              "value": "120363359564158388@g.us",
+              "type": "string"
+            },
+            {
+              "id": "719dafd4-7da1-4abe-bc40-4cfd8a3f1ea3",
+              "name": "instanceId",
+              "value": "b565b54b-2b4e-41ba-bebf-b0dcf5eb5ab2",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        200,
+        0
+      ],
+      "id": "ea79f258-5be2-4c1e-a015-ce13e5594206",
+      "name": "config"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT *\nFROM public.\"Message\"\nWHERE \"instanceId\" = '{{ $json.instanceId }}'\n  AND \"key\"->>'remoteJid' = '{{ $json.grupoId }}'\n  AND \"messageTimestamp\" >= EXTRACT(EPOCH FROM (NOW() - INTERVAL '24 HOURS'))\n  AND \"messageType\" = 'conversation'\nORDER BY \"messageTimestamp\" ASC;\n\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        400,
+        0
+      ],
+      "id": "1d6f9227-8755-48e8-8ea7-2396e1fd62a7",
+      "name": "listar_ultimas_24h_mensagens",
+      "credentials": {
+        "postgres": {
+          "id": "UG4CqzCe8yk5SvOn",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1060,
+        0
+      ],
+      "id": "2ee3ae40-3f39-4e27-93d2-38057483b4ab",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.5,
+      "position": [
+        1240,
+        0
+      ],
+      "id": "09589639-82f6-49d4-8d1f-e05e2cd30b39",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-1.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1320,
+        180
+      ],
+      "id": "73395fc7-fe32-4e1d-9d31-760c871e33d7",
+      "name": "Google Gemini Chat Model"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  ...$input.all().map(item => ({\n    numero: item.json.key.participant?.split('@')[0],\n    nome: item.json.pushName,\n    texto: item.json.message.conversation,\n    dataHora: item.json.formattedDate,\n  }))\n]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        840,
+        0
+      ],
+      "id": "5b44d69e-58df-43ca-92b8-70db29f0a005",
+      "name": "tratamento"
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "instanceName": "private",
+        "remoteJid": "={{ $('config').item.json.grupoId }}",
+        "messageText": "={{ $json.text }}"
+      },
+      "type": "n8n-nodes-evolution-api.httpBin",
+      "typeVersion": 1,
+      "position": [
+        1600,
+        0
+      ],
+      "id": "2b4a28f5-7437-4219-9d29-8e8072e74c44",
+      "name": "Evolution API"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 6
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -20,
+        0
+      ],
+      "id": "3a9eb721-3730-42e5-998d-f8dae5815538",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "formatDate",
+        "date": "={{ $json.messageTimestamp }}",
+        "format": "custom",
+        "customFormat": "dd/MM/yyyy hh:mm:ss",
+        "options": {
+          "includeInputFields": true
+        }
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        620,
+        0
+      ],
+      "id": "6e22caf1-d800-4124-9ec5-176b420479b2",
+      "name": "Date & Time"
+    }
+  ],
+  "connections": {
+    "config": {
+      "main": [
+        [
+          {
+            "node": "listar_ultimas_24h_mensagens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "listar_ultimas_24h_mensagens": {
+      "main": [
+        [
+          {
+            "node": "Date & Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "tratamento": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time": {
+      "main": [
+        [
+          {
+            "node": "tratamento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "2846f8b1-d407-40b9-b24e-cec246bc0356",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-01-06T20:42:25.967Z",
+      "updatedAt": "2025-01-06T20:42:25.967Z",
+      "role": "workflow:owner",
+      "workflowId": "Pm04CDntVnjZGbPL",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
