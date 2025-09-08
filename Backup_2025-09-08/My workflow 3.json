@@ -1,0 +1,1135 @@
+{
+  "createdAt": "2025-06-23T03:43:30.372Z",
+  "updatedAt": "2025-06-23T03:43:30.372Z",
+  "id": "QSmqwQddeKEXUu1l",
+  "name": "My workflow 3",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "983b25ad-bb74-46ff-81d7-2b166d7b53a6",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1160,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "status",
+              "field2": "=status"
+            },
+            {
+              "field1": "id",
+              "field2": "id"
+            }
+          ]
+        },
+        "fuzzyCompare": true,
+        "options": {}
+      },
+      "id": "efd5eddb-ae75-410e-af45-03e1bd3f2531",
+      "name": "Compare Datasets",
+      "type": "n8n-nodes-base.compareDatasets",
+      "typeVersion": 2.3,
+      "position": [
+        -520,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "suaURL/message/sendMedia/SuaConexao",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "Token aqui"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"number\":\"55{{ $json.phonenumber }}\",\"options\":{\"delay\":1200,\"presence\":\"composing\"},\"mediaMessage\":{\"mediatype\":\"image\",\"caption\":\"✅ Fala {{ $json[\"name\"] }}, somos da *MNS Agência*. Sua solicitação foi recebida com sucesso.\\n\\nE em breve entraremos em contato para mais informações e te ajudar.\\n\\n📅 Dica: Certifique-se de ter seu telefone por perto e de estar disponível. Assim, garantimos um atendimento eficiente e sem atrasos. Valeu!!\",\"media\":\"https://app.mns.marketing/media/logoretina01%20-%20co%CC%81pia.png\"}} ",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "aaadfc7a-59d5-4101-9314-35c50726276a",
+      "name": "02 - Lead Morno",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        420,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "suaURL/message/sendMedia/SuaConexao",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "Token Aqui"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"number\":\"55{{ $json.phonenumber }}\",\"options\":{\"delay\":1200,\"presence\":\"composing\"},\"mediaMessage\":{\"mediatype\":\"image\",\"caption\":\"✅ Fala {{ $json[\"name\"] }}, somos da *MNS Agência*. Sua solicitação foi recebida com sucesso.\\n\\nE em breve entraremos em contato para mais informações e te ajudar.\\n\\n📅 Dica: Certifique-se de ter seu telefone por perto e de estar disponível. Assim, garantimos um atendimento eficiente e sem atrasos. Valeu!!\",\"media\":\"https://app.mns.marketing/media/logoretina01%20-%20co%CC%81pia.png\"}} ",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "a0173d5c-5526-4b43-b0df-05d6fe9a03fc",
+      "name": "03 - Lead Frio",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        420,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "suaURL/message/sendMedia/SuaConexao",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "Token Aqui"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"number\":\"55{{ $json.phonenumber }}\",\"options\":{\"delay\":1200,\"presence\":\"composing\"},\"mediaMessage\":{\"mediatype\":\"image\",\"caption\":\"🚀 Fala *{{ $json[\"name\"] }}* Beleza! 🛒\\n\\nSomos a MNS Agência e recebemos você atrvês de uma Indicação, fique atendo no seu WhatsApp e telefone que entraremos em contato em breve, Valeu* 🌟\",\"media\":\"https://app.mns.marketing/media/logoretina01%20-%20co%CC%81pia.png\"}} ",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "d00b64dc-dda0-40f3-ba85-920732dd4ee5",
+      "name": "04 - Indicação",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        420,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "suaURL/message/sendMedia/SuaConexao",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "Token Aqui"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"number\":\"55{{ $json.phonenumber }}\",\"options\":{\"delay\":1200,\"presence\":\"composing\"},\"mediaMessage\":{\"mediatype\":\"image\",\"caption\":\"✅ Fala {{ $json[\"name\"] }}, somos da *MNS Agência*. Sua solicitação foi recebida com sucesso.\\n\\nE em breve entraremos em contato para mais informações e te ajudar.\\n\\n📅 Dica: Certifique-se de ter seu telefone por perto e de estar disponível. Assim, garantimos um atendimento eficiente e sem atrasos. Valeu!!\",\"media\":\"https://app.mns.marketing/media/logoretina01%20-%20co%CC%81pia.png\"}} ",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "b4522b01-6583-4d25-96ac-11c5df7ca539",
+      "name": "05 - Lead Quente",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        420,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "suaURL/message/sendMedia/SuaConexao",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "Token aqui"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"number\":\"55{{ $json.phonenumber }}\",\"options\":{\"delay\":1200,\"presence\":\"composing\"},\"mediaMessage\":{\"mediatype\":\"image\",\"caption\":\"✅ Fala {{ $json[\"name\"] }},\\n\\n Show de bola!!!\\n\\nA proposta já foi gerada, quero te convidar a entrar na família MNS, e prosperar conosco cada dia, se tiver alguma dúvida por favor não exite em nos falar, estamos aqui para te orentar em cada etapa, Valeu!!!\",\"media\":\"https://app.mns.marketing/media/logoretina01%20-%20co%CC%81pia.png\"}} ",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "99020f0c-ea33-41bf-a0ba-7b752e42226a",
+      "name": "06 -  Orçamento",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        420,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "suaURL/message/sendMedia/SuaConexao",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "Token aqui"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"number\":\"55{{ $json.phonenumber }}\",\"options\":{\"delay\":1200,\"presence\":\"composing\"},\"mediaMessage\":{\"mediatype\":\"image\",\"caption\":\"✅ Fala {{ $json[\"name\"] }},\\n\\n Estamos avançando!!!\\n\\nEstamos na negociação, e é muito importante essa etapa, entender os valores e alinhar qual a melhor forma de iniciar o projeto que alavancar as vendas da sua empresa é primordial, bora vender!!!\",\"media\":\"https://app.mns.marketing/media/logoretina01%20-%20co%CC%81pia.png\"}} ",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "2354eb65-68ad-4666-bd7d-c8239dce043a",
+      "name": "07 - Negociação",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        420,
+        960
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "suaURL/message/sendMedia/SuaConexao",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "Token aqui"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"number\":\"55{{ $json.phonenumber }}\",\"options\":{\"delay\":1200,\"presence\":\"composing\"},\"mediaMessage\":{\"mediatype\":\"image\",\"caption\":\"✅ Fala {{ $json[\"name\"] }},\\n\\n Estamos avançando, quero te agradecer pela oportunidade que nos deu, vamos avançar fique atento que mandaremos mais informações, Valeu!!\",\"media\":\"https://app.mns.marketing/media/logoretina01%20-%20co%CC%81pia.png\"}} ",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "1f17f1d3-88f2-47e6-8f43-ed8e4122db4f",
+      "name": "10 - OPORTUNIDADE",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        420,
+        1120
+      ]
+    },
+    {
+      "parameters": {
+        "dataType": "string",
+        "value1": "={{ $json.status }}",
+        "rules": {
+          "rules": [
+            {
+              "value2": "2",
+              "outputKey": "2"
+            },
+            {
+              "value2": "3",
+              "outputKey": "3"
+            },
+            {
+              "value2": "4",
+              "outputKey": "4"
+            },
+            {
+              "value2": "5",
+              "outputKey": "5"
+            },
+            {
+              "value2": "6",
+              "outputKey": "6"
+            },
+            {
+              "value2": "7",
+              "outputKey": "7"
+            },
+            {
+              "value2": "10",
+              "outputKey": "10"
+            }
+          ]
+        }
+      },
+      "id": "c34e7b41-713a-4204-81b1-8b506cee0088",
+      "name": "Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 2,
+      "position": [
+        0,
+        580
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "e93c11a5-9074-453b-a0ff-5c9738139d21",
+      "name": "No Operation, do nothing",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        0,
+        380
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "f9cdf1da-478c-4b93-b7cf-a4776ee391be",
+      "name": "No Operation, do nothing1",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        0,
+        180
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "5ce689d1-fcea-49e8-807a-cb57892d2c14",
+      "name": "No Operation, do nothing2",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Status do Perfex Evolution API\n",
+        "height": 1292.7147237509662,
+        "width": 398.61210417446335,
+        "color": 4
+      },
+      "id": "b8633a73-6867-48e0-95f1-cf01700b7eca",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        280,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Atualizar Lista Exel",
+        "height": 288.1713973126977,
+        "width": 438.6656658346816
+      },
+      "id": "8c70997f-8e73-4453-9d42-539b420e1ba5",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        880,
+        1040
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1xyd-ZV_-SOBmvxF2DENTNlv-9N0VzMXEDn3iciH5_mQ",
+          "mode": "list",
+          "cachedResultName": "antiga-mnsn8n-data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xyd-ZV_-SOBmvxF2DENTNlv-9N0VzMXEDn3iciH5_mQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xyd-ZV_-SOBmvxF2DENTNlv-9N0VzMXEDn3iciH5_mQ/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "7edc5db8-3545-4005-b0e8-8142bc85d2f9",
+      "name": "Banco Atual",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.1,
+      "position": [
+        -820,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "url": "suaURL/api/leads/search/",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "authtoken",
+              "value": "seu Token"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "43ad304a-38c2-4744-bb02-08bddf4db09e",
+      "name": "Leads Perfex atualizados",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -820,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "url": "URLaqui/api/leads/search/",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "authtoken",
+              "value": "Token do Perfex"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8cdfddb1-bbfb-483b-9483-24e8df17eb5f",
+      "name": "Dados atuais perfex",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        920,
+        1120
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1xyd-ZV_-SOBmvxF2DENTNlv-9N0VzMXEDn3iciH5_mQ",
+          "mode": "list",
+          "cachedResultName": "antiga-mnsn8n-data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xyd-ZV_-SOBmvxF2DENTNlv-9N0VzMXEDn3iciH5_mQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1xyd-ZV_-SOBmvxF2DENTNlv-9N0VzMXEDn3iciH5_mQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "hash",
+              "displayName": "hash",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "company",
+              "displayName": "company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "country",
+              "displayName": "country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "zip",
+              "displayName": "zip",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "city",
+              "displayName": "city",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "state",
+              "displayName": "state",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "address",
+              "displayName": "address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "assigned",
+              "displayName": "assigned",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "dateadded",
+              "displayName": "dateadded",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "from_form_id",
+              "displayName": "from_form_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lastcontact",
+              "displayName": "lastcontact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "dateassigned",
+              "displayName": "dateassigned",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_status_change",
+              "displayName": "last_status_change",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "addedfrom",
+              "displayName": "addedfrom",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "website",
+              "displayName": "website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "leadorder",
+              "displayName": "leadorder",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phonenumber",
+              "displayName": "phonenumber",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "date_converted",
+              "displayName": "date_converted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lost",
+              "displayName": "lost",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "junk",
+              "displayName": "junk",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_lead_status",
+              "displayName": "last_lead_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "is_imported_from_email_integration",
+              "displayName": "is_imported_from_email_integration",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email_integration_uid",
+              "displayName": "email_integration_uid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "is_public",
+              "displayName": "is_public",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "default_language",
+              "displayName": "default_language",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "client_id",
+              "displayName": "client_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_value",
+              "displayName": "lead_value",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "vat",
+              "displayName": "vat",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "from_ma_form_id",
+              "displayName": "from_ma_form_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ma_point",
+              "displayName": "ma_point",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ma_unsubscribed",
+              "displayName": "ma_unsubscribed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "perfex_saas_tenant_id",
+              "displayName": "perfex_saas_tenant_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "customfields",
+              "displayName": "customfields",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "096a3bc4-2073-4f02-9c9e-e506626cc3f2",
+      "name": "Atualizar leads",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.1,
+      "position": [
+        1120,
+        1120
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.customfields[8].value }}",
+              "value2": "sim"
+            }
+          ]
+        }
+      },
+      "id": "56950b3a-671b-44e9-9344-bfc9e2e6eb47",
+      "name": "IF",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -220,
+        640
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Leads Perfex atualizados",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Banco Atual",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compare Datasets": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "IF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "02 - Lead Morno",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "03 - Lead Frio",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "04 - Indicação",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "05 - Lead Quente",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "06 -  Orçamento",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "07 - Negociação",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "10 - OPORTUNIDADE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "02 - Lead Morno": {
+      "main": [
+        [
+          {
+            "node": "Dados atuais perfex",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "03 - Lead Frio": {
+      "main": [
+        [
+          {
+            "node": "Dados atuais perfex",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "04 - Indicação": {
+      "main": [
+        [
+          {
+            "node": "Dados atuais perfex",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "05 - Lead Quente": {
+      "main": [
+        [
+          {
+            "node": "Dados atuais perfex",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "06 -  Orçamento": {
+      "main": [
+        [
+          {
+            "node": "Dados atuais perfex",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "07 - Negociação": {
+      "main": [
+        [
+          {
+            "node": "Dados atuais perfex",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "10 - OPORTUNIDADE": {
+      "main": [
+        [
+          {
+            "node": "Dados atuais perfex",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Banco Atual": {
+      "main": [
+        [
+          {
+            "node": "Compare Datasets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leads Perfex atualizados": {
+      "main": [
+        [
+          {
+            "node": "Compare Datasets",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Dados atuais perfex": {
+      "main": [
+        [
+          {
+            "node": "Atualizar leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Dados atuais perfex",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "b739a4ed-7465-4723-9cd5-a7163956b8f3",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-06-23T03:43:30.372Z",
+      "updatedAt": "2025-06-23T03:43:30.372Z",
+      "role": "workflow:owner",
+      "workflowId": "QSmqwQddeKEXUu1l",
+      "projectId": "I3gAC3xI6nBnmwxf"
+    }
+  ],
+  "tags": []
+}
